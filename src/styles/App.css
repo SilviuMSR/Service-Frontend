@@ -1,0 +1,74 @@
+.appContainer{
+  padding:0px;
+  margin:0px;
+  height:100%;
+  box-sizing:border-box;
+}
+
+.searchHolder{
+  display:flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+  width: 350px;
+  padding: 5px 10px 5px 10px;
+  margin-left:auto;
+  background-color: #378e81;
+  box-sizing:border-box;
+  margin-right:25px;
+}
+
+.searchHolder input{
+  width:290px;
+  color:#ffffff; 
+  padding-left:10px;
+}
+
+.searchHolder .searchIcon{
+  margin-top:2px;
+}
+
+.contentContainer{
+  display:flex;
+  flex-direction: row;
+  flex-grow: 1;  /*ensures that the container will take up the full height of the parent container*/
+  overflow-y: auto;  /*adds scroll to this container*/
+  background-color:#eee;
+}
+
+.fullHeight{
+  height:100%;
+}
+
+.rotate-90 {
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  transform: rotate(90deg);
+}
+
+.modalBoxMultipleSelect{
+  margin-top:20px;
+}
+
+.verticalMenu{
+  display: 'flex' !important;
+  width: 10% !important
+}
+
+.baseContainer{
+  display:flex;
+  flex-direction: column;
+  flex-grow: 1;  /*ensures that the container will take up the full height of the parent container*/
+  overflow-y: auto;  /*adds scroll to this container*/
+
+}
+
+.toastSuccess{
+  background-color: #378e81 !important
+}
+
+.toastError{
+  background-color: #ef4517 !important
+}

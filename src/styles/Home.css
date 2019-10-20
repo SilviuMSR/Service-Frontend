@@ -1,0 +1,13 @@
+.width-300{
+    width:300px !important;
+}
+
+.noPadding{
+    padding:0px !important;
+}
+
+.homeContainer{
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
