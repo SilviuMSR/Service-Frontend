@@ -1,20 +1,25 @@
 import React, { Component } from 'react'
+import { JssProvider } from 'react-jss'
 import { connect } from 'react-redux'
+
+import Login from '../components/Login/Login'
 
 class Root extends Component {
 
-    constructor(props) {
-        super(props)
-        this.state = {
-        }
+    state = {
+        renderPage: false
+    }
+
+    componentDidMount() {
+        this.setState({ renderPage: true })
     }
 
     render() {
-       return (
-           <div>
-               App
-           </div>
-       )
+        if (this.state.renderPage) {
+            return (<JssProvider>
+                <Login />
+            </JssProvider>)
+        } else return null
     }
 }
 
