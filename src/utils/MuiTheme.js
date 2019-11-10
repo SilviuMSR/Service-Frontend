@@ -97,11 +97,6 @@ const MuiTheme = createMuiTheme({
 
             }
         }
-        /*MuiSvgIcon: {
-            listButton: {
-                
-            }
-        }*/
     }
 })
 export default MuiTheme

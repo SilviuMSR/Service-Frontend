@@ -1,5 +1,7 @@
 import { combineReducers } from 'redux'
 
-export default combineReducers({
+import reservation from './reservation'
 
+export default combineReducers({
+    reservation
 })

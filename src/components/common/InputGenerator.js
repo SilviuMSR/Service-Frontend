@@ -14,7 +14,6 @@ class InputGenerator extends React.Component {
 
     render() {
         let { ...props } = this.props
-
         switch (props.type) {
             case 'radioSelector':
                 return <RadioSelector

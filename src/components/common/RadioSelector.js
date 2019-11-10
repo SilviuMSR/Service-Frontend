@@ -10,6 +10,8 @@ import FormLabel from '@material-ui/core/FormLabel';
 const styles = theme => ({
     root: {
         display: 'flex',
+        height: 80,
+        paddingBottom: 8
     },
     formControl: {
         margin: theme.spacing.unit * 3,
