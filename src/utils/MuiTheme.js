@@ -96,6 +96,11 @@ const MuiTheme = createMuiTheme({
                 paddingTop: '6px',
 
             }
+        },
+        MuiAppBar: {
+            root: {
+                backgroundColor: '#add8e6'
+            }
         }
     }
 })

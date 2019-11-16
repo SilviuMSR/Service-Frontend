@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import Homepage from '../components/Homepage/Homepage'
 import Dashboard from '../components/Dashboard/Dashboard'
 import Reservations from '../components/Reservation/Reservations'
+import TopNavbar from '../components/common/TopNavbar'
 
 class Root extends Component {
 
@@ -25,10 +26,10 @@ class Root extends Component {
                     {this.state.logged ?
                         (
                             <>
-                            <div style={{height: '10%'}}>  
-                            This will be topnavbar
-                            </div>
-                                <div style={{height: '90%', backgroundColor: 'red'}}>
+                                <div style={{ height: '10%' }}>
+                                    <TopNavbar />
+                                </div>
+                                <div style={{ height: '90%'}}>
                                     <Switch>
                                         {<Route path="/reservations" exact component={Reservations} />}
                                         {<Route path="/" component={Dashboard} />}
