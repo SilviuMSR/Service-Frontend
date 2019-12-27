@@ -1,0 +1,9 @@
+export const TOPBAR_CHANGE_LANGUAGE = 'TOPBAR_CHANGE_LANGUAGE'
+
+export const IS_LOGGED = 'IS_LOGGED'
+export const IS_NOT_LOGGED = 'IS_NOT_LOGGED'
+export const GET_ROLES = 'GET_ROLES'
+export const LOGIN = 'LOGIN'
+export const CHANGE_USERNAME = 'CHANGE_USERNAME'
+
+export const TOGGLE_ALERTS = 'TOGGLE_ALERTS'

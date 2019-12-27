@@ -16,10 +16,24 @@ const styles = theme => ({
 
 class TopNavbar extends Component {
 
+    renderLoginSection = () => {
+        console.log(this.props.login)
+        if (this.props.login.isLogged) {
+            return (
+                <Button color="inherit">{this.props.login.username}</Button>
+            )
+        }
+
+        return (
+            <Button color="inherit">Login</Button>
+        )
+
+    }
+
     render() {
 
         const { classes } = this.props
-        
+
         return (
             <div className={classes.root}>
                 <AppBar position="static">
@@ -27,7 +41,7 @@ class TopNavbar extends Component {
                         <Typography variant="h6" className={classes.title}>
                             News
                         </Typography>
-                        <Button color="inherit">Login</Button>
+                        {this.renderLoginSection()}
                     </Toolbar>
                 </AppBar>
             </div>
@@ -36,10 +50,12 @@ class TopNavbar extends Component {
 }
 
 const mapStateToProps = state => ({
+    login: state.login
 })
 
 const mapDispatchToProps = dispatch => {
     return {
+
     }
 }
 
