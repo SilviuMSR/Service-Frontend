@@ -47,9 +47,7 @@ class Login extends Component {
         let passwordIndex = modalFieldsCopy.findIndex(idx => idx.name === 'password')
         if (usernameIndex > -1 && passwordIndex > -1) {
             this.props.login(modalFieldsCopy[usernameIndex].value, sha256(modalFieldsCopy[passwordIndex].value))
-                .then(res => alert("CMMMMMMM"))
                 .catch(err => {
-                    console.log("VIN AICI", err)
                     if (!err.response)
                         NOTIFICATION.error("Server down")
                     else

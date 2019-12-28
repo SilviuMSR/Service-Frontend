@@ -14,6 +14,11 @@ export const getById = modelId => dispatch =>
         .then(response => Promise.resolve(response.data))
         .catch(errorHandler)
 
+export const getModelByBrandId = brandId => dispatch =>
+    axios.get(`${baseRoute}/brand/${brandId}`)
+        .then(response => Promise.resolve(response.data))
+        .catch(errorHandler)
+
 export const create = model => dispatch =>
     axios.post(baseRoute, { model })
         .then(response => Promise.resolve(response.data))

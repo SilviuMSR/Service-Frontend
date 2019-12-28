@@ -17,7 +17,6 @@ const styles = theme => ({
 class TopNavbar extends Component {
 
     renderLoginSection = () => {
-        console.log(this.props.login)
         if (this.props.login.isLogged) {
             return (
                 <Button color="inherit">{this.props.login.username}</Button>

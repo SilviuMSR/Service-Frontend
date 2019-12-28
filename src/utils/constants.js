@@ -2,6 +2,7 @@ export const EDIT = 'edit'
 export const CREATE = 'create'
 
 export const PROBLEM = 'knowingStatus'
+export const CAR_BRAND_ID = 'carBrandId'
 export const NO = 'Nu'
 
 export const HOMEPAGE_OPTIONS = [
