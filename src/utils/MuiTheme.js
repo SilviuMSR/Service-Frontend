@@ -96,12 +96,12 @@ const MuiTheme = createMuiTheme({
                 paddingTop: '6px',
 
             }
-        }
-        /*MuiSvgIcon: {
-            listButton: {
-                
+        },
+        MuiAppBar: {
+            root: {
+                backgroundColor: '#add8e6'
             }
-        }*/
+        }
     }
 })
 export default MuiTheme
