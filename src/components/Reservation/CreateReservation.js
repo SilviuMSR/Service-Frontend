@@ -3,8 +3,9 @@ import { connect } from 'react-redux'
 import { Button } from '@material-ui/core'
 
 import InputGenerator from '../common/InputGenerator'
-import { mapToDropdownSelector, findIndexInArray } from '../../utils/apiFunctions'
+import { mapToDropdownSelector, mapToRadioSelector, findIndexInArray, findIdInArray, findElementByNameInArray } from '../../utils/apiFunctions'
 import * as CONSTANTS from '../../utils/constants'
+import * as PROBLEMS from '../../redux/actions/problems'
 import * as BRANDS from '../../redux/actions/brands'
 import * as MODELS from '../../redux/actions/models'
 import * as RESERVATION from '../../redux/actions/reservation'
@@ -23,7 +24,7 @@ class CreateReservation extends Component {
     ]
 
     knowingProblem = [
-        { value: '', type: 'radioSelector', label: 'Alege cauza problemei', name: 'problem', options: CONSTANTS.RESERVATION_PROBLEMS_LIST },
+        { value: '', type: 'radioSelector', label: 'Alege cauza problemei', name: 'problem', options: [] },
         { value: '', type: 'number', disabled: true, label: 'Pret', name: 'price' }
     ]
 
@@ -49,14 +50,17 @@ class CreateReservation extends Component {
     }
 
     onChangeHandler = event => {
-
+        let modalFieldsProblemCopy = [...this.state.modalFieldsProblem].map(field => ({ ...field }))
+        let problemIndex = findIndexInArray(modalFieldsProblemCopy, 'problem')
+        let priceIndex = findIndexInArray(modalFieldsProblemCopy, 'price')
         if (this.state.problemKnow) {
-            let problemIndex = this.state.modalFieldsProblem.findIndex(field => field.name === event.target.name)
-
             if (problemIndex > -1) {
-                let modalFieldsProblemCopy = [...this.state.modalFieldsProblem].map(field => ({ ...field }))
-
                 modalFieldsProblemCopy[problemIndex].value = event.target.value
+                this.setState({ modalFieldsProblem: modalFieldsProblemCopy })
+            }
+            if (priceIndex > -1) {
+                let prices = findElementByNameInArray(modalFieldsProblemCopy[problemIndex].options, modalFieldsProblemCopy[problemIndex].value).map(el => el.price)
+                modalFieldsProblemCopy[priceIndex].value = prices.reduce((sum, price) => sum + price)
                 this.setState({ modalFieldsProblem: modalFieldsProblemCopy })
             }
         }
@@ -65,7 +69,12 @@ class CreateReservation extends Component {
         if (currentIndex > -1) {
             let modalFieldsCopy = [...this.state.modalFields].map(field => ({ ...field }))
             if (modalFieldsCopy[currentIndex].name.toLowerCase() === CONSTANTS.PROBLEM.toLowerCase()) {
-                if (modalFieldsCopy[currentIndex].value === CONSTANTS.NO) this.setState({ problemKnow: true })
+                if (modalFieldsCopy[currentIndex].value === CONSTANTS.NO) {
+                    this.props.getProblems().then(problems => {
+                        modalFieldsProblemCopy[problemIndex].options = mapToRadioSelector(problems.carProblems)
+                        this.setState({ modalFieldsProblem: modalFieldsProblemCopy, problemKnow: true })
+                    })
+                }
                 else this.setState({ problemKnow: false, modalFieldsProblem: this.knowingProblem })
             }
             modalFieldsCopy[currentIndex].value = event.target.value
@@ -95,7 +104,7 @@ class CreateReservation extends Component {
         let priceIndex = findIndexInArray(this.state.modalFieldsProblem, 'price')
 
         if (problemsIndex > -1) {
-            problemArray = problemArray.concat(this.state.modalFieldsProblem[problemsIndex].value)
+            problemArray = problemArray.concat(findIdInArray(this.state.modalFieldsProblem[problemsIndex].options, this.state.modalFieldsProblem[problemsIndex].value))
             reservationJson.problem = problemArray.filter(el => el !== "")
         }
 
@@ -160,6 +169,7 @@ const mapDispatchToProps = dispatch => {
     return {
         getBrands: () => dispatch(BRANDS.get()),
         getModelByBrandId: carBrandId => dispatch(MODELS.getModelByBrandId(carBrandId)),
+        getProblems: () => dispatch(PROBLEMS.get()),
         createReservation: reservation => dispatch(RESERVATION.create(reservation))
     }
 }
