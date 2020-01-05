@@ -53,6 +53,7 @@ class CreateReservation extends Component {
         let modalFieldsProblemCopy = [...this.state.modalFieldsProblem].map(field => ({ ...field }))
         let problemIndex = findIndexInArray(modalFieldsProblemCopy, 'problem')
         let priceIndex = findIndexInArray(modalFieldsProblemCopy, 'price')
+
         if (this.state.problemKnow) {
             if (problemIndex > -1) {
                 modalFieldsProblemCopy[problemIndex].value = event.target.value
@@ -60,7 +61,7 @@ class CreateReservation extends Component {
             }
             if (priceIndex > -1) {
                 let prices = findElementByNameInArray(modalFieldsProblemCopy[problemIndex].options, modalFieldsProblemCopy[problemIndex].value).map(el => el.price)
-                modalFieldsProblemCopy[priceIndex].value = prices.reduce((sum, price) => sum + price)
+                modalFieldsProblemCopy[priceIndex].value = prices.length ? prices.reduce((sum, price) => sum + price) : 0
                 this.setState({ modalFieldsProblem: modalFieldsProblemCopy })
             }
         }
@@ -93,7 +94,7 @@ class CreateReservation extends Component {
     }
 
     onResetHandler = () => {
-        this.setState({ modalFields: this.initialFields })
+        this.setState({ modalFields: this.initialFields, modalFieldsProblem: this.knowingProblem })
     }
 
     createReservationJson = () => {
