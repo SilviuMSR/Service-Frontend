@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
 import { withStyles, Typography, AppBar, Button, IconButton, Toolbar } from '@material-ui/core'
 
 const styles = theme => ({
@@ -38,7 +39,7 @@ class TopNavbar extends Component {
                 <AppBar position="static">
                     <Toolbar>
                         <Typography variant="h6" className={classes.title}>
-                            News
+                            <Button onClick={() => this.props.history.push('/reservations')}>Reservations</Button>
                         </Typography>
                         {this.renderLoginSection()}
                     </Toolbar>
@@ -58,4 +59,4 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(TopNavbar))
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(withRouter(TopNavbar)))
