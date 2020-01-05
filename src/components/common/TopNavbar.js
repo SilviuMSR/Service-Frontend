@@ -17,7 +17,7 @@ const styles = theme => ({
     },
     title: {
         flexGrow: 1,
-    },
+    }
 })
 
 class TopNavbar extends Component {
@@ -59,7 +59,7 @@ class TopNavbar extends Component {
                     <Toolbar>
                         <Typography variant="h6" className={classes.title}>
                             <Tabs>
-                                <Tab className={this.state.selectedOption === "" ? classes.clickedOption : ""} label="Homepage" onClick={() => this.handleClickOption("")} />
+                                <Tab className={`${this.state.selectedOption === "" ? classes.clickedOption : ""}`} label="Homepage" onClick={() => this.handleClickOption("")} />
                                 <Tab className={this.state.selectedOption === "reservations" ? classes.clickedOption : ""} label="Reservations" onClick={() => this.handleClickOption("reservations")} />
                             </Tabs>
                         </Typography>

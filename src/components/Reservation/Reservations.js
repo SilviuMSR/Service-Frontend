@@ -1,7 +1,21 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
+import { withStyles, Paper } from '@material-ui/core'
+
 import * as RESERVATIONS from '../../redux/actions/reservation'
+
+const styles = theme => ({
+    container: {
+        width: '100%',
+        height: '100%',
+        overflow:'auto'
+    },
+    containerContent: {
+        margin: 24,
+        backgroundColor: 'red',
+    }
+})
 
 class Reservations extends Component {
 
@@ -19,15 +33,17 @@ class Reservations extends Component {
 
     render() {
         return (
-            <>
-                {this.state.reservations.map(res => {
-                    return (
-                        <div>
-                            {res.clientName}
-                        </div>
-                    )
-                })}
-            </>
+            <div className={this.props.classes.container}>
+                <div className={this.props.classes.containerContent}>
+                    {this.state.reservations.map(res => {
+                        return (
+                            <div>
+                                {res.clientName}
+                            </div>
+                        )
+                    })}
+                </div>
+            </div>
         )
     }
 }
@@ -41,4 +57,4 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Reservations)
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Reservations))
