@@ -47,9 +47,9 @@ const MuiTheme = createMuiTheme({
             }
         },
         MuiAppBar: {
-            colorPrimary: {
-                backgroundColor: primaryColorHover
-            }
+            // colorPrimary: {
+            //     backgroundColor: '#f5f5f5'
+            // }
         },
         MuiIconButton: {
             colorSecondary: {
@@ -95,11 +95,6 @@ const MuiTheme = createMuiTheme({
                 fontSize: '15px !important',
                 paddingTop: '6px',
 
-            }
-        },
-        MuiAppBar: {
-            root: {
-                backgroundColor: '#add8e6'
             }
         }
     }
