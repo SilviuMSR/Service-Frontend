@@ -1,5 +1,5 @@
 import React from 'react'
-import { withStyles, Avatar } from '@material-ui/core'
+import { withStyles, Avatar, Button } from '@material-ui/core'
 import moment from 'moment'
 
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
@@ -138,6 +138,29 @@ const styles = theme => ({
 
 class AdminReservation extends React.Component {
 
+    renderMiddleSectionHandler = () => {
+        if (this.props.reservation.reservationStatus === CONSTANTS.RESERVATION_PANDING) return (
+            <div className={this.props.classes.options}>
+                <span className={this.props.classes.titleText}>This reservation wait for response!</span>
+                <div className={this.props.classes.optionsContainer}>
+                    <CheckIcon onClick={() => this.props.modifyStatus(this.props.reservation._id, CONSTANTS.RESERVATION_ACCEPTED)} className={this.props.classes.acceptIcon} />
+                    <CloseIcon onClick={() => this.props.modifyStatus(this.props.reservation._id, CONSTANTS.RESERVATION_DECLINED)} className={this.props.classes.declineIcon} />
+                </div>
+            </div>
+        )
+
+        if (this.props.reservation.reservationStatus === CONSTANTS.RESERVATION_DONE) return (
+            <div className={this.props.classes.options}>
+                <span className={this.props.classes.titleText}>Problems for this car are successfully resolved!</span>
+                <div className={this.props.classes.optionsContainer}>
+                    <Button onClick={() => alert("Generating documents for this reservation")}>GENERATE DOCUMENTS</Button>
+                </div>
+            </div>
+        )
+
+        return null
+    }
+
     renderStatusHandler = () => {
         if (this.props.reservation.reservationStatus === CONSTANTS.RESERVATION_PANDING) return (
             <div className={this.props.classes.statusContainer}>
@@ -174,7 +197,6 @@ class AdminReservation extends React.Component {
     }
 
     render() {
-        console.log("COMMING HERE!")
         let { classes } = this.props
         return (
             <ExpansionPanel>
@@ -225,15 +247,7 @@ class AdminReservation extends React.Component {
                                 <span className={classes.subtitleText}>Email: {this.props.reservation.clientEmail}</span>
                             </div>
                         </div>
-                        {this.props.reservation.reservationStatus === CONSTANTS.RESERVATION_PANDING ?
-                            <div className={classes.options}>
-                                <span className={classes.titleText}>This reservation wait for response!</span>
-                                <div className={classes.optionsContainer}>
-                                    <CheckIcon onClick={() => this.props.modifyStatus(this.props.reservation._id, CONSTANTS.RESERVATION_ACCEPTED)} className={classes.acceptIcon} />
-                                    <CloseIcon onClick={() => this.props.modifyStatus(this.props.reservation._id, CONSTANTS.RESERVATION_DECLINED)} className={classes.declineIcon} />
-                                </div>
-                            </div>
-                            : null}
+                        {this.renderMiddleSectionHandler()}
                         <div className={classes.expandedContainerItemLast}>
                             <div className={classes.titleText}>
                                 <span className={classes.titleText}>CAR PROBLEMS</span>

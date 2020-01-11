@@ -34,11 +34,11 @@ class Reservations extends Component {
         this.props.getReservations().then(res => this.setState({ reservations: res.reservations, renderPage: true }))
     }
 
-    modifyStatusHandler = (reservationId, newStatus) => {
+    modifyStatusHandler = (reservationId, newStatus, userId) => {
         let newReservation = {
+            userId: userId,
             reservationStatus: newStatus
         }
-
         this.props.modifyStatus(reservationId, newReservation).then(() => this.getReservationsHandler())
     }
 
@@ -50,7 +50,7 @@ class Reservations extends Component {
                         <RenderItems
                             modifyStatus={this.modifyStatusHandler}
                             items={this.state.reservations}
-                            renderType={CONSTANTS.RENDER_RESERVATION_ADMIN}
+                            renderType={CONSTANTS.RENDER_RESERVATION_EMPLOYEE}
                         />
                     </div>
                 </div>

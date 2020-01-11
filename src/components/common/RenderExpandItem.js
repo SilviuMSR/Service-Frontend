@@ -32,7 +32,10 @@ class RenderExpandItem extends React.Component {
                                     modifyStatus={this.props.modifyStatus}
                                     reservation={item} />
                             case CONSTANTS.RENDER_RESERVATION_EMPLOYEE:
-                                return <ReservationEmployee reservation={item} />
+                                return <ReservationEmployee
+                                    reservation={item}
+                                    modifyStatus={this.props.modifyStatus}
+                                />
                             case CONSTANTS.RENDER_RESERVATION_PERSONAL:
                                 return <ReservationPersonal reservation={item} />
                         }
