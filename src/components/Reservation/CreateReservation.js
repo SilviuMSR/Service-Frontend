@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Button } from '@material-ui/core'
+import moment from 'moment'
 
 import InputGenerator from '../common/InputGenerator'
 import { mapToDropdownSelector, mapToRadioSelector, findIndexInArray, findIdInArray, findElementByNameInArray } from '../../utils/apiFunctions'
@@ -14,6 +15,8 @@ import * as NOTIFICATION from '../../utils/notification'
 import '../../styles/CreateReservation.css'
 
 class CreateReservation extends Component {
+
+    todayValue = moment().format(CONSTANTS.INPUT_TYPE_DATE_FORMAT)
 
     initialFields = [
         { value: '', type: 'dropdownSelector', label: 'Brand', name: 'carBrandId', options: [] },
@@ -114,6 +117,7 @@ class CreateReservation extends Component {
         }
 
         this.state.modalFields.forEach(field => reservationJson[field.name] = field.value)
+        reservationJson['createdAt'] = this.todayValue
 
         return reservationJson
 
