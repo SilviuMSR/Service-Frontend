@@ -24,6 +24,9 @@ const MuiTheme = createMuiTheme({
         MuiPaper: {
             elevation1: {
                 boxShadow: 'none',
+                '&:hover': {
+                    backgroundColor: 'rgba(0,0,0,0.05)',
+                },
             },
         },
         MuiCollapse: {

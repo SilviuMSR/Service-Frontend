@@ -178,7 +178,7 @@ class PersonalReservation extends React.Component {
                                 {this.props.reservation.problem ? this.props.reservation.problem.map((problem, index) => {
                                     return (
                                         <div>
-                                            <span className={classes.subtitleText}>{index + 1}. {problem.name}</span>
+                                            <li><span className={classes.subtitleText}>{problem.name}</span></li>
                                         </div>
                                     )
                                 }) : '-'}

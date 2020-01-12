@@ -158,6 +158,21 @@ class AdminReservation extends React.Component {
             </div>
         )
 
+        if (this.props.reservation.reservationStatus === CONSTANTS.RESERVATION_IN_PROGRESS) return (
+            <div className={this.props.classes.options}>
+                <span className={this.props.classes.titleText}>Progress Details</span>
+                <div className={this.props.classes.optionsContainer}>
+                    <span className={this.props.classes.subtitleText}>{this.props.reservation.userId.username.charAt(0).toUpperCase() + this.props.reservation.userId.username.slice(1)} works at this car.</span>
+                </div>
+            </div>
+        )
+
+        if (this.props.reservation.reservationStatus === CONSTANTS.RESERVATION_DECLINED) return (
+            <div className={this.props.classes.options}>
+                <span className={this.props.classes.titleText}>This reservation was declined!</span>
+            </div>
+        )
+
         return null
     }
 
@@ -199,7 +214,7 @@ class AdminReservation extends React.Component {
     render() {
         let { classes } = this.props
         return (
-            <ExpansionPanel>
+            <ExpansionPanel >
                 <ExpansionPanelSummary
                     expandIcon={<ExpandMoreIcon />}
                     aria-controls="panel1bh-content"
@@ -256,7 +271,7 @@ class AdminReservation extends React.Component {
                                 {this.props.reservation.problem ? this.props.reservation.problem.map((problem, index) => {
                                     return (
                                         <div>
-                                            <span className={classes.subtitleText}>{index + 1}. {problem.name}</span>
+                                            <li><span className={classes.subtitleText}>{problem.name}</span></li>
                                         </div>
                                     )
                                 }) : '-'}
