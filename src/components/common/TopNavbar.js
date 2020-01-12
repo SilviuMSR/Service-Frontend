@@ -3,6 +3,8 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { withStyles, Typography, AppBar, Button, IconButton, Toolbar, Tab, Tabs } from '@material-ui/core'
 
+import * as LOGIN from '../../redux/actions/login'
+
 const styles = theme => ({
     root: {
         flexGrow: 1,
@@ -35,7 +37,7 @@ class TopNavbar extends Component {
     renderLoginSection = () => {
         if (this.props.login.isLogged) {
             return (
-                <Button color="inherit">{this.props.login.username}</Button>
+                <Button onClick={() => this.props.logout()} color="inherit">{this.props.login.username}</Button>
             )
         }
 
@@ -77,7 +79,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => {
     return {
-
+        logout: () => dispatch(LOGIN.logout())
     }
 }
 

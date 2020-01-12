@@ -21,6 +21,16 @@ const MuiTheme = createMuiTheme({
                 }
             }
         },
+        MuiPaper: {
+            elevation1: {
+                boxShadow: 'none',
+            },
+        },
+        MuiCollapse: {
+            entered: {
+                borderBottom: '1px solid rgba(0,0,0,0.1)'
+            }
+        },
         MuiFormLabel: {
             root: {
                 "&$focused": {

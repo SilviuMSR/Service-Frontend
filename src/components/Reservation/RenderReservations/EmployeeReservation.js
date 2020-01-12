@@ -61,7 +61,6 @@ const styles = theme => ({
         flexDirection: 'column',
         justifyContent: 'center'
     },
-
     expandedContainerItemLast: {
         flex: 1,
         display: 'flex',
@@ -86,11 +85,11 @@ const styles = theme => ({
         display: 'flex',
         flexDirection: 'row'
     },
-    ovalRed: {
+    ovalGreen: {
         width: 14,
         height: 14,
         borderRadius: 7,
-        backgroundColor: 'red',
+        backgroundColor: 'green',
         marginRight: 10
     },
     acceptIcon: {
@@ -115,10 +114,10 @@ const styles = theme => ({
 class EmployeeReservation extends React.Component {
 
     renderStatusHandler = () => {
-        if (this.props.reservation.reservationStatus === CONSTANTS.RESERVATION_PANDING) return (
+        if (this.props.reservation.reservationStatus === CONSTANTS.RESERVATION_ACCEPTED) return (
             <div className={this.props.classes.statusContainer}>
-                <div className={this.props.classes.ovalPanding} />
-                <span className={this.props.classes.subtitleText}>{CONSTANTS.RESERVATION_PANDING}</span>
+                <div className={this.props.classes.ovalGreen} />
+                <span className={this.props.classes.subtitleText}>{CONSTANTS.RESERVATION_ACCEPTED}</span>
             </div>
         )
         return <span>-</span>
@@ -126,7 +125,6 @@ class EmployeeReservation extends React.Component {
 
     render() {
         let { classes } = this.props
-        console.log(this.props)
         return (
             <ExpansionPanel>
                 <ExpansionPanelSummary

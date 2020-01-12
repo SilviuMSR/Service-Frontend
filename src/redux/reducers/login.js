@@ -7,15 +7,16 @@ const initialState = {
     allRoles: [],
     username: '',
     providerId: '',
+    position: '',
     userId: null
 }
 
 function loginReducer(state = initialState, action) {
     switch (action.type) {
         case TYPES.IS_LOGGED:
-            return { ...state, isLogged: true, username: action.payload.username, userId: action.payload.userId }
+            return { ...state, isLogged: true, username: action.payload.username, userId: action.payload.userId, position: action.payload.position }
         case TYPES.LOGIN:
-            return { ...state, isLogged: true, username: action.payload.username, userId: action.payload.userId }
+            return { ...state, isLogged: true, username: action.payload.username, userId: action.payload.userId, position: action.payload.position }
         case TYPES.IS_NOT_LOGGED:
             return { ...state, isLogged: false }
         case TYPES.GET_ROLES:
