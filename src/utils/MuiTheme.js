@@ -21,6 +21,21 @@ const MuiTheme = createMuiTheme({
                 }
             }
         },
+        MuiOutlinedInput: {
+            root: {
+                '& $notchedOutline': {
+                    borderColor: '#e2e5ed'
+                },
+                '&$focused $notchedOutline': {
+                    borderColor: '#1976d2',
+                },
+                '&$disabled': {
+                    '& $notchedOutline': {
+                        borderColor: '#e2e5ed'
+                    }
+                }
+            }
+        },
         MuiPaper: {
             elevation1: {
                 boxShadow: 'none',
@@ -37,7 +52,7 @@ const MuiTheme = createMuiTheme({
         MuiFormLabel: {
             root: {
                 "&$focused": {
-                    color: primaryColor
+                    color: 'black'
                 }
             }
         },

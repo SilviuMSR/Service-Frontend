@@ -14,6 +14,11 @@ export const getById = reservationId => dispatch =>
         .then(response => Promise.resolve(response.data))
         .catch(errorHandler)
 
+export const generateInvoice = reservationId => dispatch =>
+    axios.post(`${baseRoute}/${reservationId}/generate`)
+        .then(response => Promise.resolve(response.data))
+        .catch(errorHandler)
+
 export const getByEmployeeId = employeeId => dispatch =>
     axios.get(`${baseRoute}/employee/${employeeId}`)
         .then(response => Promise.resolve(response.data))

@@ -6,6 +6,7 @@ import { withStyles } from '@material-ui/core'
 import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
 
 import RenderItems from '../common/RenderExpandItem'
+import SimpleModal from '../common/SimpleModal'
 
 import * as RESERVATIONS from '../../redux/actions/reservation'
 import * as CONSTANTS from '../../utils/constants'
@@ -60,11 +61,17 @@ class Reservations extends Component {
     state = {
         reservations: [],
         renderPage: false,
-        selectedOption: ''
+        selectedOption: '',
+        showFiles: false,
+        reservationFiles: []
     }
 
     componentDidMount() {
-        this.setState({ selectedOption: this.props.login.position === 'admin' ? CONSTANTS.RENDER_RESERVATION_ADMIN : CONSTANTS.RENDER_RESERVATION_EMPLOYEE}, () => this.handlerReservations())
+        this.setState({ selectedOption: this.props.login.position === 'admin' ? CONSTANTS.RENDER_RESERVATION_ADMIN : CONSTANTS.RENDER_RESERVATION_EMPLOYEE }, () => this.handlerReservations())
+    }
+
+    getReservationById = reservationId => {
+        this.props.getReservationById(reservationId).then(result => this.setState({ reservationFiles: result.file }))
     }
 
     handlerReservations = () => {
@@ -128,7 +135,19 @@ class Reservations extends Component {
                         <div onClick={() => this.selectOptionHandler(CONSTANTS.RENDER_RESERVATION_PERSONAL)} className={this.props.classes.options}><span className={`${this.state.selectedOption === CONSTANTS.RENDER_RESERVATION_PERSONAL ? this.props.classes.selectedOption : ""} ${this.props.classes.optionText}`}>PERSONAL</span></div>
                     </div> : null}
                     <div className={this.props.classes.containerContent}>
+                        <SimpleModal title={"Files"} open={this.state.showFiles && this.state.expandedReservationId} onCancel={() => this.setState({ showFiles: false })}>
+                            {this.state.reservationFiles.length ? this.state.reservationFiles.map(file => {
+                                return (
+                                    <p>{file.originalName ? file.originalName : ""}</p>
+                                )
+                            }) : null}
+                        </SimpleModal>
                         <RenderItems
+                            onExpandHandler={reservationId => this.setState({ expandedReservationId: reservationId }, () => this.getReservationById(this.state.expandedReservationId))}
+                            showFilesHandler={() => this.setState({ showFiles: true })}
+                            generateInvoice={reservationId => {
+                                this.props.generateInvoice(reservationId).then(() => this.handlerReservations())
+                            }}
                             modifyStatus={this.modifyStatusHandler}
                             items={this.state.reservations}
                             renderType={this.state.selectedOption}
@@ -147,7 +166,9 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => {
     return {
+        generateInvoice: reservationId => dispatch(RESERVATIONS.generateInvoice(reservationId)),
         getReservations: options => dispatch(RESERVATIONS.get(options)),
+        getReservationById: reservationId => dispatch(RESERVATIONS.getById(reservationId)),
         getByEmployeeId: employeeId => dispatch(RESERVATIONS.getByEmployeeId(employeeId)),
         modifyStatus: (reservationId, newReservation) => dispatch(RESERVATIONS.edit(reservationId, newReservation))
     }

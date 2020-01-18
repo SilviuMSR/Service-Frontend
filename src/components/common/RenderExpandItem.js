@@ -25,19 +25,25 @@ class RenderExpandItem extends React.Component {
         return (
             <>
                 <div className={classes.panelContainer}>
-                    {this.props.items.map(item => {
+                    {this.props.items.map((item, index) => {
                         switch (this.props.renderType) {
                             case CONSTANTS.RENDER_RESERVATION_ADMIN:
                                 return <ReservationAdmin
+                                    key={index}
+                                    onExpandHandler={reservationId => this.props.onExpandHandler(reservationId)}
+                                    showFilesHandler={this.props.showFilesHandler}
+                                    generateInvoice={reservationId => this.props.generateInvoice(reservationId)}
                                     modifyStatus={this.props.modifyStatus}
                                     reservation={item} />
                             case CONSTANTS.RENDER_RESERVATION_EMPLOYEE:
                                 return <ReservationEmployee
+                                    key={index}
                                     reservation={item}
                                     modifyStatus={this.props.modifyStatus}
                                 />
                             case CONSTANTS.RENDER_RESERVATION_PERSONAL:
                                 return <ReservationPersonal
+                                    key={index}
                                     reservation={item}
                                     modifyStatus={this.props.modifyStatus} />
                         }

@@ -4,7 +4,10 @@ import { Button } from '@material-ui/core'
 import moment from 'moment'
 
 import InputGenerator from '../common/InputGenerator'
+import SimpleModal from '../common/SimpleModal'
+
 import { mapToDropdownSelector, mapToRadioSelector, findIndexInArray, findIdInArray, findElementByNameInArray } from '../../utils/apiFunctions'
+
 import * as CONSTANTS from '../../utils/constants'
 import * as PROBLEMS from '../../redux/actions/problems'
 import * as BRANDS from '../../redux/actions/brands'
@@ -27,7 +30,7 @@ class CreateReservation extends Component {
     ]
 
     knowingProblem = [
-        { value: '', type: 'radioSelector', label: 'Alege cauza problemei', name: 'problem', options: [] },
+        //{ value: '', type: 'radioSelector', label: 'Alege cauza problemei', name: 'problem', options: [] },
         { value: '', type: 'number', disabled: true, label: 'Pret', name: 'price' }
     ]
 
@@ -57,17 +60,17 @@ class CreateReservation extends Component {
         let problemIndex = findIndexInArray(modalFieldsProblemCopy, 'problem')
         let priceIndex = findIndexInArray(modalFieldsProblemCopy, 'price')
 
-        if (this.state.problemKnow) {
-            if (problemIndex > -1) {
-                modalFieldsProblemCopy[problemIndex].value = event.target.value
-                this.setState({ modalFieldsProblem: modalFieldsProblemCopy })
-            }
-            if (priceIndex > -1) {
-                let prices = findElementByNameInArray(modalFieldsProblemCopy[problemIndex].options, modalFieldsProblemCopy[problemIndex].value).map(el => el.price)
-                modalFieldsProblemCopy[priceIndex].value = prices.length ? prices.reduce((sum, price) => sum + price) : 0
-                this.setState({ modalFieldsProblem: modalFieldsProblemCopy })
-            }
-        }
+        // if (this.state.problemKnow) {
+        //     if (problemIndex > -1) {
+        //         modalFieldsProblemCopy[problemIndex].value = event.target.value
+        //         this.setState({ modalFieldsProblem: modalFieldsProblemCopy })
+        //     }
+        //     if (priceIndex > -1) {
+        //         let prices = findElementByNameInArray(modalFieldsProblemCopy[problemIndex].options, modalFieldsProblemCopy[problemIndex].value).map(el => el.price)
+        //         modalFieldsProblemCopy[priceIndex].value = prices.length ? prices.reduce((sum, price) => sum + price) : 0
+        //         this.setState({ modalFieldsProblem: modalFieldsProblemCopy })
+        //     }
+        // }
 
         let currentIndex = this.state.modalFields.findIndex(field => field.name === event.target.name)
         if (currentIndex > -1) {
@@ -75,7 +78,7 @@ class CreateReservation extends Component {
             if (modalFieldsCopy[currentIndex].name.toLowerCase() === CONSTANTS.PROBLEM.toLowerCase()) {
                 if (modalFieldsCopy[currentIndex].value === CONSTANTS.NO) {
                     this.props.getProblems().then(problems => {
-                        modalFieldsProblemCopy[problemIndex].options = mapToRadioSelector(problems.carProblems)
+                        //modalFieldsProblemCopy[problemIndex].options = mapToRadioSelector(problems.carProblems)
                         this.setState({ modalFieldsProblem: modalFieldsProblemCopy, problemKnow: true })
                     })
                 }
@@ -146,6 +149,7 @@ class CreateReservation extends Component {
         return (
             <div className="container">
                 <div className="fieldsContainer">
+                    <SimpleModal open={this.state.problemKnow} onCancel={() => this.setState({ problemKnow: false })} />
                     {this.renderFields()}
                     {this.state.problemKnow ?
                         this.state.modalFieldsProblem.map((field, index) => {
