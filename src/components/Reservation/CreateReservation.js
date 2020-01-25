@@ -149,7 +149,7 @@ class CreateReservation extends Component {
         return (
             <div className="container">
                 <div className="fieldsContainer">
-                    <SimpleModal open={this.state.openProblemModal} onCancel={() => this.setState({ openProblemModal: false })}>
+                    <SimpleModal open={this.state.openProblemModal} cancelButtonText={"ANULEAZA"} acceptButtonText={"ADAUGA"} onAccept={() => this.setState({ openProblemModal: false })} onCancel={() => this.setState({ openProblemModal: false })}>
                         {
                             this.state.modalFieldsProblem.filter(field => field.name === 'problem').map((field, index) => {
                                 return <InputGenerator

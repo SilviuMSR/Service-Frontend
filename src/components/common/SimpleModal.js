@@ -14,6 +14,7 @@ const style = theme => ({
         paddingTop: 25
     },
     acceptButton: {
+        color: 'green'
     },
     cancelButton: {
         marginRight: 'auto',
