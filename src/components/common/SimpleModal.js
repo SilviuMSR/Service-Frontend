@@ -15,7 +15,8 @@ const style = theme => ({
         paddingTop: 25
     },
     dialogContent: {
-        padding: '0px 24px 0px'
+        padding: '0px 24px 0px',
+        overflow: 'hidden'
     },
     acceptButton: {
         color: 'green'

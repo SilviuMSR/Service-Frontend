@@ -6,7 +6,7 @@ import moment from 'moment'
 import InputGenerator from '../common/InputGenerator'
 import SimpleModal from '../common/SimpleModal'
 
-import { mapToDropdownSelector, mapToMultipleSelector, findIndexInArray, findIdInArray } from '../../utils/apiFunctions'
+import { mapToDropdownSelector, mapToMultipleSelector, findIndexInArray } from '../../utils/apiFunctions'
 
 import * as CONSTANTS from '../../utils/constants'
 import * as PROBLEMS from '../../redux/actions/problems'

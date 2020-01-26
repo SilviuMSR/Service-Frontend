@@ -63,6 +63,7 @@ class TopNavbar extends Component {
                             <Tabs>
                                 <Tab className={`${this.state.selectedOption === "" ? classes.clickedOption : ""}`} label="Homepage" onClick={() => this.handleClickOption("")} />
                                 <Tab className={this.state.selectedOption === "reservations" ? classes.clickedOption : ""} label="Reservations" onClick={() => this.handleClickOption("reservations")} />
+                                <Tab className={this.state.selectedOption === "stoc" ? classes.clickedOption : ""} label="Stoc" onClick={() => this.handleClickOption("stoc")} />
                             </Tabs>
                         </Typography>
                         {this.renderLoginSection()}
