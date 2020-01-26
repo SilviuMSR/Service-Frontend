@@ -79,7 +79,8 @@ const styles = theme => ({
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'flex-start',
-        cursor: 'pointer'
+        cursor: 'pointer',
+        paddingTop: 6
     },
     workOnClick: {
         cursor: 'pointer'
@@ -145,7 +146,7 @@ class PersonalReservation extends React.Component {
         let { classes } = this.props
         
         return (
-            <ExpansionPanel>
+            <ExpansionPanel onChange={() => this.props.onExpandHandler(this.props.reservation._id)}>
                 <ExpansionPanelSummary
                     expandIcon={<ExpandMoreIcon />}
                     aria-controls="panel1bh-content"
@@ -176,7 +177,7 @@ class PersonalReservation extends React.Component {
                             <div className={classes.titleText}>
                                 <span className={classes.titleText}>CAR PROBLEMS</span>
                             </div>
-                            <div className={classes.problemsContainer}>
+                            <div onClick={this.props.showProblemsHandler} className={classes.problemsContainer}>
                                 {this.props.reservation.problem ? this.props.reservation.problem.map((problem, index) => {
                                     return (
                                         <div>

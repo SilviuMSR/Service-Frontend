@@ -6,12 +6,16 @@ import { Close } from '@material-ui/icons'
 const style = theme => ({
     dialogTitle: {
         borderBottom: '1px solid #eaedf3',
-        padding: '4px 0px 8px 22px'
+        padding: '4px 0px 8px 22px',
+        marginBottom: 10
     },
     dialogActions: {
         borderTop: '1px solid #eaedf3',
         marginTop: 10,
         paddingTop: 25
+    },
+    dialogContent: {
+        padding: '0px 24px 0px'
     },
     acceptButton: {
         color: 'green'
@@ -41,7 +45,7 @@ class SimpleModal extends Component {
                     {this.props.title}
                     <Close onClick={this.props.onCancel} className={this.props.classes.topRightCancelButton} />
                 </DialogTitle>
-                <DialogContent className={this.props.styles ? this.props.styles.contentStyle : null}>
+                <DialogContent className={this.props.styles ? this.props.styles.contentStyle : this.props.classes.dialogContent}>
                     {this.props.children}
                 </DialogContent>
                 <DialogActions className={this.props.classes.dialogActions}>

@@ -1,9 +1,12 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { Document, Page, pdfjs } from 'react-pdf'
+import localConfig from '../../config/local.json'
 
 import { withStyles } from '@material-ui/core'
 
-import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
+import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined'
+import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 
 import RenderItems from '../common/RenderExpandItem'
 import SimpleModal from '../common/SimpleModal'
@@ -11,6 +14,8 @@ import SimpleModal from '../common/SimpleModal'
 import * as RESERVATIONS from '../../redux/actions/reservation'
 import * as CONSTANTS from '../../utils/constants'
 import * as NOTIFICATION from '../../utils/notification'
+
+pdfjs.GlobalWorkerOptions.workerSrc = `${localConfig.frontend}/pdf.worker.js`
 
 const styles = theme => ({
     container: {
@@ -53,6 +58,74 @@ const styles = theme => ({
     },
     selectedOption: {
         color: '#1976d2'
+    },
+    problemsContainer: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    filesContainer: {
+        display: 'flex',
+    },
+    problemsList: {
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        paddingTop: 18,
+        borderRight: '1px solid rgba(0,0,0,0.1)',
+        paddingRight: 8
+    },
+    problemSteps: {
+        flex: 1
+    },
+    problem: {
+        display: 'flex',
+        flexDirection: 'column'
+    },
+    rightArrowContainer: {
+        marginLeft: 'auto',
+        paddingRight: 18,
+        color: "#1976d2"
+    },
+    problemWrapper: {
+        '&:hover': {
+            border: '1px solid #1976d2',
+            borderRadius: 15
+        },
+        display: 'flex',
+        flex: 1,
+        flexDirection: 'row',
+        padding: 10,
+        paddingRight: 5,
+        marginTop: 5,
+        fontSize: 13,
+        border: '1px solid transparent',
+        cursor: 'pointer'
+    },
+    fileWrapper: {
+        '&:hover': {
+            border: '1px solid #1976d2',
+            borderRadius: 15
+        },
+        display: 'flex',
+        flexDirection: 'row',
+        padding: 10,
+        paddingRight: 5,
+        marginTop: 5,
+        fontSize: 13,
+        border: '1px solid transparent',
+        cursor: 'pointer'
+    },
+    selectedProblem: {
+        border: '1px solid #1976d2',
+        borderRadius: 15
+    },
+    stepsContainer: {
+        display: 'flex',
+        flexDirection: 'column',
+        paddingTop: 18,
+        paddingLeft: 12,
+        fontSize: 13
     }
 })
 
@@ -63,7 +136,10 @@ class Reservations extends Component {
         renderPage: false,
         selectedOption: '',
         showFiles: false,
-        reservationFiles: []
+        showProblems: false,
+        currentProblem: null,
+        currentFile: null,
+        currentReservation: null
     }
 
     componentDidMount() {
@@ -71,7 +147,7 @@ class Reservations extends Component {
     }
 
     getReservationById = reservationId => {
-        this.props.getReservationById(reservationId).then(result => this.setState({ reservationFiles: result.file }))
+        this.props.getReservationById(reservationId).then(result => this.setState({ currentReservation: result }))
     }
 
     handlerReservations = () => {
@@ -125,6 +201,81 @@ class Reservations extends Component {
         })
     }
 
+    onProblemClickHandler = problem => {
+        this.setState({ currentProblem: problem })
+    }
+
+    onFileClickHandler = file => {
+        this.setState({ currentFile: file })
+    }
+
+    onFileLoadSuccess = () => {
+        this.setState({ pdfPage: 1 })
+    }
+
+    renderModalContentHandler = () => {
+        if (this.state.showFiles) {
+            return (
+                <div className={this.props.classes.filesContainer}>
+                    <div className={this.props.classes.problemsList}>
+                        {this.state.currentReservation.file.length ? this.state.currentReservation.file.map(file => {
+                            return (
+                                <div onClick={() => this.onFileClickHandler(file)} className={`${this.state.currentFile ? this.state.currentFile._id === file._id ? this.props.classes.selectedProblem : "" : ""} ${this.props.classes.fileWrapper}`}>
+                                    <span>{file.customName}</span>
+                                    <div className={this.props.classes.rightArrowContainer}>
+                                        <ChevronRightIcon />
+                                    </div>
+                                </div>
+                            )
+                        }) : null}
+                    </div>
+                    <div className={this.props.classes.problemSteps}>
+                        <div>
+                            {this.state.currentFile ? <Document
+                                file={`http://localhost:9000/static/invoices/${this.state.currentFile.originalName}`}
+                                onLoadSuccess={this.onFileLoadSuccess}
+                            >
+                                <Page pageNumber={this.state.pdfPage} />
+                            </Document> : null}
+                        </div>
+                    </div>
+                </div>
+            )
+        }
+        if (this.state.showProblems) {
+            return (
+                <div className={this.props.classes.problemsContainer}>
+                    <div className={this.props.classes.problemsList}>
+                        {this.state.currentReservation.problem.map(pr => {
+                            return (
+                                <div onClick={() => this.onProblemClickHandler(pr)} className={`${this.state.currentProblem ? this.state.currentProblem._id === pr._id ? this.props.classes.selectedProblem : "" : ""} ${this.props.classes.problemWrapper}`}>
+                                    <div className={this.props.classes.problem}>
+                                        <span>{pr.name}</span>
+                                        <span>{pr.price} RON</span>
+                                    </div>
+                                    <div className={this.props.classes.rightArrowContainer}>
+                                        <ChevronRightIcon />
+                                    </div>
+                                </div>
+                            )
+                        })}
+                    </div>
+                    <div className={this.props.classes.problemSteps}>
+                        {this.state.currentProblem ? this.state.currentProblem.steps.map((step, index) => {
+                            return (
+                                <div className={this.props.classes.stepsContainer}>
+                                    <span>{index + 1}.&nbsp;{step}</span>
+                                </div>
+                            )
+                        }) : null}
+                    </div>
+                </div>
+            )
+        }
+
+        return null
+    }
+
     render() {
         if (this.state.renderPage) {
             return (
@@ -135,16 +286,13 @@ class Reservations extends Component {
                         <div onClick={() => this.selectOptionHandler(CONSTANTS.RENDER_RESERVATION_PERSONAL)} className={this.props.classes.options}><span className={`${this.state.selectedOption === CONSTANTS.RENDER_RESERVATION_PERSONAL ? this.props.classes.selectedOption : ""} ${this.props.classes.optionText}`}>PERSONAL</span></div>
                     </div> : null}
                     <div className={this.props.classes.containerContent}>
-                        <SimpleModal title={"Files"} open={this.state.showFiles && this.state.expandedReservationId} onCancel={() => this.setState({ showFiles: false })}>
-                            {this.state.reservationFiles.length ? this.state.reservationFiles.map(file => {
-                                return (
-                                    <p>{file.originalName ? file.originalName : ""}</p>
-                                )
-                            }) : null}
+                        <SimpleModal maxWidth={"md"} title={this.state.showFiles ? "Files" : "Problems"} open={(this.state.showFiles || this.state.showProblems) && this.state.expandedReservationId} onCancel={() => this.state.showFiles ? this.setState({ showFiles: false }) : this.setState({ showProblems: false, currentProblem: null })}>
+                            {this.renderModalContentHandler()}
                         </SimpleModal>
                         <RenderItems
                             onExpandHandler={reservationId => this.setState({ expandedReservationId: reservationId }, () => this.getReservationById(this.state.expandedReservationId))}
-                            showFilesHandler={() => this.setState({ showFiles: true })}
+                            showFilesHandler={() => this.setState({ showFiles: true, currentFile: this.state.currentReservation.file[0] })}
+                            showProblemsHandler={() => this.setState({ showProblems: true, currentProblem: this.state.currentReservation.problem[0] })}
                             generateInvoice={reservationId => {
                                 this.props.generateInvoice(reservationId).then(() => this.handlerReservations())
                             }}

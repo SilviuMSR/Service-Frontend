@@ -30,6 +30,7 @@ class RenderExpandItem extends React.Component {
                             case CONSTANTS.RENDER_RESERVATION_ADMIN:
                                 return <ReservationAdmin
                                     key={index}
+                                    showProblemsHandler={this.props.showProblemsHandler}
                                     onExpandHandler={reservationId => this.props.onExpandHandler(reservationId)}
                                     showFilesHandler={this.props.showFilesHandler}
                                     generateInvoice={reservationId => this.props.generateInvoice(reservationId)}
@@ -39,12 +40,16 @@ class RenderExpandItem extends React.Component {
                                 return <ReservationEmployee
                                     key={index}
                                     reservation={item}
+                                    onExpandHandler={reservationId => this.props.onExpandHandler(reservationId)}
+                                    showProblemsHandler={this.props.showProblemsHandler}
                                     modifyStatus={this.props.modifyStatus}
                                 />
                             case CONSTANTS.RENDER_RESERVATION_PERSONAL:
                                 return <ReservationPersonal
                                     key={index}
                                     reservation={item}
+                                    onExpandHandler={reservationId => this.props.onExpandHandler(reservationId)}
+                                    showProblemsHandler={this.props.showProblemsHandler}
                                     modifyStatus={this.props.modifyStatus} />
                         }
                     })}

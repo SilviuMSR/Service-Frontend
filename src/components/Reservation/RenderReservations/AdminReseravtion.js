@@ -69,12 +69,14 @@ const styles = theme => ({
     clientDetailsContainer: {
         display: 'flex',
         flexDirection: 'column',
+        paddingTop: 6
     },
     problemsContainer: {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'flex-end',
-        cursor: 'pointer'
+        cursor: 'pointer',
+        paddingTop: 6
     },
     workOnClick: {
         cursor: 'pointer'
@@ -143,7 +145,8 @@ const styles = theme => ({
         }
     },
     optionsContainer: {
-        textAlign: 'center'
+        textAlign: 'center',
+        paddingTop: 6
     },
     options: {
         display: 'flex',
@@ -286,7 +289,7 @@ class AdminReservation extends React.Component {
                             <div className={classes.titleText}>
                                 <span className={classes.titleText}>CAR PROBLEMS</span>
                             </div>
-                            <div className={classes.problemsContainer}>
+                            <div onClick={this.props.showProblemsHandler} className={classes.problemsContainer}>
                                 {this.props.reservation.problem ? this.props.reservation.problem.map((problem, index) => {
                                     return (
                                         <div>
