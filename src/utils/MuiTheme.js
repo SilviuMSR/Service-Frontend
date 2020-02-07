@@ -21,10 +21,38 @@ const MuiTheme = createMuiTheme({
                 }
             }
         },
+        MuiOutlinedInput: {
+            root: {
+                '& $notchedOutline': {
+                    borderColor: '#e2e5ed'
+                },
+                '&$focused $notchedOutline': {
+                    borderColor: '#1976d2',
+                },
+                '&$disabled': {
+                    '& $notchedOutline': {
+                        borderColor: '#e2e5ed'
+                    }
+                }
+            }
+        },
+        MuiPaper: {
+            elevation1: {
+                boxShadow: 'none',
+                '&:hover': {
+                    backgroundColor: 'rgba(0,0,0,0.05)',
+                },
+            },
+        },
+        MuiCollapse: {
+            entered: {
+                borderBottom: '1px solid rgba(0,0,0,0.1)'
+            }
+        },
         MuiFormLabel: {
             root: {
                 "&$focused": {
-                    color: primaryColor
+                    color: 'black'
                 }
             }
         },

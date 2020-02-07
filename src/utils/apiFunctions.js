@@ -17,6 +17,13 @@ export const mapToRadioSelector = arr => {
     return mappedArray
 }
 
+export const mapToMultipleSelector = arr => {
+    let mappedArray = []
+    mappedArray = mappedArray.concat(arr.map(el => ({ id: el._id || el.id, name: el.name, label: el.name, value: false, price: el.price ? el.price : null })))
+
+    return mappedArray
+}
+
 export const findIdInArray = (arr, elementToFind) => {
     // Map array to have always name, in order to be easy to filter later
     let mappedArray = arr.map(el => {

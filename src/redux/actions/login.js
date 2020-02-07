@@ -9,7 +9,8 @@ export const login = (username, password) => dispatch => axios.post('/login', {
         type: TYPES.LOGIN,
         payload: {
             username: response.data.username,
-            userId: response.data.id
+            userId: response.data.id,
+            position: response.data.position
         }
     })
     return Promise.resolve(response)
@@ -21,7 +22,8 @@ export const isLogged = () => dispatch => axios.get('/logged')
             type: TYPES.IS_LOGGED,
             payload: {
                 username: response.data.username,
-                userId: response.data.userId
+                userId: response.data.userId,
+                position: response.data.position
             }
         })
         return Promise.resolve()

@@ -2,6 +2,7 @@ import React from 'react'
 import { TextField } from '@material-ui/core'
 
 import RadioSelector from './RadioSelector'
+import MultiSelector from './MultipleSelector'
 import DropdownSelector from './DropdownSelector'
 
 class InputGenerator extends React.Component {
@@ -21,6 +22,10 @@ class InputGenerator extends React.Component {
                     {...props} />
             case 'radioSelector':
                 return <RadioSelector
+                    {...props}
+                />
+            case 'multiSelector':
+                return <MultiSelector
                     {...props}
                 />
             default:

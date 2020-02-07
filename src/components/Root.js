@@ -9,6 +9,7 @@ import Homepage from '../components/Homepage/Homepage'
 import Dashboard from '../components/Dashboard/Dashboard'
 import Reservations from '../components/Reservation/Reservations'
 import TopNavbar from '../components/common/TopNavbar'
+import Stoc from '../components/Stoc/Stoc'
 
 class Root extends Component {
 
@@ -35,11 +36,12 @@ class Root extends Component {
                         (
                             <>
                                 <div style={{ height: '10%' }}>
-                                    <TopNavbar/>
+                                    <TopNavbar />
                                 </div>
                                 <div style={{ height: '90%' }}>
                                     <Switch>
                                         {<Route path="/reservations" exact component={Reservations} />}
+                                        {<Route path="/stoc" exact component={Stoc} />}
                                         {<Route path="/" component={Dashboard} />}
                                     </Switch>
                                 </div>

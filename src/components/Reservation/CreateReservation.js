@@ -1,9 +1,13 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Button } from '@material-ui/core'
+import moment from 'moment'
 
 import InputGenerator from '../common/InputGenerator'
-import { mapToDropdownSelector, mapToRadioSelector, findIndexInArray, findIdInArray, findElementByNameInArray } from '../../utils/apiFunctions'
+import SimpleModal from '../common/SimpleModal'
+
+import { mapToDropdownSelector, mapToMultipleSelector, findIndexInArray } from '../../utils/apiFunctions'
+
 import * as CONSTANTS from '../../utils/constants'
 import * as PROBLEMS from '../../redux/actions/problems'
 import * as BRANDS from '../../redux/actions/brands'
@@ -15,6 +19,8 @@ import '../../styles/CreateReservation.css'
 
 class CreateReservation extends Component {
 
+    todayValue = moment().format(CONSTANTS.INPUT_TYPE_DATE_FORMAT)
+
     initialFields = [
         { value: '', type: 'dropdownSelector', label: 'Brand', name: 'carBrandId', options: [] },
         { value: '', type: 'dropdownSelector', label: 'Model', name: 'carModelId', options: [] },
@@ -24,14 +30,16 @@ class CreateReservation extends Component {
     ]
 
     knowingProblem = [
-        { value: '', type: 'radioSelector', label: 'Alege cauza problemei', name: 'problem', options: [] },
-        { value: '', type: 'number', disabled: true, label: 'Pret', name: 'price' }
+        { type: 'multiSelector', utils: 'Alege cauza problemei', name: 'problem', value: [] },
+        { value: 0, type: 'number', disabled: true, label: 'Pret', name: 'price' }
     ]
 
     state = {
         modalFields: this.initialFields,
         modalFieldsProblem: this.knowingProblem,
-        problemKnow: false
+        problemKnow: false,
+        openProblemModal: false,
+        problemsList: []
     }
 
     populateWithBrands = () => {
@@ -54,13 +62,13 @@ class CreateReservation extends Component {
         let problemIndex = findIndexInArray(modalFieldsProblemCopy, 'problem')
         let priceIndex = findIndexInArray(modalFieldsProblemCopy, 'price')
 
-        if (this.state.problemKnow) {
+        if (this.state.problemKnow && this.state.openProblemModal) {
             if (problemIndex > -1) {
                 modalFieldsProblemCopy[problemIndex].value = event.target.value
                 this.setState({ modalFieldsProblem: modalFieldsProblemCopy })
             }
             if (priceIndex > -1) {
-                let prices = findElementByNameInArray(modalFieldsProblemCopy[problemIndex].options, modalFieldsProblemCopy[problemIndex].value).map(el => el.price)
+                let prices = modalFieldsProblemCopy[problemIndex].value.length ? modalFieldsProblemCopy[problemIndex].value.filter(field => field.value).map(field => field.price) : []
                 modalFieldsProblemCopy[priceIndex].value = prices.length ? prices.reduce((sum, price) => sum + price) : 0
                 this.setState({ modalFieldsProblem: modalFieldsProblemCopy })
             }
@@ -72,8 +80,8 @@ class CreateReservation extends Component {
             if (modalFieldsCopy[currentIndex].name.toLowerCase() === CONSTANTS.PROBLEM.toLowerCase()) {
                 if (modalFieldsCopy[currentIndex].value === CONSTANTS.NO) {
                     this.props.getProblems().then(problems => {
-                        modalFieldsProblemCopy[problemIndex].options = mapToRadioSelector(problems.carProblems)
-                        this.setState({ modalFieldsProblem: modalFieldsProblemCopy, problemKnow: true })
+                        modalFieldsProblemCopy[problemIndex].value = mapToMultipleSelector(problems.carProblems)
+                        this.setState({ modalFieldsProblem: modalFieldsProblemCopy, problemKnow: true, openProblemModal: true })
                     })
                 }
                 else this.setState({ problemKnow: false, modalFieldsProblem: this.knowingProblem })
@@ -99,14 +107,12 @@ class CreateReservation extends Component {
 
     createReservationJson = () => {
         let reservationJson = {}
-        let problemArray = []
 
         let problemsIndex = findIndexInArray(this.state.modalFieldsProblem, 'problem')
         let priceIndex = findIndexInArray(this.state.modalFieldsProblem, 'price')
 
         if (problemsIndex > -1) {
-            problemArray = problemArray.concat(findIdInArray(this.state.modalFieldsProblem[problemsIndex].options, this.state.modalFieldsProblem[problemsIndex].value))
-            reservationJson.problem = problemArray.filter(el => el !== "")
+            reservationJson.problem = this.state.modalFieldsProblem[problemsIndex].value.filter(field => field.value).map(field => field.id)
         }
 
         if (priceIndex > -1) {
@@ -114,6 +120,7 @@ class CreateReservation extends Component {
         }
 
         this.state.modalFields.forEach(field => reservationJson[field.name] = field.value)
+        reservationJson['createdAt'] = this.todayValue
 
         return reservationJson
 
@@ -142,9 +149,21 @@ class CreateReservation extends Component {
         return (
             <div className="container">
                 <div className="fieldsContainer">
+                    <SimpleModal open={this.state.openProblemModal} cancelButtonText={"ANULEAZA"} acceptButtonText={"ADAUGA"} onAccept={() => this.setState({ openProblemModal: false })} onCancel={() => this.setState({ openProblemModal: false })}>
+                        {
+                            this.state.modalFieldsProblem.filter(field => field.name === 'problem').map((field, index) => {
+                                return <InputGenerator
+                                    key={index}
+                                    margin="dense"
+                                    fullWidth={true}
+                                    onChange={event => this.onChangeHandler(event)}
+                                    {...field} />
+                            })
+                        }
+                    </SimpleModal>
                     {this.renderFields()}
                     {this.state.problemKnow ?
-                        this.state.modalFieldsProblem.map((field, index) => {
+                        this.state.modalFieldsProblem.filter(field => field.name !== 'problem').map((field, index) => {
                             return <InputGenerator
                                 key={index}
                                 margin="dense"
