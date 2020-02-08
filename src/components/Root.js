@@ -61,6 +61,7 @@ class Root extends Component {
                         (
                             <div style={{ display: 'flex', height: '100%' }}>
                                 <RootSidebar
+                                    onLogout={this.props.logout}
                                     items={this.state.sidebarItems}
                                 />
                                 <div style={{ flex: 1 }}>
@@ -88,7 +89,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => {
     return {
-        isLogged: () => dispatch(LOGIN.isLogged())
+        isLogged: () => dispatch(LOGIN.isLogged()),
+        logout: () => dispatch(LOGIN.logout())
     }
 }
 

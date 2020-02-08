@@ -120,14 +120,14 @@ class Sidebar extends Component {
     render() {
         const { classes } = this.props
         const ListItemComponent = props => {
-            if (props.isSelected) return (<ListItem disableTypography component={props.to ? Link : 'div'} to={props.to} divider={true} button selected={this.state.selected[props.label]} onClick={() => this.handleSelect(props.label)}>
+            if (props.isSelected) return (<ListItem  component={props.to ? Link : 'div'} to={props.to} divider={true} button selected={this.state.selected[props.label]} onClick={() => this.handleSelect(props.label)}>
                 <ListItemIcon>
                     {props.icon ? props.icon : <FolderOutlinedIcon />}
                 </ListItemIcon>
                 <ListItemText classes={{ primary: classes.listItemTextSelected }} inset primary={props.text} />
                 {props.nested ? props.open ? <ExpandLessIcon className={classes.sidebarIcon} onClick={() => this.handleExpand(props.label)} /> : <ExpandMoreIcon className={classes.sidebarIcon} onClick={() => this.handleExpand(props.label)} /> : null}
             </ListItem>)
-            return (<ListItem disableTypography component={props.to ? Link : 'div'} to={props.to} divider={true} button selected={this.state.selected[props.label]} onClick={() => this.handleSelect(props.label)}>
+            return (<ListItem component={props.to ? Link : 'div'} to={props.to} divider={true} button selected={this.state.selected[props.label]} onClick={() => this.handleSelect(props.label)}>
                 <ListItemIcon>
                     {props.icon ? props.icon : <FolderOutlinedIcon />}
                 </ListItemIcon>

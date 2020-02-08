@@ -3,13 +3,10 @@ import { connect } from 'react-redux'
 
 import { withStyles, Button, TextField } from '@material-ui/core'
 
-import { mapToDropdownSelector, mapToMultipleSelector, findIndexInArray } from '../../utils/apiFunctions'
+import * as STOCK from '../../redux/actions/stocks'
 import * as CONSTANTS from '../../utils/constants'
-import * as BRANDS from '../../redux/actions/brands'
-import * as MODELS from '../../redux/actions/models'
 
-import InputGenerator from '../common/InputGenerator'
-import SimpleModal from '../common/SimpleModal'
+import CreateStock from './CreateStock'
 
 const styles = theme => ({
     container: {
@@ -49,75 +46,47 @@ const styles = theme => ({
 
 class Stoc extends Component {
 
-    initialFields = [
-        { value: '', type: 'dropdownSelector', label: 'Brand', name: 'carBrandId', options: [] },
-        { value: '', type: 'dropdownSelector', label: 'Model', name: 'carModelId', options: [] },
-        { value: '', type: 'text', label: 'Nume', name: 'name' },
-        { value: '', type: 'text', label: 'Price', name: 'price' },
-        { value: 0, type: "number", label: "Quantity", name: 'no' }
-    ]
+    stockToEdit = {}
 
     state = {
         openModal: false,
+        modalType: CONSTANTS.CREATE,
+        stocks: [],
         modalFields: this.initialFields
     }
 
-    populateWithBrands = () => {
-        this.props.getBrands().then(brands => {
-            let brandIndex = findIndexInArray(this.state.modalFields, 'carBrandId')
-            if (brandIndex > -1) {
-                let modalFieldsCopy = [...this.state.modalFields].map(el => ({ ...el }))
-                modalFieldsCopy[brandIndex].options = mapToDropdownSelector(brands.brands)
-                this.setState({ modalFields: modalFieldsCopy, openModal: true })
-            }
-        })
+    componentDidMount() {
+        this.getStocks()
     }
 
-    onAddHandler = () => {
-        this.setState({ openModal: false })
-    }
-
-    onChangeHandler = event => {
-
-        let currentIndex = this.state.modalFields.findIndex(field => field.name === event.target.name)
-        if (currentIndex > -1) {
-            let modalFieldsCopy = [...this.state.modalFields].map(field => ({ ...field }))
-            modalFieldsCopy[currentIndex].value = event.target.value
-            this.setState({ modalFields: modalFieldsCopy })
-
-            if (modalFieldsCopy[currentIndex].name.toLowerCase() === CONSTANTS.CAR_BRAND_ID.toLowerCase()) {
-                this.props.getModelByBrandId(modalFieldsCopy[currentIndex].value).then(models => {
-                    let modelsIndex = findIndexInArray(modalFieldsCopy, 'carModelId')
-                    if (modelsIndex > -1) {
-                        modalFieldsCopy[modelsIndex].options = mapToDropdownSelector(models)
-                        this.setState({ modalFields: modalFieldsCopy })
-                    }
-                })
-            }
-        }
-    }
-
-    renderStocModalFields = () => {
-        return this.state.modalFields.map((field, index) => {
-            return <InputGenerator
-                key={index}
-                margin="dense"
-                fullWidth={true}
-                onChange={event => this.onChangeHandler(event)}
-                {...field} />
+    getStocks = () => {
+        this.props.getStocks().then(result => {
+            this.setState({
+                stocks: result.pieces
+            })
         })
     }
 
     render() {
         return (
             <>
-                <SimpleModal acceptButtonText="Adauga" cancelButtonText="Anuleaza" onAccept={this.onAddHandler} maxWidth={"md"} title={"Adauga stoc"} open={this.state.openModal} onCancel={() => this.setState({ openModal: false })}>
-                    {this.renderStocModalFields()}
-                </SimpleModal>
+                <CreateStock stockId={this.stockToEdit._id} type={this.state.modalType} getStocks={() => this.getStocks()} open={this.state.openModal} onCancel={() => this.setState({ openModal: false })} />
                 <div className={this.props.classes.container}>
                     <div className={this.props.classes.headersContainer}>
-                        <div className={this.props.classes.addContainer}><Button onClick={this.populateWithBrands}>ADD</Button></div>
+                        <div className={this.props.classes.addContainer}><Button onClick={() => this.setState({ openModal: true, modalType: CONSTANTS.CREATE })}>ADD</Button></div>
                         <div className={this.props.classes.searchContainer}><TextField placeholder="Search..." /></div>
+                    </div>
+                    <div>
+                        {this.state.stocks.map(stock => {
+                            return (
+                                <div onClick={() => {
+                                    this.stockToEdit = stock
+                                    this.setState({ openModal: true, modalType: CONSTANTS.EDIT })
+                                }}>
+                                    {stock.name}
+                                </div>
+                            )
+                        })}
                     </div>
                 </div>
             </>
@@ -130,8 +99,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => {
     return {
-        getBrands: () => dispatch(BRANDS.get()),
-        getModelByBrandId: carBrandId => dispatch(MODELS.getModelByBrandId(carBrandId)),
+        getStocks: () => dispatch(STOCK.get())
     }
 }
 
