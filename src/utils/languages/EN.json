@@ -1,4 +1,4 @@
-{   
+{
     "ro": "RO",
     "en": "EN",
     "cancel": "Cancel",
@@ -6,5 +6,12 @@
     "edit": "Edit",
     "create": "Create",
     "sidebar": {
+        "admin": {
+            "admin": "Admin",
+            "car": "Cars"
+        },
+        "reservation": "Reservations",
+        "stoc": "Stock",
+        "dashboard": "Dashboard"
     }
 }

@@ -98,8 +98,7 @@ const MuiTheme = createMuiTheme({
         MuiListItem: {
             root: {
                 paddingRight: '5px',
-                paddingLeft: '18px',
-                color: 'rgba(0, 0, 0, 0.87)'
+                paddingLeft: '18px'
             }
         },
         MuiListSubheader: {
