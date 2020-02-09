@@ -19,8 +19,8 @@ export const create = problem => dispatch =>
         .then(response => Promise.resolve(response.data))
         .catch(errorHandler)
 
-export const edit = (problemId, problem) => dispatch =>
-    axios.put(`${baseRoute}/${problemId}`, { problem })
+export const edit = (problemId, problem, modifySteps) => dispatch =>
+    axios.put(`${baseRoute}/${problemId}?${modifySteps ? 'modifySteps=true' : ''}`, { problem })
         .then(response => Promise.resolve(response.data))
         .catch(errorHandler)
 
