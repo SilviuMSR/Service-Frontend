@@ -2,7 +2,9 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
 import { withStyles, Button, TextField } from '@material-ui/core'
+import { Delete } from '@material-ui/icons'
 
+import ConfirmationModal from '../common/ConfirmationDialog'
 import * as STOCK from '../../redux/actions/stocks'
 import * as CONSTANTS from '../../utils/constants'
 
@@ -47,11 +49,13 @@ const styles = theme => ({
 class Stoc extends Component {
 
     stockToEdit = {}
+    stockToDelete = {}
 
     state = {
         openModal: false,
         modalType: CONSTANTS.CREATE,
         stocks: [],
+        openConfirmationModal: false,
         modalFields: this.initialFields
     }
 
@@ -67,9 +71,29 @@ class Stoc extends Component {
         })
     }
 
+    deleteStockHandler = () => {
+        this.props.deleteStock(this.stockToDelete._id).then(() => {
+            this.getStocks()
+            this.setState({ openConfirmationModal: false })
+        })
+    }
+
+    closeConfirmationModalHandler = () => {
+        this.stockToDelete = {}
+        this.setState({ openConfirmationModal: false })
+    }
+
     render() {
         return (
             <>
+                <ConfirmationModal
+                    text={`Delete?`}
+                    cancelButtonText={"Cancel"}
+                    acceptButtonText={"Delete"}
+                    open={this.state.openConfirmationModal}
+                    onClose={this.closeConfirmationModalHandler}
+                    onCancel={this.closeConfirmationModalHandler}
+                    onAccept={() => this.deleteStockHandler()} />
                 <CreateStock stockId={this.stockToEdit._id} type={this.state.modalType} getStocks={() => this.getStocks()} open={this.state.openModal} onCancel={() => this.setState({ openModal: false })} />
                 <div className={this.props.classes.container}>
                     <div className={this.props.classes.headersContainer}>
@@ -84,6 +108,10 @@ class Stoc extends Component {
                                     this.setState({ openModal: true, modalType: CONSTANTS.EDIT })
                                 }}>
                                     {stock.name}
+                                    <Delete onClick={() => {
+                                        this.stockToDelete = stock
+                                        this.setState({ openConfirmationModal: true })
+                                    }} />
                                 </div>
                             )
                         })}
@@ -99,7 +127,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => {
     return {
-        getStocks: () => dispatch(STOCK.get())
+        getStocks: () => dispatch(STOCK.get()),
+        deleteStock: stockId => dispatch(STOCK.del(stockId))
     }
 }
 

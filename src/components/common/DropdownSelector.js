@@ -42,7 +42,6 @@ class DropdownSelector extends React.Component {
     }
 
     render() {
-        console.log("HERE", this.props)
         const { classes } = this.props
         return (
             <div className={classes.root}>

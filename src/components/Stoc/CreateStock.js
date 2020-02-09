@@ -63,7 +63,8 @@ class CreateStock extends Component {
 
     state = {
         modalFields: this.initialFields,
-        availableBrands: []
+        availableBrands: [],
+        waitForBrands: false
     }
 
     componentWillReceiveProps(nextProps) {
@@ -72,51 +73,55 @@ class CreateStock extends Component {
     }
 
     toggleEditModal = stockId => {
-        this.populateWithBrands()
-        this.props.getStockById(stockId).then(response => {
-            let modalFieldsCopy = [...this.state.modalFields].map(field => {
-                if (field.type === 'dropdownSelector') {
-                    if (field.name === 'carModelId') {
-                        this.props.getModelByBrandId(response['carBrandId']).then(result => {
-                            let carModel = {
-                                ...field,
-                                value: result[0]._id,
-                                options: mapToDropdownSelector(result)
-                            }
-                            modalFieldsCopy[1] = carModel
-                            this.setState({
-                                modalFields: modalFieldsCopy
+        this.populateWithBrands().then(() => {
+            this.props.getStockById(stockId).then(response => {
+                let modalFieldsCopy = [...this.state.modalFields].map(field => {
+                    if (field.type === 'dropdownSelector') {
+                        if (field.name === 'carModelId') {
+                            this.props.getModelByBrandId(response['carBrandId']).then(result => {
+                                let carModel = {
+                                    ...field,
+                                    value: result[0]._id,
+                                    options: mapToDropdownSelector(result)
+                                }
+                                modalFieldsCopy[1] = carModel
+                                this.setState({
+                                    modalFields: modalFieldsCopy
+                                })
                             })
+                        }
+                        return ({
+                            ...field,
+                            value: response[field.name],
+                            options: field.options.map(option => {
+                                return ({ ...option, value: String(option.id) === String(response[field.name]) ? true : false })
+                            }),
+                            touched: true
                         })
                     }
+
                     return ({
                         ...field,
-                        value: response[field.name],
-                        touched: true
+                        value: response[field.name]
                     })
-                }
-
-                return ({
-                    ...field,
-                    value: response[field.name]
                 })
-            })
 
-            this.setState({
-                modalFields: modalFieldsCopy
+                this.setState({
+                    modalFields: modalFieldsCopy
+                })
+            }).catch(() => {
+                alert("NOT FOUND")
             })
-        }).catch(() => {
-            alert("NOT FOUND")
         })
     }
 
     populateWithBrands = () => {
-        this.props.getBrands().then(brands => {
+        return this.props.getBrands().then(brands => {
             let brandIndex = findIndexInArray(this.state.modalFields, 'carBrandId')
             if (brandIndex > -1) {
                 let modalFieldsCopy = [...this.state.modalFields].map(el => ({ ...el }))
                 modalFieldsCopy[brandIndex].options = mapToDropdownSelector(brands.brands)
-                this.setState({ modalFields: modalFieldsCopy, openModal: true, availableBrands: brands.brands })
+                this.setState({ modalFields: modalFieldsCopy, openModal: true, availableBrands: brands.brand })
             }
         })
     }
