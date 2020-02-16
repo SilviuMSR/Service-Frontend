@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import { Route } from 'react-router-dom'
 import { withRouter } from 'react-router'
+
 import CarBrand from '../CarBrand/CarBrand'
+import CarProblem from '../CarProblem/CarProblem'
 
 class Admin extends Component {
     render() {
@@ -9,6 +11,7 @@ class Admin extends Component {
         return (
             <>
                 <Route path={`${match.path}/car`} exact component={CarBrand} />
+                <Route path={`${match.path}/problem`} exact component={CarProblem} />
             </>
         )
     }

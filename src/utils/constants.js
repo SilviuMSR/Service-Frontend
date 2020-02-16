@@ -24,6 +24,13 @@ export const HOMEPAGE_OPTIONS = [
     { name: 'LOGIN', value: false }
 ]
 
+export const PROBLEM_DIFFICULTY = [
+    { label: '', value: false},
+    { label: 'EASY', value: false },
+    { label: 'MEDIUM', value: false },
+    { label: 'HARD', value: false },
+]
+
 export const RESERVATION_PROBLEMS_OPTION = [
     { label: 'Da', value: false },
     { label: 'Nu', value: false },

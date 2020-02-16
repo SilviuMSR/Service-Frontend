@@ -19,10 +19,11 @@ export const create = problem => dispatch =>
         .then(response => Promise.resolve(response.data))
         .catch(errorHandler)
 
-export const edit = (problemId, problem, modifySteps) => dispatch =>
-    axios.put(`${baseRoute}/${problemId}?${modifySteps ? 'modifySteps=true' : ''}`, { problem })
+export const edit = (problemId, problem, modifySteps, newStepData) => dispatch => {
+    return axios.put(`${baseRoute}/${problemId}?${modifySteps ? 'modifySteps=true' : ''}`, { problem: problem, stepAfter: newStepData ? newStepData.stepAfter : null, newStep: newStepData ? newStepData.newStep : null })
         .then(response => Promise.resolve(response.data))
         .catch(errorHandler)
+}
 
 export const del = problemId => dispatch =>
     axios.delete(`${baseRoute}/${problemId}`)
