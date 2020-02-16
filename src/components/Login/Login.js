@@ -22,6 +22,12 @@ class Login extends Component {
         modalFields: this.initialFields
     }
 
+    pressEnterHandler = (e) => {
+        if (e.key === 'Enter') {
+            this.onSubmitHandler()
+        }
+    }
+
     componentDidMount() {
     }
 
@@ -63,6 +69,7 @@ class Login extends Component {
                 <div className="fieldsContainer">
                     {this.state.modalFields.map((field, index) => {
                         return <InputGenerator
+                            onKeyPress={this.pressEnterHandler}
                             key={index}
                             margin="dense"
                             fullWidth={true}

@@ -25,7 +25,7 @@ export const edit = (problemId, problem, modifySteps, newStepData) => dispatch =
         .catch(errorHandler)
 }
 
-export const del = problemId => dispatch =>
-    axios.delete(`${baseRoute}/${problemId}`)
+export const del = (problemId, deleteStep) => dispatch =>
+    axios.delete(`${baseRoute}/${problemId}?${`${deleteStep ? `deleteStep=${deleteStep}` : ''}`}`)
         .then(response => Promise.resolve(response.data))
         .catch(errorHandler)

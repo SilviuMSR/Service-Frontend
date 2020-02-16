@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import moment from 'moment'
 
 import { withStyles, Button } from '@material-ui/core'
+import { Delete } from '@material-ui/icons'
 
 import { mapToDropdownSelector } from '../../../utils/apiFunctions'
 
@@ -207,6 +208,12 @@ class CreateCarProblem extends Component {
         }
     }
 
+    deleteStepHandler = step => {
+        this.props.deleteStep(this.props.problemId, step).then(() => {
+            this.toggleEditModal(this.props.problemId)
+        })
+    }
+
     renderProblemFields = () => {
         const stepsIndex = this.state.modalFields.findIndex(field => field.name === 'steps')
         if (stepsIndex && this.state.modalFields[stepsIndex].value.length)
@@ -233,17 +240,24 @@ class CreateCarProblem extends Component {
                         <div className={this.props.classes.currentSteps}>
                             {this.state.modalFields[stepsIndex].value.map(step => {
                                 return (
-                                    <li>{step}</li>
+                                    <div>
+                                        <li>{step}</li>
+                                        <Delete onClick={() => {
+                                            this.deleteStepHandler(step)
+                                        }} />
+                                    </div>
                                 )
                             })}
                         </div>
                         {this.state.addNewStep && <div className={this.props.classes.newStep}>
                             {this.state.newStepModalFields.map(field => {
-                                return <InputGenerator
-                                    margin="dense"
-                                    fullWidth={true}
-                                    onChange={event => this.onChangeHandlerNewStep(event)}
-                                    {...field} />
+                                return (
+                                    <InputGenerator
+                                        margin="dense"
+                                        fullWidth={true}
+                                        onChange={event => this.onChangeHandlerNewStep(event)}
+                                        {...field} />
+                                )
                             })}
                         </div>
                         }
@@ -286,6 +300,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => {
     return {
         createProblem: problem => dispatch(PROBLEM.create(problem)),
+        deleteStep: (problemId, step) => dispatch(PROBLEM.del(problemId, step)),
         getProblemById: problemId => dispatch(PROBLEM.getById(problemId)),
         edit: (problem, problemId, modifySteps, newSteps) => dispatch(PROBLEM.edit(problem, problemId, modifySteps, newSteps))
     }
