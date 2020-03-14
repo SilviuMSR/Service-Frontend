@@ -9,6 +9,7 @@ import * as MODELS from '../../../redux/actions/models'
 import * as CONSTANTS from '../../../utils/constants'
 
 import ConfirmationModal from '../../common/ConfirmationDialog'
+import RenderCards from '../../common/RenderCards'
 import CreateBrandModal from './CreateCarBrand'
 import CarModel from '../CarModel/CarModel'
 
@@ -23,32 +24,34 @@ const styles = theme => ({
     },
     headersContainer: {
         height: 50,
-        width: 300,
-        margin: '10px 100px 0px auto',
-        borderRadius: 4,
-        boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.08)',
-        border: '1px solid rgba(0,0,0,0.1)',
+        width: '100%',
+        borderBottom: '1px solid rgba(0,0,0,0.1)',
         backgroundColor: 'white',
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
-        boxSizing: 'content-box'
-    },
-    addContainer: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderRight: '1px solid rgba(0,0,0,0.1)'
-    },
-    searchContainer: {
-        flex: 3,
-        paddingLeft: 10,
-        alignItems: 'center',
-        justifyContent: 'center',
     },
     carContainer: {
         display: 'flex',
         flexDirection: 'row'
+    },
+    addContainer: {
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        paddingRight: 19
+    },
+    titleContainer: {
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'row',
+        paddingLeft: 19,
+        fontSize: 18,
+        fontWeight: 500
+    },
+    titleText: {
+        color: '#1976d2'
     }
 })
 
@@ -64,8 +67,10 @@ class CarBrand extends Component {
         openConfirmationModal: false,
         associatedModels: [],
         selectedBrandId: null,
-        modalFields: this.initialFields
+        modalFields: this.initialFields,
+        addModel: false
     }
+
 
     componentDidMount() {
         this.getBrands()
@@ -97,6 +102,18 @@ class CarBrand extends Component {
         this.setState({ openConfirmationModal: false })
     }
 
+    onSelectBrand = brand => {
+        this.getAssociatedModels(brand._id)
+    }
+
+    handleModelEvents = value => {
+        if (this.state.selectedBrandId) {
+            this.setState({
+                addModel: value
+            })
+        }
+    }
+
     render() {
         return (
             <>
@@ -111,31 +128,38 @@ class CarBrand extends Component {
                 <CreateBrandModal carBrandId={this.brandToEdit._id} type={this.state.modalType} getBrands={() => this.getBrands()} open={this.state.openModal} onCancel={() => this.setState({ openModal: false })} />
                 <div className={this.props.classes.container}>
                     <div className={this.props.classes.headersContainer}>
-                        <div className={this.props.classes.addContainer}><Button onClick={() => this.setState({ openModal: true, modalType: CONSTANTS.CREATE })}>ADD</Button></div>
-                        <div className={this.props.classes.searchContainer}><TextField placeholder="Search..." /></div>
+                        <div className={this.props.classes.titleContainer}>
+                            <p className={this.props.classes.titleText}>CAR BRANDS</p>
+                            <Button onClick={() => this.setState({ openModal: true, modalType: CONSTANTS.CREATE })}>ADD</Button>
+                        </div>
+                        <div className={this.props.classes.addContainer}>
+                            <div className={this.props.classes.titleContainer}>
+                                <p className={this.props.classes.titleText}>ASSOCIATED MODELS</p>
+                                <Button onClick={() => this.handleModelEvents(true)}>ADD</Button>
+                            </div>
+                            <TextField placeholder="Search..." />
+                        </div>
+
                     </div>
                     <div className={this.props.classes.carContainer}>
-                        <div style={{ flex: 1 }}>
-                            {this.state.brands.map(brand => {
-                                return (
-                                    <div>
-                                        <span onClick={() => {
-                                            this.getAssociatedModels(brand._id)
-                                        }}>{brand.name}</span>
-                                        <Edit onClick={() => {
-                                            this.brandToEdit = brand
-                                            this.setState({ openModal: true, modalType: CONSTANTS.EDIT })
-                                        }} />
-                                        <Delete onClick={() => {
-                                            this.brandToDelete = brand
-                                            this.setState({ openConfirmationModal: true })
-                                        }} />
-                                    </div>
-                                )
-                            })}
+                        <div style={{ flex: 1, backgroundColor: '#F8F8F8', margin: 20 }}>
+                            <RenderCards
+                                displayMainPhoto={true}
+                                type={CONSTANTS.BRAND_TYPE}
+                                onEdit={item => {
+                                    this.brandToEdit = item
+                                    this.setState({ openModal: true, modalType: CONSTANTS.EDIT })
+                                }}
+                                onDelete={item => {
+                                    this.brandToDelete = item
+                                    this.setState({ openConfirmationModal: true })
+                                }}
+                                onClick={item => this.onSelectBrand(item)}
+                                content={[{ field: 'name', label: 'Brand' }]}
+                                items={this.state.brands} />
                         </div>
-                        <div style={{ flex: 1 }}>
-                            {this.state.selectedBrandId ? <CarModel carBrandId={this.state.selectedBrandId} models={this.state.associatedModels} getModels={() => this.getAssociatedModels()} /> : <p>Select brand</p>}
+                        <div style={{ flex: 1, backgroundColor: '#F8F8F8', margin: 20 }}>
+                            {this.state.selectedBrandId ? <CarModel addClicked={this.state.addModel} onCloseModal={() => this.handleModelEvents(false)} carBrandId={this.state.selectedBrandId} models={this.state.associatedModels} getModels={() => this.getAssociatedModels()} /> : <p>Select brand</p>}
                         </div>
                     </div>
                 </div>

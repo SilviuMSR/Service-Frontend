@@ -15,6 +15,9 @@ export const PROBLEM = 'knowingStatus'
 export const CAR_BRAND_ID = 'carBrandId'
 export const NO = 'Nu'
 
+export const MODEL_TYPE = "MODEL_TYPE"
+export const BRAND_TYPE = "BRAND_TYPE"
+
 export const DEFAULT_DATE_TIME_FORMAT = 'DD/MM/YYYY HH:mm:ss'
 export const DEFAULT_DATE_FORMAT = 'DD/MM/YYYY'
 export const INPUT_TYPE_DATE_FORMAT = 'YYYY-MM-DD'

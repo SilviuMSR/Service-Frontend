@@ -74,6 +74,14 @@ const MuiTheme = createMuiTheme({
                 }
             }
         },
+        MuiCardContent: {
+            root: {
+                '&:last-child': {
+                    paddingBottom: 4
+                },
+                padding: 6
+            }
+        },
         MuiAppBar: {
             // colorPrimary: {
             //     backgroundColor: '#f5f5f5'

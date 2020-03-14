@@ -9,9 +9,16 @@ import * as CONSTANTS from '../../../utils/constants'
 
 import ConfirmationModal from '../../common/ConfirmationDialog'
 import CreateModelModal from './CreateCarModel'
+import RenderCards from '../../common/RenderCards'
 
 const styles = theme => ({
-
+    titleContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        paddingLeft: 19,
+        fontSize: 18,
+        fontWeight: 500
+    }
 })
 
 class CarModel extends Component {
@@ -24,6 +31,15 @@ class CarModel extends Component {
         modalType: CONSTANTS.CREATE,
         openConfirmationModal: false,
         modalFields: this.initialFields
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.addClicked) {
+            this.setState({
+                openModal: true,
+                modalType: CONSTANTS.CREATE
+            })
+        }
     }
 
     deleteModelHandler = () => {
@@ -49,24 +65,25 @@ class CarModel extends Component {
                     onClose={this.closeConfirmationModalHandler}
                     onCancel={this.closeConfirmationModalHandler}
                     onAccept={() => this.deleteModelHandler()} />
-                <CreateModelModal carBrandId={this.props.carBrandId} carModelId={this.modelToEdit._id} type={this.state.modalType} getModels={this.props.getModels} open={this.state.openModal} onCancel={() => this.setState({ openModal: false })} />
-                <Button onClick={() => this.setState({ openModal: true, modalType: CONSTANTS.CREATE })}>ADD</Button>
-                {this.props.models.map(model => {
-                    return (
-                        <div>
+                <CreateModelModal carBrandId={this.props.carBrandId} carModelId={this.modelToEdit._id} type={this.state.modalType} getModels={this.props.getModels} open={this.state.openModal} onCancel={() => {
+                    this.props.onCloseModal()
+                    this.setState({ openModal: false })
+                }} />
+                <RenderCards
+                    displayMainPhoto={true}
+                    type={CONSTANTS.MODEL_TYPE}
+                    onEdit={item => {
+                        this.modelToEdit = item
+                        this.setState({ openModal: true, modalType: CONSTANTS.EDIT })
+                    }}
+                    onDelete={item => {
+                        this.modelToDelete = item
+                        this.setState({ openConfirmationModal: true })
+                    }}
+                    onClick={item => { }}
+                    content={[{ field: 'name', label: 'Model' }]}
+                    items={this.props.models} />
 
-                            <span>{model.name}</span>
-                            <Edit onClick={() => {
-                                this.modelToEdit = model
-                                this.setState({ openModal: true, modalType: CONSTANTS.EDIT })
-                            }} />
-                            <Delete onClick={() => {
-                                this.modelToDelete = model
-                                this.setState({ openConfirmationModal: true })
-                            }} />
-                        </div>
-                    )
-                })}
 
             </>
         )
