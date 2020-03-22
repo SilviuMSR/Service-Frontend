@@ -9,7 +9,8 @@
         "admin": {
             "admin": "Admin",
             "car": "Cars",
-            "problem": "Problems"
+            "problem": "Problems",
+            "user": "Users"
         },
         "reservation": "Reservations",
         "stoc": "Stock",

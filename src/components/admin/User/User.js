@@ -6,10 +6,11 @@ import { Delete } from '@material-ui/icons'
 
 import ConfirmationModal from '../../common/ConfirmationDialog'
 import RenderCards from '../../common/RenderCards'
-import * as CONSTANTS from '../../../utils/constants'
-import * as PROBLEMS from '../../../redux/actions/problems'
 
-import CreateCarProblem from './CreateCarProblem'
+import * as CONSTANTS from '../../../utils/constants'
+import * as USERS from '../../../redux/actions/users'
+
+import UserModal from './UserModal'
 
 const styles = theme => ({
     container: {
@@ -50,39 +51,39 @@ const styles = theme => ({
     }
 })
 
-class CarProblem extends Component {
+class User extends Component {
 
-    problemToEdit = {}
-    problemToDelete = {}
+    userToEdit = {}
+    userToDelete = {}
 
     state = {
         openModal: false,
         modalType: CONSTANTS.CREATE,
-        problems: [],
+        users: [],
         openConfirmationModal: false
     }
 
     componentDidMount() {
-        this.getProblems()
+        this.getUsers()
     }
 
-    getProblems = () => {
-        this.props.getProblems().then(result => {
+    getUsers = () => {
+        this.props.getUsers().then(result => {
             this.setState({
-                problems: result.carProblems
+                users: result.users
             })
         })
     }
 
-    deleteProblemHandler = () => {
-        this.props.delete(this.problemToDelete._id).then(() => {
-            this.getProblems()
+    deleteUserHandler = () => {
+        this.props.delete(this.userToDelete._id).then(() => {
+            this.getUsers()
             this.setState({ openConfirmationModal: false })
         })
     }
 
     closeConfirmationModalHandler = () => {
-        this.problemToDelete = {}
+        this.userToDelete = {}
         this.setState({ openConfirmationModal: false })
     }
 
@@ -96,36 +97,37 @@ class CarProblem extends Component {
                     open={this.state.openConfirmationModal}
                     onClose={this.closeConfirmationModalHandler}
                     onCancel={this.closeConfirmationModalHandler}
-                    onAccept={() => this.deleteProblemHandler()} />
-                <CreateCarProblem problemId={this.problemToEdit._id} type={this.state.modalType} getProblems={() => this.getProblems()} open={this.state.openModal} onCancel={() => {
-                    this.getProblems()
+                    onAccept={() => this.deleteUserHandler()} />
+                <UserModal userId={this.userToEdit._id} type={this.state.modalType} getUsers={() => this.getUsers()} open={this.state.openModal} onCancel={() => {
+                    this.getUsers()
                     this.setState({ openModal: false })
                 }} />
                 <div className={this.props.classes.container}>
                     <div className={this.props.classes.headersContainer}>
                         <div className={this.props.classes.titleContainer}>
-                            <p className={this.props.classes.titleText}>CAR PROBLEMS</p>
+                            <p className={this.props.classes.titleText}>USERS</p>
                         </div>
                         <div className={this.props.classes.addContainer}>
                             <Button color="primary" onClick={() => this.setState({ openModal: true, modalType: CONSTANTS.CREATE })}>ADD</Button>
-                            <div className={this.props.classes.searchContainer}><TextField placeholder="Search..." /></div>
+                            <div className={this.props.classes.searchContainer}>
+                                <TextField placeholder="Search..." />
+                            </div>
                         </div>
                     </div>
                     <div style={{ backgroundColor: '#F8F8F8', margin: '20px 55px', flex: 1, border: '1px solid rgba(0,0,0,0.1)', boxShadow: '1px 1px rgba(0,0,0,0.1)' }}>
                         <RenderCards
                             displayMainPhoto={false}
-                            type={CONSTANTS.BRAND_TYPE}
                             onEdit={item => {
-                                this.problemToEdit = item
+                                this.userToEdit = item
                                 this.setState({ openModal: true, modalType: CONSTANTS.EDIT })
                             }}
                             onDelete={item => {
-                                this.problemToDelete = item
+                                this.userToDelete = item
                                 this.setState({ openConfirmationModal: true })
                             }}
                             onClick={item => { }}
-                            content={[{ field: 'name', label: 'Name' }, { field: 'difficulty', label: 'Difficulty' }, { field: 'price', label: 'Price' }, { field: 'steps', label: 'No. steps', length: true }]}
-                            items={this.state.problems} />
+                            content={[{ field: 'username', label: 'Name' }, { field: 'position', label: 'Position' }, { field: 'userStatus', label: 'Status' }]}
+                            items={this.state.users} />
                     </div>
                 </div>
 
@@ -139,9 +141,9 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => {
     return {
-        getProblems: () => dispatch(PROBLEMS.get()),
-        delete: problemId => dispatch(PROBLEMS.del(problemId))
+        getUsers: () => dispatch(USERS.get()),
+        delete: userId => dispatch(USERS.del(userId))
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(CarProblem))
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(User))

@@ -47,6 +47,10 @@ const styles = theme => ({
     },
     titleText: {
         color: '#1976d2'
+    },
+    searchContainer: {
+        paddingLeft: 18,
+        paddingTop: 7
     }
 })
 
@@ -106,7 +110,9 @@ class Stoc extends Component {
                         </div>
                         <div className={this.props.classes.addContainer}>
                             <Button color="primary" onClick={() => this.setState({ openModal: true, modalType: CONSTANTS.CREATE })}>ADD</Button>
-                            <TextField placeholder="Search..." />
+                            <div className={this.props.classes.searchContainer}>
+                                <TextField placeholder="Search..." />
+                            </div>
                         </div>
                     </div>
                     <div style={{ backgroundColor: '#F8F8F8', margin: '20px 55px', flex: 1, border: '1px solid rgba(0,0,0,0.1)', boxShadow: '1px 1px rgba(0,0,0,0.1)' }}>
@@ -122,7 +128,7 @@ class Stoc extends Component {
                                 this.setState({ openConfirmationModal: true })
                             }}
                             onClick={item => { }}
-                            content={[{ populate: 'carBrandId', field: 'name', label: 'Brand' }, { populate:'carModelId', field: 'name', label: 'Model' }, { field: 'name', label: 'Name' }, {field: 'price', label: 'Price'}, {field: 'no', label: 'Quantity'}]}
+                            content={[{ populate: 'carBrandId', field: 'name', label: 'Brand' }, { populate: 'carModelId', field: 'name', label: 'Model' }, { field: 'name', label: 'Name' }, { field: 'price', label: 'Price' }, { field: 'no', label: 'Quantity' }]}
                             items={this.state.stocks} />
                     </div>
                 </div>

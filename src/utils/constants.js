@@ -39,6 +39,18 @@ export const PROBLEM_DIFFICULTY = [
     { label: 'HARD', value: false },
 ]
 
+export const USER_POSITION = [
+    { label: '', value: false},
+    { label: 'EMPLOYEE', value: false },
+    { label: 'ADMIN', value: false }
+]
+
+export const USER_STATUS = [
+    { label: '', value: false},
+    { label: 'AVAILABLE', value: false },
+    { label: 'ON VACATION', value: false }
+]
+
 export const RESERVATION_PROBLEMS_OPTION = [
     { label: 'Da', value: false },
     { label: 'Nu', value: false },

@@ -29,6 +29,10 @@ class Root extends Component {
                 {
                     to: '/admin/problem',
                     label: 'problem'
+                },
+                {
+                    to: '/admin/user',
+                    label: 'user'
                 }
             ]
         },

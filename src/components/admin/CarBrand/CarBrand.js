@@ -52,6 +52,14 @@ const styles = theme => ({
     },
     titleText: {
         color: '#1976d2'
+    },
+    searchContainer: {
+        paddingLeft: 18,
+        paddingTop: 17
+    },
+    addButton: {
+        marginTop: 11,
+        marginLeft: 8
     }
 })
 
@@ -130,14 +138,20 @@ class CarBrand extends Component {
                     <div className={this.props.classes.headersContainer}>
                         <div className={this.props.classes.titleContainer}>
                             <p className={this.props.classes.titleText}>CAR BRANDS</p>
-                            <Button color="primary" onClick={() => this.setState({ openModal: true, modalType: CONSTANTS.CREATE })}>ADD</Button>
+                            <div className={this.props.classes.addButton}>
+                                <Button color="primary" onClick={() => this.setState({ openModal: true, modalType: CONSTANTS.CREATE })}>ADD</Button>
+                            </div>
                         </div>
                         <div className={this.props.classes.addContainer}>
                             <div className={this.props.classes.titleContainer}>
                                 <p className={this.props.classes.titleText}>ASSOCIATED MODELS</p>
-                                <Button color="primary" onClick={() => this.handleModelEvents(true)}>ADD</Button>
+                                <div className={this.props.classes.addButton}>
+                                    <Button color="primary" onClick={() => this.handleModelEvents(true)}>ADD</Button>
+                                </div>
                             </div>
-                            <TextField placeholder="Search..." />
+                            <div className={this.props.classes.searchContainer}>
+                                <TextField placeholder="Search..." />
+                            </div>
                         </div>
 
                     </div>

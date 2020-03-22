@@ -153,7 +153,8 @@ const styles = theme => ({
     },
     titleText: {
         color: '#1976d2'
-    }
+    },
+    
 })
 
 class Reservations extends Component {
@@ -172,7 +173,7 @@ class Reservations extends Component {
     }
 
     componentDidMount() {
-        this.setState({ selectedOption: this.props.login.position === 'admin' ? CONSTANTS.RENDER_RESERVATION_ADMIN : CONSTANTS.RENDER_RESERVATION_EMPLOYEE }, () => this.handlerReservations())
+        this.setState({ selectedOption: this.props.login.position.toLowerCase() === 'admin' ? CONSTANTS.RENDER_RESERVATION_ADMIN : CONSTANTS.RENDER_RESERVATION_EMPLOYEE }, () => this.handlerReservations())
     }
 
     getReservationById = reservationId => {
@@ -180,7 +181,7 @@ class Reservations extends Component {
     }
 
     handlerReservations = () => {
-        if (this.props.login.position === 'admin') {
+        if (this.props.login.position.toLowerCase() === 'admin') {
             this.getReservationsHandler()
         }
         else if (this.state.selectedOption === CONSTANTS.RENDER_RESERVATION_EMPLOYEE) {
@@ -313,16 +314,16 @@ class Reservations extends Component {
                         <div className={this.props.classes.titleContainer}>
                             <p className={this.props.classes.titleText}>RESERVATIONS</p>
                         </div>
-                        {this.props.login.position !== 'admin' ? <div className={this.props.classes.headersContainerEmployee}>
+                        {this.props.login.position.toLowerCase() !== 'admin' ? <div className={this.props.classes.headersContainerEmployee}>
                             <div className={this.props.classes.optionsIcon}><VisibilityOutlinedIcon /></div>
                             <div onClick={() => this.selectOptionHandler(CONSTANTS.RENDER_RESERVATION_EMPLOYEE)} className={this.props.classes.options}><span className={`${this.state.selectedOption === CONSTANTS.RENDER_RESERVATION_EMPLOYEE ? this.props.classes.selectedOption : ""} ${this.props.classes.optionText}`}>RESERVATIONS</span></div>
                             <div onClick={() => this.selectOptionHandler(CONSTANTS.RENDER_RESERVATION_PERSONAL)} className={this.props.classes.options}><span className={`${this.state.selectedOption === CONSTANTS.RENDER_RESERVATION_PERSONAL ? this.props.classes.selectedOption : ""} ${this.props.classes.optionText}`}>PERSONAL</span></div>
                         </div> : null}
                     </div>
                     <div className={this.props.classes.containerContent}>
-                        <SimpleModal maxWidth={"md"} title={this.state.showFiles ? "Files" : "Problems"} open={(this.state.showFiles || this.state.showProblems) && this.state.expandedReservationId} onCancel={() => this.state.showFiles ? this.setState({ showFiles: false }) : this.setState({ showProblems: false, currentProblem: null })}>
+                        {/* <SimpleModal maxWidth={"md"} title={this.state.showFiles ? "Files" : "Problems"} open={(this.state.showFiles || this.state.showProblems) && this.state.expandedReservationId} onCancel={() => this.state.showFiles ? this.setState({ showFiles: false }) : this.setState({ showProblems: false, currentProblem: null })}>
                             {this.renderModalContentHandler()}
-                        </SimpleModal>
+                        </SimpleModal> */}
                         {/* <RenderItems
                             onExpandHandler={reservationId => this.setState({ expandedReservationId: reservationId }, () => this.getReservationById(this.state.expandedReservationId))}
                             showFilesHandler={() => this.setState({ showFiles: true, currentFile: this.state.currentReservation.file[0] })}
