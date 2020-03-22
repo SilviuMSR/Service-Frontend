@@ -19,7 +19,6 @@ const style = theme => ({
         overflow: 'hidden'
     },
     acceptButton: {
-        color: 'green'
     },
     cancelButton: {
         marginRight: 'auto',

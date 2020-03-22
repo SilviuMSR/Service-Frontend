@@ -17,10 +17,15 @@ export const NO = 'Nu'
 
 export const MODEL_TYPE = "MODEL_TYPE"
 export const BRAND_TYPE = "BRAND_TYPE"
+export const RESERVATION_TYPE = "RESERVATION_TYPE"
 
 export const DEFAULT_DATE_TIME_FORMAT = 'DD/MM/YYYY HH:mm:ss'
 export const DEFAULT_DATE_FORMAT = 'DD/MM/YYYY'
 export const INPUT_TYPE_DATE_FORMAT = 'YYYY-MM-DD'
+
+export const DETAILS_TAB = 'DETAILS'
+export const PROBLEMS_TAB = 'PROBLEMS'
+export const INVOICES_TAB = 'INVOICES'
 
 export const HOMEPAGE_OPTIONS = [
     { name: 'REZERVARE', value: true },

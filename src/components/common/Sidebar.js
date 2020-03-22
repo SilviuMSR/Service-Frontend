@@ -29,19 +29,19 @@ const styles = theme => ({
         borderBottom: '1px solid #eee'
     },
     listItemText: {
-        color: 'black',
+        color: '#fff',
         fontWeight: 500,
         fontStyle: 'normal',
         fontStretch: 'normal'
     },
     listItemTextSelected: {
-        color: '#1976d2',
+        color: '#c0d3d3',
         fontWeight: 500,
         fontStyle: 'normal',
         fontStretch: 'normal'
     },
     sidebarIcon: {
-        color: 'black'
+        color: '#fff'
     },
     logoutButton: {
         color: 'white',
@@ -121,14 +121,14 @@ class Sidebar extends Component {
         const { classes } = this.props
         const ListItemComponent = props => {
             if (props.isSelected) return (<ListItem  component={props.to ? Link : 'div'} to={props.to} divider={true} button selected={this.state.selected[props.label]} onClick={() => this.handleSelect(props.label)}>
-                <ListItemIcon>
+                <ListItemIcon style={{color: '#c0d3d3'}}>
                     {props.icon ? props.icon : <FolderOutlinedIcon />}
                 </ListItemIcon>
                 <ListItemText classes={{ primary: classes.listItemTextSelected }} inset primary={props.text} />
                 {props.nested ? props.open ? <ExpandLessIcon className={classes.sidebarIcon} onClick={() => this.handleExpand(props.label)} /> : <ExpandMoreIcon className={classes.sidebarIcon} onClick={() => this.handleExpand(props.label)} /> : null}
             </ListItem>)
             return (<ListItem component={props.to ? Link : 'div'} to={props.to} divider={true} button selected={this.state.selected[props.label]} onClick={() => this.handleSelect(props.label)}>
-                <ListItemIcon>
+                <ListItemIcon style={{color: '#fff'}}>
                     {props.icon ? props.icon : <FolderOutlinedIcon />}
                 </ListItemIcon>
                 <ListItemText classes={{ primary: classes.listItemText }} inset primary={props.text} />

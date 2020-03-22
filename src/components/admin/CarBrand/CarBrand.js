@@ -130,19 +130,19 @@ class CarBrand extends Component {
                     <div className={this.props.classes.headersContainer}>
                         <div className={this.props.classes.titleContainer}>
                             <p className={this.props.classes.titleText}>CAR BRANDS</p>
-                            <Button onClick={() => this.setState({ openModal: true, modalType: CONSTANTS.CREATE })}>ADD</Button>
+                            <Button color="primary" onClick={() => this.setState({ openModal: true, modalType: CONSTANTS.CREATE })}>ADD</Button>
                         </div>
                         <div className={this.props.classes.addContainer}>
                             <div className={this.props.classes.titleContainer}>
                                 <p className={this.props.classes.titleText}>ASSOCIATED MODELS</p>
-                                <Button onClick={() => this.handleModelEvents(true)}>ADD</Button>
+                                <Button color="primary" onClick={() => this.handleModelEvents(true)}>ADD</Button>
                             </div>
                             <TextField placeholder="Search..." />
                         </div>
 
                     </div>
                     <div className={this.props.classes.carContainer}>
-                        <div style={{ flex: 1, backgroundColor: '#F8F8F8', margin: 20 }}>
+                        <div style={{ flex: 1, backgroundColor: '#F8F8F8', margin: '20px 25px', border: '1px solid rgba(0,0,0,0.1)', boxShadow: '1px 1px rgba(0,0,0,0.1)' }}>
                             <RenderCards
                                 displayMainPhoto={true}
                                 type={CONSTANTS.BRAND_TYPE}
@@ -158,7 +158,7 @@ class CarBrand extends Component {
                                 content={[{ field: 'name', label: 'Brand' }]}
                                 items={this.state.brands} />
                         </div>
-                        <div style={{ flex: 1, backgroundColor: '#F8F8F8', margin: 20 }}>
+                        <div style={{ flex: 1, backgroundColor: '#F8F8F8', margin: '20px 25px', border: '1px solid rgba(0,0,0,0.1)', boxShadow: '1px 1px rgba(0,0,0,0.1)' }}>
                             {this.state.selectedBrandId ? <CarModel addClicked={this.state.addModel} onCloseModal={() => this.handleModelEvents(false)} carBrandId={this.state.selectedBrandId} models={this.state.associatedModels} getModels={() => this.getAssociatedModels()} /> : <p>Select brand</p>}
                         </div>
                     </div>

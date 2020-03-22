@@ -72,7 +72,8 @@ const styles = theme => ({
         marginLeft: 'auto'
     },
     stepsTitle: {
-        fontSize: 18
+        fontSize: 18,
+        fontWeight: 500
     },
     steps: {
         flex: 2,
@@ -234,15 +235,15 @@ class CreateCarProblem extends Component {
                 <div className={this.props.classes.stepsContainer}>
                     <div className={this.props.classes.stepsContainerHeader}>
                         <p className={this.props.classes.stepsTitle}>Steps</p>
-                        <Button onClick={() => this.addNewStepHandler()} className={`${this.props.classes.marginLeftAuto}`}>ADD NEW STEP</Button>
+                        <Button color="primary" onClick={() => this.addNewStepHandler()} className={`${this.props.classes.marginLeftAuto}`}>ADD NEW STEP</Button>
                     </div>
                     <div className={this.props.classes.steps}>
                         <div className={this.props.classes.currentSteps}>
                             {this.state.modalFields[stepsIndex].value.map(step => {
                                 return (
-                                    <div>
+                                    <div style={{display: 'flex', flexDirection: 'row'}}>
                                         <li>{step}</li>
-                                        <Delete onClick={() => {
+                                        <Delete style={{color: '#e53935', cursor: 'pointer'}} onClick={() => {
                                             this.deleteStepHandler(step)
                                         }} />
                                     </div>

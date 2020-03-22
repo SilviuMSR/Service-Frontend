@@ -103,11 +103,11 @@ class CarProblem extends Component {
                             <p className={this.props.classes.titleText}>CAR PROBLEMS</p>
                         </div>
                         <div className={this.props.classes.addContainer}>
-                            <Button onClick={() => this.setState({ openModal: true, modalType: CONSTANTS.CREATE })}>ADD</Button>
+                            <Button color="primary" onClick={() => this.setState({ openModal: true, modalType: CONSTANTS.CREATE })}>ADD</Button>
                             <TextField placeholder="Search..." />
                         </div>
                     </div>
-                    <div style={{ backgroundColor: '#F8F8F8', margin: 20, flex: 1 }}>
+                    <div style={{ backgroundColor: '#F8F8F8', margin: '20px 55px', flex: 1, border: '1px solid rgba(0,0,0,0.1)', boxShadow: '1px 1px rgba(0,0,0,0.1)' }}>
                         <RenderCards
                             displayMainPhoto={false}
                             type={CONSTANTS.BRAND_TYPE}
@@ -120,7 +120,7 @@ class CarProblem extends Component {
                                 this.setState({ openConfirmationModal: true })
                             }}
                             onClick={item => { }}
-                            content={[{ field: 'name', label: 'Name' }, { field: 'difficulty', label: 'Difficulty' }, { field: 'steps', label: 'No. steps', length: true }]}
+                            content={[{ field: 'name', label: 'Name' }, { field: 'difficulty', label: 'Difficulty' }, { field: 'price', label: 'Price' }, { field: 'steps', label: 'No. steps', length: true }]}
                             items={this.state.problems} />
                     </div>
                 </div>
