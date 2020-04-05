@@ -51,7 +51,8 @@ class CreateCarBrand extends Component {
     todayValue = moment().format(CONSTANTS.INPUT_TYPE_DATE_FORMAT)
 
     initialFields = [
-        { value: '', type: 'text', label: 'Nume', name: 'name' }
+        { value: '', type: 'text', label: 'Nume', name: 'name' },
+        { value: '', type: 'file', InputLabelProps: { shrink: true }, label: 'Logo', name: 'logo' }
     ]
 
     state = {
@@ -74,32 +75,56 @@ class CreateCarBrand extends Component {
             this.setState({
                 modalFields: modalFieldsCopy
             })
-        }).catch(() => {
-            alert("NOT FOUND")
         })
     }
 
     createBrandJson = () => {
         let brandJson = {}
-
         this.state.modalFields.forEach(field => brandJson[field.name] = field.value)
         brandJson['createdAt'] = this.todayValue
-
         return brandJson
 
     }
 
     onAddHandler = () => {
-        this.props.createBrand(this.createBrandJson()).then(() => {
-            this.onCancelHandler()
-            this.props.getBrands()
+        const brandJson = this.createBrandJson()
+        const logoIndex = this.state.modalFields.findIndex(index => index.name === 'logo')
+
+        this.props.createBrand(brandJson).then(createdBrand => {
+            if (logoIndex > -1 && this.state.modalFields[logoIndex].files && this.state.modalFields[logoIndex].files.length) {
+                let files = Array.from(this.state.modalFields[logoIndex].files)
+                const formData = new FormData()
+                formData.append('file', files[0])
+                return this.props.uploadLogo(createdBrand._id, formData).then(() => {
+                    this.onCancelHandler()
+                    this.props.getBrands()
+                })
+            }
+            else {
+                this.onCancelHandler()
+                this.props.getBrands()
+            }
         })
     }
 
     onEditHandler = () => {
-        this.props.edit(this.props.carBrandId, this.createBrandJson()).then(() => {
-            this.onCancelHandler()
-            this.props.getBrands()
+        const brandJson = this.createBrandJson()
+        const logoIndex = this.state.modalFields.findIndex(index => index.name === 'logo')
+
+        this.props.edit(this.props.carBrandId, brandJson).then(() => {
+            if (logoIndex > -1 && this.state.modalFields[logoIndex].files && this.state.modalFields[logoIndex].files.length) {
+                let files = Array.from(this.state.modalFields[logoIndex].files)
+                const formData = new FormData()
+                formData.append('file', files[0])
+                return this.props.editLogo(this.props.carBrandId, formData).then(() => {
+                    this.onCancelHandler()
+                    this.props.getBrands()
+                })
+            }
+            else {
+                this.onCancelHandler()
+                this.props.getBrands()
+            }
         })
     }
 
@@ -108,7 +133,13 @@ class CreateCarBrand extends Component {
         let currentIndex = this.state.modalFields.findIndex(field => field.name === event.target.name)
         if (currentIndex > -1) {
             let modalFieldsCopy = [...this.state.modalFields].map(field => ({ ...field }))
-            modalFieldsCopy[currentIndex].value = event.target.value
+            if (event.target.type === 'file') {
+                modalFieldsCopy[currentIndex].files = event.target.files
+                modalFieldsCopy[currentIndex].value = event.target.value
+            }
+            else {
+                modalFieldsCopy[currentIndex].value = event.target.value
+            }
             this.setState({ modalFields: modalFieldsCopy })
         }
     }
@@ -156,7 +187,9 @@ const mapDispatchToProps = dispatch => {
     return {
         createBrand: brand => dispatch(BRANDS.create(brand)),
         getBrandById: brandId => dispatch(BRANDS.getById(brandId)),
-        edit: (brand, brandId) => dispatch(BRANDS.edit(brand, brandId))
+        edit: (brand, brandId) => dispatch(BRANDS.edit(brand, brandId)),
+        uploadLogo: (brandId, form) => dispatch(BRANDS.uploadLogo(brandId, form)),
+        editLogo: (brandId, form) => dispatch(BRANDS.editLogo(brandId, form)),
     }
 }
 

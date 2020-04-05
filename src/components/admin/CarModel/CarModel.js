@@ -70,7 +70,7 @@ class CarModel extends Component {
                     this.setState({ openModal: false })
                 }} />
                 <RenderCards
-                    displayMainPhoto={true}
+                    displayMainPhoto={false}
                     type={CONSTANTS.MODEL_TYPE}
                     onEdit={item => {
                         this.modelToEdit = item

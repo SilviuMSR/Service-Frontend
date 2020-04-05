@@ -133,13 +133,14 @@ class SimpleCardContent extends Component {
     }
 
     render() {
+        const logoPathBrand = `http://localhost:9000/brands/${this.props.item._id}/image`
         const { classes } = this.props
         return (
             <div onClick={() => this.props.onClick(this.props.item)}>
                 <Card className={classes.root}>
                     <CardContent className={classes.cardContent}>
                         {this.props.displayMainPhoto ? <div style={{ flex: 1, padding: 4 }}>
-                            <img src="https://via.placeholder.com/75x75" height={75} width={75} />
+                            <img src={logoPathBrand || "https://via.placeholder.com/75x75"} height={75} width={75} />
                         </div> : null}
                         <div style={{ flex: 2, borderRight: '1px solid rgba(0,0,0,0.1)', padding: 4 }}>
 
