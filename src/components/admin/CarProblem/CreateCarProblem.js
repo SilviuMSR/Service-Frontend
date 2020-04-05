@@ -217,55 +217,53 @@ class CreateCarProblem extends Component {
 
     renderProblemFields = () => {
         const stepsIndex = this.state.modalFields.findIndex(field => field.name === 'steps')
-        if (stepsIndex && this.state.modalFields[stepsIndex].value.length)
-            return (<div className={this.props.classes.modalContainer}>
-                <div className={this.props.classes.problemDetails}>
-                    {
-                        this.state.modalFields.map((field, index) => {
-                            if (field.name !== 'steps')
-                                return <InputGenerator
-                                    key={index}
+        return (<div className={this.props.classes.modalContainer}>
+            <div className={this.props.classes.problemDetails}>
+                {
+                    this.state.modalFields.map((field, index) => {
+                        if (field.name !== 'steps')
+                            return <InputGenerator
+                                key={index}
+                                margin="dense"
+                                fullWidth={true}
+                                onChange={event => this.onChangeHandler(event)}
+                                {...field} />
+                    })
+                }
+            </div>
+            {stepsIndex > -1 && this.state.modalFields[stepsIndex].value.length && <div className={this.props.classes.stepsContainer}>
+                <div className={this.props.classes.stepsContainerHeader}>
+                    <p className={this.props.classes.stepsTitle}>Steps</p>
+                    <Button color="primary" onClick={() => this.addNewStepHandler()} className={`${this.props.classes.marginLeftAuto}`}>ADD NEW STEP</Button>
+                </div>
+                <div className={this.props.classes.steps}>
+                    <div className={this.props.classes.currentSteps}>
+                        {this.state.modalFields[stepsIndex].value.map(step => {
+                            return (
+                                <div style={{ display: 'flex', flexDirection: 'row' }}>
+                                    <li>{step}</li>
+                                    <Delete style={{ color: '#e53935', cursor: 'pointer' }} onClick={() => {
+                                        this.deleteStepHandler(step)
+                                    }} />
+                                </div>
+                            )
+                        })}
+                    </div>
+                    {this.state.addNewStep && <div className={this.props.classes.newStep}>
+                        {this.state.newStepModalFields.map(field => {
+                            return (
+                                <InputGenerator
                                     margin="dense"
                                     fullWidth={true}
-                                    onChange={event => this.onChangeHandler(event)}
+                                    onChange={event => this.onChangeHandlerNewStep(event)}
                                     {...field} />
-                        })
+                            )
+                        })}
+                    </div>
                     }
                 </div>
-                <div className={this.props.classes.stepsContainer}>
-                    <div className={this.props.classes.stepsContainerHeader}>
-                        <p className={this.props.classes.stepsTitle}>Steps</p>
-                        <Button color="primary" onClick={() => this.addNewStepHandler()} className={`${this.props.classes.marginLeftAuto}`}>ADD NEW STEP</Button>
-                    </div>
-                    <div className={this.props.classes.steps}>
-                        <div className={this.props.classes.currentSteps}>
-                            {this.state.modalFields[stepsIndex].value.map(step => {
-                                return (
-                                    <div style={{display: 'flex', flexDirection: 'row'}}>
-                                        <li>{step}</li>
-                                        <Delete style={{color: '#e53935', cursor: 'pointer'}} onClick={() => {
-                                            this.deleteStepHandler(step)
-                                        }} />
-                                    </div>
-                                )
-                            })}
-                        </div>
-                        {this.state.addNewStep && <div className={this.props.classes.newStep}>
-                            {this.state.newStepModalFields.map(field => {
-                                return (
-                                    <InputGenerator
-                                        margin="dense"
-                                        fullWidth={true}
-                                        onChange={event => this.onChangeHandlerNewStep(event)}
-                                        {...field} />
-                                )
-                            })}
-                        </div>
-                        }
-                    </div>
-                </div>
-            </div>)
-        else return null
+            </div>}
+        </div>)
     }
 
     onCancelHandler = () => {

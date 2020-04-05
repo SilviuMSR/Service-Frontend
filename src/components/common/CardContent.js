@@ -70,6 +70,10 @@ const styles = theme => ({
         marginRight: 10,
         marginTop: 3
     },
+    extraWidth: {
+        maxWidth: 340,
+        minWidth: 340
+    }
 })
 
 class SimpleCardContent extends Component {
@@ -132,15 +136,20 @@ class SimpleCardContent extends Component {
         )
     }
 
+    computeLogoPath = () => {
+        if (this.props.item.carBrandId && this.props.item.carBrandId.logoPath) return `http://localhost:9000/brands/${this.props.item.carBrandId._id}/image`
+        return `http://localhost:9000/brands/${this.props.item._id}/image`
+    }
+
     render() {
-        const logoPathBrand = `http://localhost:9000/brands/${this.props.item._id}/image`
+        const logoPath = this.computeLogoPath()
         const { classes } = this.props
         return (
             <div onClick={() => this.props.onClick(this.props.item)}>
-                <Card className={classes.root}>
-                    <CardContent className={classes.cardContent}>
+                <Card className={`${classes.root} ${this.props.extraWidth ? classes.extraWidth : ''}`}>
+                    <CardContent className={`${this.props.extraWidth ? classes.extraWidth : ''} ${classes.cardContent}`}>
                         {this.props.displayMainPhoto ? <div style={{ flex: 1, padding: 4 }}>
-                            <img src={logoPathBrand || "https://via.placeholder.com/75x75"} height={75} width={75} />
+                            <img src={logoPath || "https://via.placeholder.com/75x75"} height={75} width={100} />
                         </div> : null}
                         <div style={{ flex: 2, borderRight: '1px solid rgba(0,0,0,0.1)', padding: 4 }}>
 
