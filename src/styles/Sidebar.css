@@ -1,11 +1,11 @@
 .sidebar{
+  font-family: Poppins;
     height: 100%; 
     display: flex;
     flex-direction: column;
     flex-shrink: 0;
     order: -1;
-    background-color:#3B4856;
-    border-right:2px solid #DFDCE3; 
+    background-color:#242424;
     width:300px; 
     overflow:auto;
   }

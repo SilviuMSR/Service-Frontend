@@ -8,14 +8,47 @@ import * as LOGIN from '../redux/actions/login'
 import Homepage from '../components/Homepage/Homepage'
 import Dashboard from '../components/Dashboard/Dashboard'
 import Reservations from '../components/Reservation/Reservations'
-import TopNavbar from '../components/common/TopNavbar'
+import RootSidebar from '../components/common/RootSidebar'
+import Admin from '../components/admin/Admin/Admin'
 import Stoc from '../components/Stoc/Stoc'
 
 class Root extends Component {
 
     state = {
         logged: false,
-        renderPage: false
+        renderPage: false,
+        sidebarItems: [{
+            label: 'admin',
+            nested: true,
+            expandedText: 'admin',
+            nestedComponents: [
+                {
+                    to: '/admin/car',
+                    label: 'car'
+                },
+                {
+                    to: '/admin/problem',
+                    label: 'problem'
+                },
+                {
+                    to: '/admin/user',
+                    label: 'user'
+                }
+            ]
+        },
+        {
+            label: 'dashboard',
+            to: '/'
+        },
+        {
+            label: 'reservation',
+            to: '/reservations'
+        },
+        {
+            label: 'stoc',
+            to: '/stoc'
+        }
+        ]
     }
 
     componentDidMount() {
@@ -34,18 +67,21 @@ class Root extends Component {
                 <Router>
                     {this.props.login.isLogged ?
                         (
-                            <>
-                                <div style={{ height: '10%' }}>
-                                    <TopNavbar />
-                                </div>
-                                <div style={{ height: '90%' }}>
+                            <div style={{ display: 'flex', height: '100%' }}>
+                                <RootSidebar
+                                    onLogout={this.props.logout}
+                                    items={this.state.sidebarItems}
+                                />
+                                <div style={{ flex: 1 }}>
                                     <Switch>
+                                        {<Route path="/" exact component={Dashboard} />}
                                         {<Route path="/reservations" exact component={Reservations} />}
                                         {<Route path="/stoc" exact component={Stoc} />}
-                                        {<Route path="/" component={Dashboard} />}
+                                        {<Route path="/admin" component={Admin} />}
+
                                     </Switch>
                                 </div>
-                            </>
+                            </div>
                         )
                         : <Homepage />
                     }
@@ -61,7 +97,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => {
     return {
-        isLogged: () => dispatch(LOGIN.isLogged())
+        isLogged: () => dispatch(LOGIN.isLogged()),
+        logout: () => dispatch(LOGIN.logout())
     }
 }
 

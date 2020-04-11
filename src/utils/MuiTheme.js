@@ -1,9 +1,17 @@
 import { createMuiTheme } from '@material-ui/core/styles'
 import { main } from '@material-ui/core/colors'
 
-const primaryColor = '#E46B01'
-const primaryColorHover = '#d66400'
-const secondaryColor = '#fc4a1a'
+const primaryColor = '#3e3f42'
+const primaryColorHover = '#6b6c6f'
+const secondaryColor = '#1665d8'
+const whiteColor = '#ffffff'
+const mainTextColor = '#ffffff'
+const blueColor = '#1665d8'
+const greenColor = '#34aa44'
+const redColor = '#e6492d'
+
+const primaryButtonColor = '#34aa44'
+const secondarButtonColor = '#f6f7f9'
 
 const MuiTheme = createMuiTheme({
     typography: {
@@ -57,14 +65,44 @@ const MuiTheme = createMuiTheme({
             }
         },
         MuiButton: {
+            root: {
+                height: 40
+            },
+            contained: {
+                boxShadow: 'unset'
+            },
             containedPrimary: {
-                backgroundColor: primaryColor,
+                color: whiteColor,
+                backgroundColor: primaryButtonColor,
                 '&:hover': {
-                    backgroundColor: primaryColorHover
+                    backgroundColor: greenColor,
+                    opacity: 0.50
+                }
+            },
+            flatSecondary: {
+                color: '#3e3f42',
+                backgroundColor: secondarButtonColor,
+                boxShadow: '0 0.5px 0.5px 0 rgba(22, 29, 37, 0.05), inset 0 1px 0 0 rgba(255, 255, 255, 0.05)',
+                border: 'solid 0.5px #d8dce6',
+                padding: 9,
+                fontSize: 12,
+                '&:hover': {
+                    backgroundColor: '#d8dce6',
+                    opacity: 0.75
                 }
             },
             flatPrimary: {
-                color: primaryColorHover
+                color: whiteColor,
+                backgroundColor: primaryButtonColor,
+                padding: 9,
+                fontSize: 12,
+                '&:hover': {
+                    backgroundColor: primaryColor,
+                    opacity: 0.50
+                },
+            },
+            label: {
+                fontSize: 12
             }
         },
         MuiCheckbox: {
@@ -72,6 +110,14 @@ const MuiTheme = createMuiTheme({
                 '&$checked': {
                     color: primaryColor,
                 }
+            }
+        },
+        MuiCardContent: {
+            root: {
+                '&:last-child': {
+                    paddingBottom: 4
+                },
+                padding: 6
             }
         },
         MuiAppBar: {
@@ -98,8 +144,7 @@ const MuiTheme = createMuiTheme({
         MuiListItem: {
             root: {
                 paddingRight: '5px',
-                paddingLeft: '18px',
-                color: 'rgba(0, 0, 0, 0.87)'
+                paddingLeft: '18px'
             }
         },
         MuiListSubheader: {

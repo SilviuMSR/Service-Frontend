@@ -4,21 +4,19 @@ import { connect } from 'react-redux'
 import { withStyles, Button, TextField } from '@material-ui/core'
 import { Delete } from '@material-ui/icons'
 
-import ConfirmationModal from '../common/ConfirmationDialog'
-import RenderCards from '../common/RenderCards'
+import ConfirmationModal from '../../common/ConfirmationDialog'
+import RenderCards from '../../common/RenderCards'
 
-import * as STOCK from '../../redux/actions/stocks'
-import * as CONSTANTS from '../../utils/constants'
+import * as CONSTANTS from '../../../utils/constants'
+import * as USERS from '../../../redux/actions/users'
 
-import CreateStock from './CreateStock'
+import UserModal from './UserModal'
 
 const styles = theme => ({
     container: {
         width: '100%',
         height: '100%',
         overflow: 'auto'
-    },
-    containerContent: {
     },
     headersContainer: {
         height: 50,
@@ -29,7 +27,6 @@ const styles = theme => ({
         flexDirection: 'row',
         alignItems: 'center',
     },
-
     addContainer: {
         flex: 1,
         display: 'flex',
@@ -54,40 +51,39 @@ const styles = theme => ({
     }
 })
 
-class Stoc extends Component {
+class User extends Component {
 
-    stockToEdit = {}
-    stockToDelete = {}
+    userToEdit = {}
+    userToDelete = {}
 
     state = {
         openModal: false,
         modalType: CONSTANTS.CREATE,
-        stocks: [],
-        openConfirmationModal: false,
-        modalFields: this.initialFields
+        users: [],
+        openConfirmationModal: false
     }
 
     componentDidMount() {
-        this.getStocks()
+        this.getUsers()
     }
 
-    getStocks = () => {
-        this.props.getStocks().then(result => {
+    getUsers = () => {
+        this.props.getUsers().then(result => {
             this.setState({
-                stocks: result.pieces
+                users: result.users
             })
         })
     }
 
-    deleteStockHandler = () => {
-        this.props.deleteStock(this.stockToDelete._id).then(() => {
-            this.getStocks()
+    deleteUserHandler = () => {
+        this.props.delete(this.userToDelete._id).then(() => {
+            this.getUsers()
             this.setState({ openConfirmationModal: false })
         })
     }
 
     closeConfirmationModalHandler = () => {
-        this.stockToDelete = {}
+        this.userToDelete = {}
         this.setState({ openConfirmationModal: false })
     }
 
@@ -101,12 +97,15 @@ class Stoc extends Component {
                     open={this.state.openConfirmationModal}
                     onClose={this.closeConfirmationModalHandler}
                     onCancel={this.closeConfirmationModalHandler}
-                    onAccept={() => this.deleteStockHandler()} />
-                <CreateStock stockId={this.stockToEdit._id} type={this.state.modalType} getStocks={() => this.getStocks()} open={this.state.openModal} onCancel={() => this.setState({ openModal: false })} />
+                    onAccept={() => this.deleteUserHandler()} />
+                <UserModal userId={this.userToEdit._id} type={this.state.modalType} getUsers={() => this.getUsers()} open={this.state.openModal} onCancel={() => {
+                    this.getUsers()
+                    this.setState({ openModal: false })
+                }} />
                 <div className={this.props.classes.container}>
                     <div className={this.props.classes.headersContainer}>
                         <div className={this.props.classes.titleContainer}>
-                            <p className={this.props.classes.titleText}>STOC</p>
+                            <p className={this.props.classes.titleText}>USERS</p>
                         </div>
                         <div className={this.props.classes.addContainer}>
                             <Button color="primary" onClick={() => this.setState({ openModal: true, modalType: CONSTANTS.CREATE })}>ADD</Button>
@@ -118,20 +117,20 @@ class Stoc extends Component {
                     <div style={{ backgroundColor: '#F8F8F8', margin: '20px 55px', flex: 1, border: '1px solid rgba(0,0,0,0.1)', boxShadow: '1px 1px rgba(0,0,0,0.1)' }}>
                         <RenderCards
                             displayMainPhoto={false}
-                            type={CONSTANTS.BRAND_TYPE}
                             onEdit={item => {
-                                this.stockToEdit = item
+                                this.userToEdit = item
                                 this.setState({ openModal: true, modalType: CONSTANTS.EDIT })
                             }}
                             onDelete={item => {
-                                this.stockToDelete = item
+                                this.userToDelete = item
                                 this.setState({ openConfirmationModal: true })
                             }}
                             onClick={item => { }}
-                            content={[{ populate: 'carBrandId', field: 'name', label: 'Brand' }, { populate: 'carModelId', field: 'name', label: 'Model' }, { field: 'name', label: 'Name' }, { field: 'price', label: 'Price' }, { field: 'no', label: 'Quantity' }]}
-                            items={this.state.stocks} />
+                            content={[{ field: 'username', label: 'Name' }, { field: 'position', label: 'Position' }, { field: 'userStatus', label: 'Status' }]}
+                            items={this.state.users} />
                     </div>
                 </div>
+
             </>
         )
     }
@@ -142,9 +141,9 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => {
     return {
-        getStocks: () => dispatch(STOCK.get()),
-        deleteStock: stockId => dispatch(STOCK.del(stockId))
+        getUsers: () => dispatch(USERS.get()),
+        delete: userId => dispatch(USERS.del(userId))
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Stoc))
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(User))

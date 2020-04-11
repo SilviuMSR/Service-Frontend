@@ -14,6 +14,7 @@ import './styles/Home.css'
 
 class App extends Component {
   render() {
+    
     return <Provider store={store}>
       <MuiThemeProvider theme={MuiTheme}>
         <ToastContainer autoClose={5000} />

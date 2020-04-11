@@ -28,3 +28,13 @@ export const del = brandId => dispatch =>
     axios.delete(`${baseRoute}/${brandId}`)
         .then(response => Promise.resolve(response.data))
         .catch(errorHandler)
+
+export const uploadLogo = (brandId, files) => dispatch =>
+    axios.post(`${baseRoute}/${brandId}/image`, files)
+        .then(response => Promise.resolve(response.data))
+        .catch(errorHandler)
+
+export const editLogo = (brandId, files) => dispatch =>
+    axios.put(`${baseRoute}/${brandId}/image`, files)
+        .then(response => Promise.resolve(response.data))
+        .catch(errorHandler)

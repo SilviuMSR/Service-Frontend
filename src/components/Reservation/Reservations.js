@@ -10,6 +10,8 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 
 import RenderItems from '../common/RenderExpandItem'
 import SimpleModal from '../common/SimpleModal'
+import RenderCards from '../common/RenderCards'
+import ReservationDetails from './ReservationDetails'
 
 import * as RESERVATIONS from '../../redux/actions/reservation'
 import * as CONSTANTS from '../../utils/constants'
@@ -42,7 +44,6 @@ const styles = theme => ({
     },
     options: {
         paddingRight: '10px',
-        flex: 1,
         cursor: 'pointer'
     },
     optionsIcon: {
@@ -126,7 +127,34 @@ const styles = theme => ({
         paddingTop: 18,
         paddingLeft: 12,
         fontSize: 13
-    }
+    },
+    headersContainer: {
+        height: 50,
+        width: '100%',
+        borderBottom: '1px solid rgba(0,0,0,0.1)',
+        backgroundColor: 'white',
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    titleContainer: {
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'row',
+        paddingLeft: 19,
+        fontSize: 18,
+        fontWeight: 500
+    },
+    headersContainerEmployee: {
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'flex-end'
+    },
+    titleText: {
+        color: '#1976d2'
+    },
+    
 })
 
 class Reservations extends Component {
@@ -139,11 +167,13 @@ class Reservations extends Component {
         showProblems: false,
         currentProblem: null,
         currentFile: null,
-        currentReservation: null
+        currentReservation: null,
+        selectedReservation: null,
+        openReservationDetails: false
     }
 
     componentDidMount() {
-        this.setState({ selectedOption: this.props.login.position === 'admin' ? CONSTANTS.RENDER_RESERVATION_ADMIN : CONSTANTS.RENDER_RESERVATION_EMPLOYEE }, () => this.handlerReservations())
+        this.setState({ selectedOption: this.props.login.position.toLowerCase() === 'admin' ? CONSTANTS.RENDER_RESERVATION_ADMIN : CONSTANTS.RENDER_RESERVATION_EMPLOYEE }, () => this.handlerReservations())
     }
 
     getReservationById = reservationId => {
@@ -151,7 +181,7 @@ class Reservations extends Component {
     }
 
     handlerReservations = () => {
-        if (this.props.login.position === 'admin') {
+        if (this.props.login.position.toLowerCase() === 'admin') {
             this.getReservationsHandler()
         }
         else if (this.state.selectedOption === CONSTANTS.RENDER_RESERVATION_EMPLOYEE) {
@@ -280,16 +310,21 @@ class Reservations extends Component {
         if (this.state.renderPage) {
             return (
                 <div className={this.props.classes.container}>
-                    {this.props.login.position !== 'admin' ? <div className={this.props.classes.headersContainer}>
-                        <div className={this.props.classes.optionsIcon}><VisibilityOutlinedIcon /></div>
-                        <div onClick={() => this.selectOptionHandler(CONSTANTS.RENDER_RESERVATION_EMPLOYEE)} className={this.props.classes.options}><span className={`${this.state.selectedOption === CONSTANTS.RENDER_RESERVATION_EMPLOYEE ? this.props.classes.selectedOption : ""} ${this.props.classes.optionText}`}>RESERVATIONS</span></div>
-                        <div onClick={() => this.selectOptionHandler(CONSTANTS.RENDER_RESERVATION_PERSONAL)} className={this.props.classes.options}><span className={`${this.state.selectedOption === CONSTANTS.RENDER_RESERVATION_PERSONAL ? this.props.classes.selectedOption : ""} ${this.props.classes.optionText}`}>PERSONAL</span></div>
-                    </div> : null}
+                    <div className={this.props.classes.headersContainer}>
+                        <div className={this.props.classes.titleContainer}>
+                            <p className={this.props.classes.titleText}>RESERVATIONS</p>
+                        </div>
+                        {this.props.login.position.toLowerCase() !== 'admin' ? <div className={this.props.classes.headersContainerEmployee}>
+                            <div className={this.props.classes.optionsIcon}><VisibilityOutlinedIcon /></div>
+                            <div onClick={() => this.selectOptionHandler(CONSTANTS.RENDER_RESERVATION_EMPLOYEE)} className={this.props.classes.options}><span className={`${this.state.selectedOption === CONSTANTS.RENDER_RESERVATION_EMPLOYEE ? this.props.classes.selectedOption : ""} ${this.props.classes.optionText}`}>RESERVATIONS</span></div>
+                            <div onClick={() => this.selectOptionHandler(CONSTANTS.RENDER_RESERVATION_PERSONAL)} className={this.props.classes.options}><span className={`${this.state.selectedOption === CONSTANTS.RENDER_RESERVATION_PERSONAL ? this.props.classes.selectedOption : ""} ${this.props.classes.optionText}`}>PERSONAL</span></div>
+                        </div> : null}
+                    </div>
                     <div className={this.props.classes.containerContent}>
-                        <SimpleModal maxWidth={"md"} title={this.state.showFiles ? "Files" : "Problems"} open={(this.state.showFiles || this.state.showProblems) && this.state.expandedReservationId} onCancel={() => this.state.showFiles ? this.setState({ showFiles: false }) : this.setState({ showProblems: false, currentProblem: null })}>
+                        {/* <SimpleModal maxWidth={"md"} title={this.state.showFiles ? "Files" : "Problems"} open={(this.state.showFiles || this.state.showProblems) && this.state.expandedReservationId} onCancel={() => this.state.showFiles ? this.setState({ showFiles: false }) : this.setState({ showProblems: false, currentProblem: null })}>
                             {this.renderModalContentHandler()}
-                        </SimpleModal>
-                        <RenderItems
+                        </SimpleModal> */}
+                        {/* <RenderItems
                             onExpandHandler={reservationId => this.setState({ expandedReservationId: reservationId }, () => this.getReservationById(this.state.expandedReservationId))}
                             showFilesHandler={() => this.setState({ showFiles: true, currentFile: this.state.currentReservation.file[0] })}
                             showProblemsHandler={() => this.setState({ showProblems: true, currentProblem: this.state.currentReservation.problem[0] })}
@@ -299,7 +334,26 @@ class Reservations extends Component {
                             modifyStatus={this.modifyStatusHandler}
                             items={this.state.reservations}
                             renderType={this.state.selectedOption}
+                        /> */}
+                        <ReservationDetails
+                            tabs={[CONSTANTS.DETAILS_TAB, CONSTANTS.PROBLEMS_TAB, CONSTANTS.INVOICES_TAB]}
+                            open={this.state.openReservationDetails}
+                            item={this.state.selectedReservation}
+                            generateInvoice={reservationId => {
+                                this.props.generateInvoice(reservationId).then(() => this.handlerReservations())
+                            }}
+                            modifyStatus={this.modifyStatusHandler}
+                            onCancel={() => this.setState({ openReservationDetails: false })}
                         />
+                    </div>
+                    <div style={{ flex: 1, backgroundColor: '#F8F8F8', margin: '20px 55px', border: '1px solid rgba(0,0,0,0.1)', boxShadow: '1px 1px rgba(0,0,0,0.1)' }}>
+                        <RenderCards
+                            extraWidth={true}
+                            displayMainPhoto={true}
+                            type={CONSTANTS.RESERVATION_TYPE}
+                            onClick={item => { this.setState({ selectedReservation: item, openReservationDetails: true }) }}
+                            content={[{ field: 'reservationStatus', label: 'Status' }, { populate: 'carBrandId', field: 'name', label: 'Brand' }, { populate: 'carModelId', field: 'name', label: 'Model' }, { field: 'price', label: 'Price' }]}
+                            items={this.state.reservations} />
                     </div>
                 </div>
             )

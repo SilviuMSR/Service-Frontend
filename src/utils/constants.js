@@ -15,13 +15,40 @@ export const PROBLEM = 'knowingStatus'
 export const CAR_BRAND_ID = 'carBrandId'
 export const NO = 'Nu'
 
+export const MODEL_TYPE = "MODEL_TYPE"
+export const BRAND_TYPE = "BRAND_TYPE"
+export const RESERVATION_TYPE = "RESERVATION_TYPE"
+
 export const DEFAULT_DATE_TIME_FORMAT = 'DD/MM/YYYY HH:mm:ss'
 export const DEFAULT_DATE_FORMAT = 'DD/MM/YYYY'
 export const INPUT_TYPE_DATE_FORMAT = 'YYYY-MM-DD'
 
+export const DETAILS_TAB = 'DETAILS'
+export const PROBLEMS_TAB = 'PROBLEMS'
+export const INVOICES_TAB = 'INVOICES'
+
 export const HOMEPAGE_OPTIONS = [
     { name: 'REZERVARE', value: true },
     { name: 'LOGIN', value: false }
+]
+
+export const PROBLEM_DIFFICULTY = [
+    { label: '', value: false},
+    { label: 'EASY', value: false },
+    { label: 'MEDIUM', value: false },
+    { label: 'HARD', value: false },
+]
+
+export const USER_POSITION = [
+    { label: '', value: false},
+    { label: 'EMPLOYEE', value: false },
+    { label: 'ADMIN', value: false }
+]
+
+export const USER_STATUS = [
+    { label: '', value: false},
+    { label: 'AVAILABLE', value: false },
+    { label: 'ON VACATION', value: false }
 ]
 
 export const RESERVATION_PROBLEMS_OPTION = [
