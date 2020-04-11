@@ -51,7 +51,7 @@ class CreateCarBrand extends Component {
     todayValue = moment().format(CONSTANTS.INPUT_TYPE_DATE_FORMAT)
 
     initialFields = [
-        { value: '', type: 'text', label: 'Nume', name: 'name' }
+        { value: '', type: 'text', label: this.props.language.labels.name, name: 'name' }
     ]
 
     state = {
@@ -136,11 +136,11 @@ class CreateCarBrand extends Component {
         return (
             <>
                 <SimpleModal
-                    acceptButtonText="Adauga"
-                    cancelButtonText="Anuleaza"
+                    acceptButtonText={this.props.language.buttons.add}
+                    cancelButtonText={this.props.language.buttons.cancel}
                     onAccept={this.props.type === CONSTANTS.CREATE ? this.onAddHandler : this.onEditHandler}
                     maxWidth={"md"}
-                    title={"Adauga model"}
+                    title={this.props.type === CONSTANTS.CREATE ? this.props.language.titles.addModel : this.props.language.titles.editModel}
                     open={this.props.open}
                     onCancel={() => this.onCancelHandler()}>
                     {this.renderCarModelFields()}
@@ -151,6 +151,7 @@ class CreateCarBrand extends Component {
 }
 
 const mapStateToProps = state => ({
+    language: state.language.i18n
 })
 
 const mapDispatchToProps = dispatch => {

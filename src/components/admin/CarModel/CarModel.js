@@ -58,9 +58,9 @@ class CarModel extends Component {
         return (
             <>
                 <ConfirmationModal
-                    text={`Delete?`}
-                    cancelButtonText={"Cancel"}
-                    acceptButtonText={"Delete"}
+                    text={this.props.language.utils.delete}
+                    cancelButtonText={this.props.language.buttons.cancel}
+                    acceptButtonText={this.props.language.buttons.delete}
                     open={this.state.openConfirmationModal}
                     onClose={this.closeConfirmationModalHandler}
                     onCancel={this.closeConfirmationModalHandler}
@@ -81,7 +81,7 @@ class CarModel extends Component {
                         this.setState({ openConfirmationModal: true })
                     }}
                     onClick={item => { }}
-                    content={[{ field: 'name', label: 'Model' }]}
+                    content={[{ field: 'name', label: this.props.language.labels.model }]}
                     items={this.props.models} />
 
 
@@ -91,6 +91,7 @@ class CarModel extends Component {
 }
 
 const mapStateToProps = state => ({
+    language: state.language.i18n
 })
 
 const mapDispatchToProps = dispatch => {

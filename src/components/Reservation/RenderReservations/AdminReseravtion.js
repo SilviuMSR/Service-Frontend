@@ -1,15 +1,12 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { withStyles, Avatar, Button } from '@material-ui/core'
 import moment from 'moment'
 
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import Typography from '@material-ui/core/Typography';
-
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import CheckIcon from '@material-ui/icons/Check';
-import CloseIcon from '@material-ui/icons/Close';
 
 import * as CONSTANTS from '../../../utils/constants'
 
@@ -160,21 +157,21 @@ class AdminReservation extends React.Component {
     renderMiddleSectionHandler = () => {
         if (this.props.reservation.reservationStatus === CONSTANTS.RESERVATION_PANDING) return (
             <div className={this.props.classes.options}>
-                <span className={this.props.classes.titleText}>This reservation wait for response!</span>
+                <span className={this.props.classes.titleText}>{this.props.language.utils.reservationWait}</span>
                 <div className={this.props.classes.optionsContainer}>
-                    <Button onClick={() => this.props.modifyStatus(this.props.reservation._id, CONSTANTS.RESERVATION_ACCEPTED)} className={this.props.classes.acceptIcon}>ACCEPT</Button>
-                    <Button onClick={() => this.props.modifyStatus(this.props.reservation._id, CONSTANTS.RESERVATION_DECLINED)} className={this.props.classes.declineIcon}>DECLINE</Button>
+        <Button onClick={() => this.props.modifyStatus(this.props.reservation._id, CONSTANTS.RESERVATION_ACCEPTED)} className={this.props.classes.acceptIcon}>{this.props.language.buttons.accept}</Button>
+        <Button onClick={() => this.props.modifyStatus(this.props.reservation._id, CONSTANTS.RESERVATION_DECLINED)} className={this.props.classes.declineIcon}>{this.props.language.buttons.decline}</Button>
                 </div>
             </div>
         )
 
         if (this.props.reservation.reservationStatus === CONSTANTS.RESERVATION_DONE) return (
             <div className={this.props.classes.options}>
-                <span className={this.props.classes.titleText}>Problems for this car are successfully resolved!</span>
+                <span className={this.props.classes.titleText}>{this.props.language.utils.reservationDone}</span>
                 <div className={this.props.classes.optionsContainer}>
                     {!this.props.reservation.file.length ? <Button onClick={() => this.props.generateInvoice(this.props.reservation._id)}>GENERATE DOCUMENTS</Button> :
                         <>
-                            <Button onClick={this.props.showFilesHandler}>SEE FILES</Button>
+                            <Button onClick={this.props.showFilesHandler}>{this.props.language.buttons.files}</Button>
                         </>}
                 </div>
             </div>
@@ -182,7 +179,7 @@ class AdminReservation extends React.Component {
 
         if (this.props.reservation.reservationStatus === CONSTANTS.RESERVATION_IN_PROGRESS) return (
             <div className={this.props.classes.options}>
-                <span className={this.props.classes.titleText}>Progress Details</span>
+                <span className={this.props.classes.titleText}>{this.props.language.utils.progress}</span>
                 <div className={this.props.classes.optionsContainer}>
                     <span className={this.props.classes.subtitleText}>{this.props.reservation.userId.username.charAt(0).toUpperCase() + this.props.reservation.userId.username.slice(1)} works at this car.</span>
                 </div>
@@ -191,7 +188,7 @@ class AdminReservation extends React.Component {
 
         if (this.props.reservation.reservationStatus === CONSTANTS.RESERVATION_DECLINED) return (
             <div className={this.props.classes.options}>
-                <span className={this.props.classes.titleText}>This reservation was declined!</span>
+                <span className={this.props.classes.titleText}>{this.props.language.utils.reservationDecline}</span>
             </div>
         )
 
@@ -249,25 +246,25 @@ class AdminReservation extends React.Component {
 
                     <div className={classes.heading}>
                         <div className={classes.titleContainer}>
-                            <span className={classes.titleText}>BRAND / MODEL</span>
+        <span className={classes.titleText}>{this.props.language.titles.brands} / {this.props.language.titles.models}</span>
                             <span className={classes.subtitleText}>{this.props.reservation.carBrandId.name} {this.props.reservation.carModelId.name}</span>
                         </div>
                     </div>
                     <div className={classes.heading}>
                         <div className={classes.titleContainer}>
-                            <span className={classes.titleText}>PRICE</span>
+        <span className={classes.titleText}>{this.props.language.labels.price.toUpperCase()}</span>
                             <span className={classes.subtitleText}>{this.props.reservation.price ? `${this.props.reservation.price} RON` : '-'}</span>
                         </div>
                     </div>
                     <div className={classes.heading}>
                         <div className={classes.titleContainer}>
-                            <span className={classes.titleText}>DATE</span>
+        <span className={classes.titleText}>{this.props.language.labels.date.toUpperCase()}</span>
                             <span className={classes.subtitleText}>{this.props.reservation.createdAt ? `${moment(this.props.reservation.createdAt).format('ll')}` : '-'}</span>
                         </div>
                     </div>
                     <div className={classes.heading}>
                         <div className={classes.titleContainer}>
-                            <span className={classes.titleText}>STATUS</span>
+        <span className={classes.titleText}>{this.props.language.titles.status}</span>
                             {this.renderStatusHandler()}
                         </div>
                     </div>
@@ -276,17 +273,17 @@ class AdminReservation extends React.Component {
                     <div className={classes.expandedContainer}>
                         <div className={classes.expandedContainerItem}>
                             <div>
-                                <span className={classes.titleText}>CLIENT DETAILS</span>
+                                <span className={classes.titleText}>{this.props.language.titles.clientDetails}</span>
                             </div>
                             <div className={classes.clientDetailsContainer}>
-                                <span className={classes.subtitleText}>Name: {this.props.reservation.clientName}</span>
-                                <span className={classes.subtitleText}>Email: {this.props.reservation.clientEmail}</span>
+                                <span className={classes.subtitleText}>{this.props.language.labels.clientName}: {this.props.reservation.clientName}</span>
+                                <span className={classes.subtitleText}>{this.props.language.labels.clientEmail}: {this.props.reservation.clientEmail}</span>
                             </div>
                         </div>
                         {this.renderMiddleSectionHandler()}
                         <div className={classes.expandedContainerItemLast}>
                             <div className={classes.titleText}>
-                                <span className={classes.titleText}>CAR PROBLEMS</span>
+                                <span className={classes.titleText}>{this.props.language.titles.problems}</span>
                             </div>
                             <div onClick={this.props.showProblemsHandler} className={classes.problemsContainer}>
                                 {this.props.reservation.problem ? this.props.reservation.problem.map((problem, index) => {
@@ -305,4 +302,15 @@ class AdminReservation extends React.Component {
     }
 }
 
-export default withStyles(styles)(AdminReservation)
+const mapStateToProps = state => ({
+    login: state.login,
+    language: state.language.i18n
+})
+
+const mapDispatchToProps = dispatch => {
+    return {
+
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(AdminReservation))

@@ -6,7 +6,6 @@ import { withRouter } from 'react-router'
 
 import InputGenerator from '../common/InputGenerator'
 import * as NOTIFICATION from '../../utils/notification'
-import * as CONSTANTS from '../../utils/constants'
 import * as LOGIN from '../../redux/actions/login'
 
 import '../../styles/Login.css'
@@ -14,8 +13,8 @@ import '../../styles/Login.css'
 class Login extends Component {
 
     initialFields = [
-        { value: '', type: 'text', label: 'Nume', name: 'username' },
-        { value: '', type: 'password', label: 'Parola', name: 'password' }
+        { value: '', type: 'text', label: this.props.language.labels.name, name: 'username' },
+        { value: '', type: 'password', label: this.props.language.labels.password, name: 'password' }
     ]
 
     state = {
@@ -86,6 +85,7 @@ class Login extends Component {
 }
 
 const mapStateToProps = state => ({
+    language: state.language.i18n
 })
 
 const mapDispatchToProps = dispatch => {

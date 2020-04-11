@@ -144,7 +144,7 @@ class PersonalReservation extends React.Component {
 
     render() {
         let { classes } = this.props
-        
+
         return (
             <ExpansionPanel onChange={() => this.props.onExpandHandler(this.props.reservation._id)}>
                 <ExpansionPanelSummary
@@ -160,13 +160,13 @@ class PersonalReservation extends React.Component {
 
                     <Typography className={classes.heading}>
                         <div className={classes.titleContainer}>
-                            <span className={classes.titleText}>BRAND / MODEL</span>
+        <span className={classes.titleText}>{this.props.language.titles.brands} / {this.props.language.titles.models}</span>
                             <span className={classes.subtitleText}>{this.props.reservation.carBrandId.name} {this.props.reservation.carModelId.name}</span>
                         </div>
                     </Typography>
                     <Typography className={classes.headingLastElement}>
                         <div className={classes.titleContainer}>
-                            <span className={classes.titleText}>STATUS</span>
+        <span className={classes.titleText}>{this.props.language.titles.status}</span>
                             {this.renderStatusHandler()}
                         </div>
                     </Typography>
@@ -175,7 +175,7 @@ class PersonalReservation extends React.Component {
                     <div className={classes.expandedContainer}>
                         <div className={classes.expandedContainerItem}>
                             <div className={classes.titleText}>
-                                <span className={classes.titleText}>CAR PROBLEMS</span>
+                                <span className={classes.titleText}>{this.props.language.titles.problems}</span>
                             </div>
                             <div onClick={this.props.showProblemsHandler} className={classes.problemsContainer}>
                                 {this.props.reservation.problem ? this.props.reservation.problem.map((problem, index) => {
@@ -189,7 +189,7 @@ class PersonalReservation extends React.Component {
                         </div>
                         <div className={classes.expandedContainerItem}>
                             <div className={this.props.classes.options}>
-                                <span className={this.props.classes.titleText}>Did you resolved all problems?</span>
+                                <span className={this.props.classes.titleText}>{this.props.language.utils.allDone}</span>
                                 <div className={this.props.classes.optionsContainer}>
                                     <CheckIcon className={classes.acceptIcon} onClick={() => this.props.modifyStatus(this.props.reservation._id, CONSTANTS.RESERVATION_DONE, this.props.login.userId)} />
                                 </div>
@@ -203,7 +203,8 @@ class PersonalReservation extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    login: state.login
+    login: state.login,
+    language: state.language.i18n
 })
 
 const mapDispatchToProps = dispatch => {

@@ -143,13 +143,13 @@ class EmployeeReservation extends React.Component {
 
                     <Typography className={classes.heading}>
                         <div className={classes.titleContainer}>
-                            <span className={classes.titleText}>BRAND / MODEL</span>
+        <span className={classes.titleText}>{this.props.language.titles.brands} / {this.props.language.titles.models}</span>
                             <span className={classes.subtitleText}>{this.props.reservation.carBrandId.name} {this.props.reservation.carModelId.name}</span>
                         </div>
                     </Typography>
                     <Typography className={classes.headingLastElement}>
                         <div className={classes.titleContainer}>
-                            <span className={classes.titleText}>STATUS</span>
+        <span className={classes.titleText}>{this.props.language.titles.status}</span>
                             {this.renderStatusHandler()}
                         </div>
                     </Typography>
@@ -158,7 +158,7 @@ class EmployeeReservation extends React.Component {
                     <div className={classes.expandedContainer}>
                         <div className={classes.expandedContainerItem}>
                             <div className={classes.titleText}>
-                                <span className={classes.titleText}>CAR PROBLEMS</span>
+        <span className={classes.titleText}>{this.props.language.titles.problems}</span>
                             </div>
                             <div onClick={this.props.showProblemsHandler} className={classes.problemsContainer}>
                                 {this.props.reservation.problem ? this.props.reservation.problem.map((problem, index) => {
@@ -172,9 +172,9 @@ class EmployeeReservation extends React.Component {
                         </div>
                         <div className={classes.expandedContainerItem}>
                             <div className={this.props.classes.options}>
-                                <span className={this.props.classes.titleText}>This reservation wait for an employee!</span>
+                            <span className={this.props.classes.titleText}>{this.props.language.utils.reservationWaitForEmployee}</span>
                                 <div className={this.props.classes.optionsContainer}>
-                                    <Button onClick={() => this.props.modifyStatus(this.props.reservation._id, CONSTANTS.RESERVATION_IN_PROGRESS, this.props.login.userId)}>Take this reservation</Button>
+                            <Button onClick={() => this.props.modifyStatus(this.props.reservation._id, CONSTANTS.RESERVATION_IN_PROGRESS, this.props.login.userId)}>{this.props.language.buttons.takeReservation}</Button>
                                 </div>
                             </div>
                         </div>
@@ -186,7 +186,8 @@ class EmployeeReservation extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    login: state.login
+    login: state.login,
+    language: state.language.i18n
 })
 
 const mapDispatchToProps = dispatch => {

@@ -1,3 +1,5 @@
+export const INVOICES_URL = 'http://localhost:9000/static/invoices/'
+
 export const EDIT = 'edit'
 export const CREATE = 'create'
 
@@ -52,8 +54,8 @@ export const USER_STATUS = [
 ]
 
 export const RESERVATION_PROBLEMS_OPTION = [
-    { label: 'Da', value: false },
-    { label: 'Nu', value: false },
+    { label: 'Da', value: false, name: 'yes' },
+    { label: 'Nu', value: false, name: 'no' },
 ]
 
 export const RESERVATION_PROBLEMS_LIST = [

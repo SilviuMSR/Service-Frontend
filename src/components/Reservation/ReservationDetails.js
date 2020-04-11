@@ -227,7 +227,7 @@ class ReservationDetails extends Component {
     renderStatusDetails = () => {
         if (this.props.item.reservationStatus === CONSTANTS.RESERVATION_PANDING) return (
             <div className={this.props.classes.options}>
-                <span className={this.props.classes.item}>This reservation wait for response!</span>
+                <span className={this.props.classes.item}>{this.props.language.utils.reservationWait}</span>
                 <div className={this.props.classes.optionsContainer}>
                     <Button onClick={() => this.props.modifyStatus(this.props.item._id, CONSTANTS.RESERVATION_ACCEPTED)} className={this.props.classes.acceptIcon}>ACCEPT</Button>
                     <Button onClick={() => this.props.modifyStatus(this.props.item._id, CONSTANTS.RESERVATION_DECLINED)} className={this.props.classes.declineIcon}>DECLINE</Button>
@@ -237,7 +237,7 @@ class ReservationDetails extends Component {
 
         if (this.props.item.reservationStatus === CONSTANTS.RESERVATION_DONE) return (
             <div className={this.props.classes.options}>
-                <span className={this.props.classes.item}>Problems for this car are successfully resolved!</span>
+                <span className={this.props.classes.item}>{this.props.language.utils.reservationDone}</span>
                 {/* <div className={this.props.classes.optionsContainer}>
                     {!this.props.item.file.length ? <Button onClick={() => this.props.generateInvoice(this.props.item._id)}>GENERATE DOCUMENTS</Button> :
                         <>
@@ -260,13 +260,13 @@ class ReservationDetails extends Component {
 
         if (this.props.item.reservationStatus === CONSTANTS.RESERVATION_DECLINED) return (
             <div className={this.props.classes.options}>
-                <span className={this.props.classes.item}>This reservation was declined!</span>
+                <span className={this.props.classes.item}>{this.props.language.utils.reservationDecline}</span>
             </div>
         )
 
         if (this.props.item.reservationStatus === CONSTANTS.RESERVATION_ACCEPTED) return (
             <div className={this.props.classes.options}>
-                <span className={this.props.classes.item}>Waiting for someone to take this reservation!</span>
+                <span className={this.props.classes.item}>{this.props.language.utils.reservationWaitForEmployee}</span>
                 <div className={this.props.classes.optionsContainer}>
                     <Button onClick={() => this.props.modifyStatus(this.props.item._id, CONSTANTS.RESERVATION_IN_PROGRESS, this.props.login.userId)}>Take this reservation</Button>
                 </div>
@@ -280,17 +280,17 @@ class ReservationDetails extends Component {
     renderDetails = () => {
 
         const detailFields = [
-            { populate: 'carBrandId', label: 'Brand', field: 'name' },
-            { populate: 'carModelId', label: 'Model', field: 'name' },
-            { field: 'clienName', label: 'Client name' },
-            { field: 'clientEmail', label: 'Client email' },
-            { field: 'createdAt', label: 'Date' },
-            { field: 'price', label: 'Price' }
+            { populate: 'carBrandId', label: this.props.language.labels.brand, field: 'name' },
+            { populate: 'carModelId', label: this.props.language.labels.model, field: 'name' },
+            { field: 'clienName', label: this.props.language.labels.clientName },
+            { field: 'clientEmail', label: this.props.language.labels.clientEmail },
+            { field: 'createdAt', label: this.props.language.labels.date },
+            { field: 'price', label: this.props.language.labels.price }
         ]
 
         const statusFields = [
-            { label: 'Status', field: 'reservationStatus' },
-            { populate: 'userId', label: 'Reserved by', field: 'username' }
+            { label: this.props.language.labels.status, field: 'reservationStatus' },
+            { populate: 'userId', label: this.props.language.labels.reservedBy, field: 'username' }
         ]
 
         return (
@@ -364,7 +364,7 @@ class ReservationDetails extends Component {
                                 <div className={this.props.classes.filePdf}>
                                     <div>
                                         {this.state.currentFile ? <Document
-                                            file={`http://localhost:9000/static/invoices/${this.state.currentFile.originalName}`}
+                                            file={`${CONSTANTS.INVOICES_URL}${this.state.currentFile.originalName}`}
                                             onLoadSuccess={this.onFileLoadSuccess}
                                         >
                                             <Page pageNumber={this.state.pdfPage} />
@@ -378,7 +378,7 @@ class ReservationDetails extends Component {
         )
 
         return (
-            <span>You can generate invocies only when reservation is finished.</span>
+            <span>{this.props.language.utils.generateInvoiceFail}</span>
         )
     }
 
@@ -397,7 +397,7 @@ class ReservationDetails extends Component {
                                     <div onClick={() => this.onProblemClickHandler(pr)} className={`${this.state.currentProblem ? this.state.currentProblem._id === pr._id ? this.props.classes.selectedProblem : "" : ""} ${this.props.classes.problemWrapper}`}>
                                         <div className={this.props.classes.problemDetails}>
                                             <span>{pr.name}</span>
-                                            <span>{pr.price} RON</span>
+                                <span>{pr.price} {this.props.language.utils.ron}</span>
                                         </div>
                                     </div>
                                 )
@@ -416,7 +416,7 @@ class ReservationDetails extends Component {
                 </>
             )
         }
-        else return (<span>The client don't know the problem of the car</span>)
+    else return (<span>{this.props.language.utils.noProblem}</span>)
     }
 
     renderContent = () => {
@@ -460,10 +460,10 @@ class ReservationDetails extends Component {
         if (this.props.item) {
             return (
                 <SimpleModal
-                    cancelButtonText="Cancel"
+                    cancelButtonText={this.props.language.buttons.cancel}
                     styles={this.props.classes}
                     maxWidth={"md"}
-                    title={"Reservation Details"}
+                    title={this.props.language.titles.reservationDetails}
                     open={this.props.open}
                     onCancel={() => this.props.onCancel()}>
                     {this.mainRender()}
@@ -474,7 +474,8 @@ class ReservationDetails extends Component {
 }
 
 const mapStateToProps = state => ({
-    login: state.login
+    login: state.login,
+    language: state.language.i18n
 })
 
 const mapDispatchToProps = dispatch => {

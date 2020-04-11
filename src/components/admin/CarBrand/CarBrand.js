@@ -126,9 +126,9 @@ class CarBrand extends Component {
         return (
             <>
                 <ConfirmationModal
-                    text={`Delete?`}
-                    cancelButtonText={"Cancel"}
-                    acceptButtonText={"Delete"}
+                    text={this.props.language.utils.delete}
+                    cancelButtonText={this.props.language.buttons.cancel}
+                    acceptButtonText={this.props.language.buttons.delete}
                     open={this.state.openConfirmationModal}
                     onClose={this.closeConfirmationModalHandler}
                     onCancel={this.closeConfirmationModalHandler}
@@ -137,20 +137,20 @@ class CarBrand extends Component {
                 <div className={this.props.classes.container}>
                     <div className={this.props.classes.headersContainer}>
                         <div className={this.props.classes.titleContainer}>
-                            <p className={this.props.classes.titleText}>CAR BRANDS</p>
+                            <p className={this.props.classes.titleText}>{this.props.language.titles.brands}</p>
                             <div className={this.props.classes.addButton}>
-                                <Button color="primary" onClick={() => this.setState({ openModal: true, modalType: CONSTANTS.CREATE })}>ADD</Button>
+                                <Button color="primary" onClick={() => this.setState({ openModal: true, modalType: CONSTANTS.CREATE })}>{this.props.language.buttons.add}</Button>
                             </div>
                         </div>
                         <div className={this.props.classes.addContainer}>
                             <div className={this.props.classes.titleContainer}>
-                                <p className={this.props.classes.titleText}>ASSOCIATED MODELS</p>
+                                <p className={this.props.classes.titleText}>{this.props.language.titles.models}</p>
                                 <div className={this.props.classes.addButton}>
-                                    <Button color="primary" onClick={() => this.handleModelEvents(true)}>ADD</Button>
+                                    <Button color="primary" onClick={() => this.handleModelEvents(true)}>{this.props.language.buttons.add}</Button>
                                 </div>
                             </div>
                             <div className={this.props.classes.searchContainer}>
-                                <TextField placeholder="Search..." />
+                                <TextField placeholder={this.props.language.utils.search} />
                             </div>
                         </div>
 
@@ -169,7 +169,7 @@ class CarBrand extends Component {
                                     this.setState({ openConfirmationModal: true })
                                 }}
                                 onClick={item => this.onSelectBrand(item)}
-                                content={[{ field: 'name', label: 'Brand' }]}
+                                content={[{ field: 'name', label: this.props.language.labels.brand }]}
                                 items={this.state.brands} />
                         </div>
                         <div style={{ flex: 1, backgroundColor: '#F8F8F8', margin: '20px 25px', border: '1px solid rgba(0,0,0,0.1)', boxShadow: '1px 1px rgba(0,0,0,0.1)' }}>
@@ -183,6 +183,7 @@ class CarBrand extends Component {
 }
 
 const mapStateToProps = state => ({
+    language: state.language.i18n
 })
 
 const mapDispatchToProps = dispatch => {

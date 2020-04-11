@@ -95,9 +95,9 @@ class Stoc extends Component {
         return (
             <>
                 <ConfirmationModal
-                    text={`Delete?`}
-                    cancelButtonText={"Cancel"}
-                    acceptButtonText={"Delete"}
+                    text={this.props.language.utils.delete}
+                    cancelButtonText={this.props.language.buttons.cancel}
+                    acceptButtonText={this.props.language.buttons.delete}
                     open={this.state.openConfirmationModal}
                     onClose={this.closeConfirmationModalHandler}
                     onCancel={this.closeConfirmationModalHandler}
@@ -106,12 +106,12 @@ class Stoc extends Component {
                 <div className={this.props.classes.container}>
                     <div className={this.props.classes.headersContainer}>
                         <div className={this.props.classes.titleContainer}>
-                            <p className={this.props.classes.titleText}>STOC</p>
+                            <p className={this.props.classes.titleText}>{this.props.language.titles.stock}</p>
                         </div>
                         <div className={this.props.classes.addContainer}>
-                            <Button color="primary" onClick={() => this.setState({ openModal: true, modalType: CONSTANTS.CREATE })}>ADD</Button>
+                            <Button color="primary" onClick={() => this.setState({ openModal: true, modalType: CONSTANTS.CREATE })}>{this.props.language.buttons.add}</Button>
                             <div className={this.props.classes.searchContainer}>
-                                <TextField placeholder="Search..." />
+                                <TextField placeholder={this.props.language.utils.search} />
                             </div>
                         </div>
                     </div>
@@ -138,6 +138,7 @@ class Stoc extends Component {
 }
 
 const mapStateToProps = state => ({
+    language: state.language.i18n
 })
 
 const mapDispatchToProps = dispatch => {

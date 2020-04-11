@@ -1,11 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import moment from 'moment'
 
 import { withStyles, Button } from '@material-ui/core'
-import { Delete } from '@material-ui/icons'
-
-import { mapToDropdownSelector } from '../../../utils/apiFunctions'
 
 import * as CONSTANTS from '../../../utils/constants'
 import * as USERS from '../../../redux/actions/users'
@@ -91,10 +87,10 @@ const styles = theme => ({
 class UserModal extends Component {
 
     initialFields = [
-        { value: '', type: 'text', label: 'Username', name: 'username' },
-        { value: '', type: 'password', label: 'Password', name: 'password' },
-        { value: '', type: 'dropdownSelector', label: 'Position', name: 'position', options: CONSTANTS.USER_POSITION },
-        { value: '', type: 'dropdownSelector', label: 'Status', name: 'userStatus', options: CONSTANTS.USER_STATUS }
+        { value: '', type: 'text', label: this.props.language.labels.username, name: 'username' },
+        { value: '', type: 'password', label: this.props.language.labels.password, name: 'password' },
+        { value: '', type: 'dropdownSelector', label: this.props.language.labels.position, name: 'position', options: CONSTANTS.USER_POSITION },
+        { value: '', type: 'dropdownSelector', label: this.props.language.labels.status, name: 'userStatus', options: CONSTANTS.USER_STATUS }
     ]
 
     state = {
@@ -196,11 +192,11 @@ class UserModal extends Component {
         return (
             <>
                 <SimpleModal
-                    acceptButtonText="Adauga"
-                    cancelButtonText="Anuleaza"
+                    acceptButtonText={this.props.language.buttons.add}
+                    cancelButtonText={this.props.language.buttons.cancel}
                     onAccept={this.props.type === CONSTANTS.CREATE ? this.onAddHandler : this.onEditHandler}
                     maxWidth={"md"}
-                    title={"Adauga user"}
+                    title={this.props.type === CONSTANTS.CREATE ? this.props.language.titles.addUser : this.props.language.titles.editUser}
                     open={this.props.open}
                     onCancel={() => this.onCancelHandler()}>
                     {this.renderUserFields()}
@@ -211,6 +207,7 @@ class UserModal extends Component {
 }
 
 const mapStateToProps = state => ({
+    language: state.language.i18n
 })
 
 const mapDispatchToProps = dispatch => {

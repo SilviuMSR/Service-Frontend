@@ -90,9 +90,9 @@ class CarProblem extends Component {
         return (
             <>
                 <ConfirmationModal
-                    text={`Delete?`}
-                    cancelButtonText={"Cancel"}
-                    acceptButtonText={"Delete"}
+                    text={this.props.language.utils.delete}
+                    cancelButtonText={this.props.language.buttons.cancel}
+                    acceptButtonText={this.props.language.buttons.delete}
                     open={this.state.openConfirmationModal}
                     onClose={this.closeConfirmationModalHandler}
                     onCancel={this.closeConfirmationModalHandler}
@@ -104,11 +104,11 @@ class CarProblem extends Component {
                 <div className={this.props.classes.container}>
                     <div className={this.props.classes.headersContainer}>
                         <div className={this.props.classes.titleContainer}>
-                            <p className={this.props.classes.titleText}>CAR PROBLEMS</p>
+            <p className={this.props.classes.titleText}>{this.props.language.titles.problems}</p>
                         </div>
                         <div className={this.props.classes.addContainer}>
-                            <Button color="primary" onClick={() => this.setState({ openModal: true, modalType: CONSTANTS.CREATE })}>ADD</Button>
-                            <div className={this.props.classes.searchContainer}><TextField placeholder="Search..." /></div>
+            <Button color="primary" onClick={() => this.setState({ openModal: true, modalType: CONSTANTS.CREATE })}>{this.props.language.buttons.add}</Button>
+                            <div className={this.props.classes.searchContainer}><TextField placeholder={this.props.language.utils.search} /></div>
                         </div>
                     </div>
                     <div style={{ backgroundColor: '#F8F8F8', margin: '20px 55px', flex: 1, border: '1px solid rgba(0,0,0,0.1)', boxShadow: '1px 1px rgba(0,0,0,0.1)' }}>
@@ -124,7 +124,7 @@ class CarProblem extends Component {
                                 this.setState({ openConfirmationModal: true })
                             }}
                             onClick={item => { }}
-                            content={[{ field: 'name', label: 'Name' }, { field: 'difficulty', label: 'Difficulty' }, { field: 'price', label: 'Price' }, { field: 'steps', label: 'No. steps', length: true }]}
+                            content={[{ field: 'name', label: this.props.language.labels.name }, { field: 'difficulty', label: this.props.language.labels.difficulty }, { field: 'price', label: this.props.language.labels.price }, { field: 'steps', label: this.props.language.labels.noSteps, length: true }]}
                             items={this.state.problems} />
                     </div>
                 </div>
@@ -135,6 +135,7 @@ class CarProblem extends Component {
 }
 
 const mapStateToProps = state => ({
+    language: state.language.i18n
 })
 
 const mapDispatchToProps = dispatch => {

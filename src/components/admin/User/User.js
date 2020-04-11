@@ -91,9 +91,9 @@ class User extends Component {
         return (
             <>
                 <ConfirmationModal
-                    text={`Delete?`}
-                    cancelButtonText={"Cancel"}
-                    acceptButtonText={"Delete"}
+                    text={this.props.language.utils.delete}
+                    cancelButtonText={this.props.language.buttons.cancel}
+                    acceptButtonText={this.props.language.buttons.delete}
                     open={this.state.openConfirmationModal}
                     onClose={this.closeConfirmationModalHandler}
                     onCancel={this.closeConfirmationModalHandler}
@@ -110,7 +110,7 @@ class User extends Component {
                         <div className={this.props.classes.addContainer}>
                             <Button color="primary" onClick={() => this.setState({ openModal: true, modalType: CONSTANTS.CREATE })}>ADD</Button>
                             <div className={this.props.classes.searchContainer}>
-                                <TextField placeholder="Search..." />
+                                <TextField placeholder={this.props.language.utils.search} />
                             </div>
                         </div>
                     </div>
@@ -126,7 +126,7 @@ class User extends Component {
                                 this.setState({ openConfirmationModal: true })
                             }}
                             onClick={item => { }}
-                            content={[{ field: 'username', label: 'Name' }, { field: 'position', label: 'Position' }, { field: 'userStatus', label: 'Status' }]}
+                            content={[{ field: 'username', label: this.props.language.labels.name }, { field: 'position', label: this.props.language.labels.position }, { field: 'userStatus', label: this.props.language.labels.status }]}
                             items={this.state.users} />
                     </div>
                 </div>
@@ -137,6 +137,7 @@ class User extends Component {
 }
 
 const mapStateToProps = state => ({
+    language: state.language.i18n
 })
 
 const mapDispatchToProps = dispatch => {
