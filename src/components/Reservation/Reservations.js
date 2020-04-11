@@ -154,7 +154,7 @@ const styles = theme => ({
     titleText: {
         color: '#1976d2'
     },
-    
+
 })
 
 class Reservations extends Component {
@@ -262,7 +262,7 @@ class Reservations extends Component {
                     <div className={this.props.classes.problemSteps}>
                         <div>
                             {this.state.currentFile ? <Document
-                                file={`http://localhost:9000/static/invoices/${this.state.currentFile.originalName}`}
+                                file={`${CONSTANTS.INVOICES_URL}${this.state.currentFile.originalName}`}
                                 onLoadSuccess={this.onFileLoadSuccess}
                             >
                                 <Page pageNumber={this.state.pdfPage} />
@@ -281,7 +281,7 @@ class Reservations extends Component {
                                 <div onClick={() => this.onProblemClickHandler(pr)} className={`${this.state.currentProblem ? this.state.currentProblem._id === pr._id ? this.props.classes.selectedProblem : "" : ""} ${this.props.classes.problemWrapper}`}>
                                     <div className={this.props.classes.problem}>
                                         <span>{pr.name}</span>
-                                        <span>{pr.price} RON</span>
+                                        <span>{pr.price} {this.props.language.utils.ron}</span>
                                     </div>
                                     <div className={this.props.classes.rightArrowContainer}>
                                         <ChevronRightIcon />
@@ -312,29 +312,15 @@ class Reservations extends Component {
                 <div className={this.props.classes.container}>
                     <div className={this.props.classes.headersContainer}>
                         <div className={this.props.classes.titleContainer}>
-                            <p className={this.props.classes.titleText}>RESERVATIONS</p>
+                            <p className={this.props.classes.titleText}>{this.props.language.titles.reservations}</p>
                         </div>
                         {this.props.login.position.toLowerCase() !== 'admin' ? <div className={this.props.classes.headersContainerEmployee}>
                             <div className={this.props.classes.optionsIcon}><VisibilityOutlinedIcon /></div>
-                            <div onClick={() => this.selectOptionHandler(CONSTANTS.RENDER_RESERVATION_EMPLOYEE)} className={this.props.classes.options}><span className={`${this.state.selectedOption === CONSTANTS.RENDER_RESERVATION_EMPLOYEE ? this.props.classes.selectedOption : ""} ${this.props.classes.optionText}`}>RESERVATIONS</span></div>
-                            <div onClick={() => this.selectOptionHandler(CONSTANTS.RENDER_RESERVATION_PERSONAL)} className={this.props.classes.options}><span className={`${this.state.selectedOption === CONSTANTS.RENDER_RESERVATION_PERSONAL ? this.props.classes.selectedOption : ""} ${this.props.classes.optionText}`}>PERSONAL</span></div>
+                            <div onClick={() => this.selectOptionHandler(CONSTANTS.RENDER_RESERVATION_EMPLOYEE)} className={this.props.classes.options}><span className={`${this.state.selectedOption === CONSTANTS.RENDER_RESERVATION_EMPLOYEE ? this.props.classes.selectedOption : ""} ${this.props.classes.optionText}`}>{this.props.language.titles.reservations}</span></div>
+                            <div onClick={() => this.selectOptionHandler(CONSTANTS.RENDER_RESERVATION_PERSONAL)} className={this.props.classes.options}><span className={`${this.state.selectedOption === CONSTANTS.RENDER_RESERVATION_PERSONAL ? this.props.classes.selectedOption : ""} ${this.props.classes.optionText}`}>{this.props.language.titles.personalReservations}</span></div>
                         </div> : null}
                     </div>
                     <div className={this.props.classes.containerContent}>
-                        {/* <SimpleModal maxWidth={"md"} title={this.state.showFiles ? "Files" : "Problems"} open={(this.state.showFiles || this.state.showProblems) && this.state.expandedReservationId} onCancel={() => this.state.showFiles ? this.setState({ showFiles: false }) : this.setState({ showProblems: false, currentProblem: null })}>
-                            {this.renderModalContentHandler()}
-                        </SimpleModal> */}
-                        {/* <RenderItems
-                            onExpandHandler={reservationId => this.setState({ expandedReservationId: reservationId }, () => this.getReservationById(this.state.expandedReservationId))}
-                            showFilesHandler={() => this.setState({ showFiles: true, currentFile: this.state.currentReservation.file[0] })}
-                            showProblemsHandler={() => this.setState({ showProblems: true, currentProblem: this.state.currentReservation.problem[0] })}
-                            generateInvoice={reservationId => {
-                                this.props.generateInvoice(reservationId).then(() => this.handlerReservations())
-                            }}
-                            modifyStatus={this.modifyStatusHandler}
-                            items={this.state.reservations}
-                            renderType={this.state.selectedOption}
-                        /> */}
                         <ReservationDetails
                             tabs={[CONSTANTS.DETAILS_TAB, CONSTANTS.PROBLEMS_TAB, CONSTANTS.INVOICES_TAB]}
                             open={this.state.openReservationDetails}
@@ -352,7 +338,7 @@ class Reservations extends Component {
                             displayMainPhoto={true}
                             type={CONSTANTS.RESERVATION_TYPE}
                             onClick={item => { this.setState({ selectedReservation: item, openReservationDetails: true }) }}
-                            content={[{ field: 'reservationStatus', label: 'Status' }, { populate: 'carBrandId', field: 'name', label: 'Brand' }, { populate: 'carModelId', field: 'name', label: 'Model' }, { field: 'price', label: 'Price' }]}
+                            content={[{ field: 'reservationStatus', label: this.props.language.labels.status }, { populate: 'carBrandId', field: 'name', label: this.props.language.labels.brand }, { populate: 'carModelId', field: 'name', label: this.props.language.labels.model }, { field: 'price', label: this.props.language.labels.price }]}
                             items={this.state.reservations} />
                     </div>
                 </div>
@@ -363,7 +349,8 @@ class Reservations extends Component {
 }
 
 const mapStateToProps = state => ({
-    login: state.login
+    login: state.login,
+    language: state.language.i18n
 })
 
 const mapDispatchToProps = dispatch => {

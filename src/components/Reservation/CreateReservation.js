@@ -22,16 +22,16 @@ class CreateReservation extends Component {
     todayValue = moment().format(CONSTANTS.INPUT_TYPE_DATE_FORMAT)
 
     initialFields = [
-        { value: '', type: 'dropdownSelector', label: 'Brand', name: 'carBrandId', options: [] },
-        { value: '', type: 'dropdownSelector', label: 'Model', name: 'carModelId', options: [] },
-        { value: '', type: 'text', label: 'Email client', name: 'clientEmail' },
-        { value: '', type: 'text', label: 'Nume client', name: 'clientName' },
-        { value: 'Nu', type: 'radioSelector', label: 'Cunosti cauza problemei?', name: 'knowingStatus', options: CONSTANTS.RESERVATION_PROBLEMS_OPTION }
+        { value: '', type: 'dropdownSelector', label: this.props.language.labels.brand, name: 'carBrandId', options: [] },
+        { value: '', type: 'dropdownSelector', label: this.props.language.labels.model, name: 'carModelId', options: [] },
+        { value: '', type: 'text', label: this.props.language.labels.clientEmail, name: 'clientEmail' },
+        { value: '', type: 'text', label: this.props.language.labels.clientName, name: 'clientName' },
+        { value: 'Nu', type: 'radioSelector', label: this.props.language.labels.problemKnow, name: 'knowingStatus', options: CONSTANTS.RESERVATION_PROBLEMS_OPTION.map(op => ({...op, label: this.props.language.labels.knowProblem[op.name]})) }
     ]
 
     knowingProblem = [
-        { type: 'multiSelector', utils: 'Alege cauza problemei', name: 'problem', value: [] },
-        { value: 0, type: 'number', disabled: true, label: 'Pret', name: 'price' }
+        { type: 'multiSelector', utils: '', name: 'problem', value: [] },
+        { value: 0, type: 'number', disabled: true, label: this.props.language.labels.price, name: 'price' }
     ]
 
     state = {
@@ -149,7 +149,7 @@ class CreateReservation extends Component {
         return (
             <div className="container">
                 <div className="fieldsContainer">
-                    <SimpleModal open={this.state.openProblemModal} cancelButtonText={"ANULEAZA"} acceptButtonText={"ADAUGA"} onAccept={() => this.setState({ openProblemModal: false })} onCancel={() => this.setState({ openProblemModal: false })}>
+                    <SimpleModal title={this.props.language.titles.chooseProblem} open={this.state.openProblemModal} cancelButtonText={this.props.language.buttons.cancel} acceptButtonText={this.props.language.buttons.add} onAccept={() => this.setState({ openProblemModal: false })} onCancel={() => this.setState({ openProblemModal: false })}>
                         {
                             this.state.modalFieldsProblem.filter(field => field.name === 'problem').map((field, index) => {
                                 return <InputGenerator
@@ -173,8 +173,8 @@ class CreateReservation extends Component {
                         })
                         : ""}
                     <div className="buttonsContainer">
-                        <Button onClick={this.onSubmitHandler}>Adauga</Button>
-                        <Button onClick={this.onResetHandler}>Reseteaza</Button>
+                    <Button onClick={this.onSubmitHandler}>{this.props.language.buttons.add}</Button>
+                    <Button onClick={this.onResetHandler}>{this.props.language.buttons.reset}</Button>
                     </div>
                 </div>
             </div>
@@ -183,6 +183,7 @@ class CreateReservation extends Component {
 }
 
 const mapStateToProps = state => ({
+    language: state.language.i18n
 })
 
 const mapDispatchToProps = dispatch => {

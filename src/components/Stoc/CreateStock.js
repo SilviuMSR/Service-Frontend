@@ -54,11 +54,11 @@ class CreateStock extends Component {
     todayValue = moment().format(CONSTANTS.INPUT_TYPE_DATE_FORMAT)
 
     initialFields = [
-        { value: '', type: 'dropdownSelector', label: 'Brand', name: 'carBrandId', options: [] },
-        { value: '', type: 'dropdownSelector', label: 'Model', name: 'carModelId', options: [] },
-        { value: '', type: 'text', label: 'Nume', name: 'name' },
-        { value: '', type: 'text', label: 'Price', name: 'price' },
-        { value: 0, type: "number", label: "Quantity", name: 'no' }
+        { value: '', type: 'dropdownSelector', label: this.props.language.labels.brand, name: 'carBrandId', options: [] },
+        { value: '', type: 'dropdownSelector', label: this.props.language.labels.model, name: 'carModelId', options: [] },
+        { value: '', type: 'text', label: this.props.language.labels.name, name: 'name' },
+        { value: '', type: 'text', label: this.props.language.labels.price, name: 'price' },
+        { value: 0, type: "number", label: this.props.language.labels.quantity, name: 'no' }
     ]
 
     state = {
@@ -192,11 +192,11 @@ class CreateStock extends Component {
         return (
             <>
                 <SimpleModal
-                    acceptButtonText="Adauga"
-                    cancelButtonText="Anuleaza"
+                    acceptButtonText={this.props.language.buttons.add}
+                    cancelButtonText={this.props.language.buttons.cancel}
                     onAccept={this.props.type === CONSTANTS.CREATE ? this.onAddHandler : this.onEditHandler}
                     maxWidth={"md"}
-                    title={"Adauga stoc"}
+                    title={this.props.type === CONSTANTS.CREATE ? this.props.language.titles.addStock : this.props.language.titles.editStock}
                     open={this.props.open}
                     onCancel={() => this.onCancelHandler()}>
                     {this.renderStocModalFields()}
@@ -207,6 +207,7 @@ class CreateStock extends Component {
 }
 
 const mapStateToProps = state => ({
+    language: state.language.i18n
 })
 
 const mapDispatchToProps = dispatch => {

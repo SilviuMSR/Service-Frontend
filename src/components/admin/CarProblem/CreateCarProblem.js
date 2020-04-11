@@ -93,15 +93,15 @@ class CreateCarProblem extends Component {
     todayValue = moment().format(CONSTANTS.INPUT_TYPE_DATE_FORMAT)
 
     initialFields = [
-        { value: '', type: 'text', label: 'Name', name: 'name' },
-        { value: '', type: 'text', label: 'Steps', name: 'steps' },
-        { value: '', type: 'number', label: 'Price', name: 'price' },
-        { value: '', type: 'dropdownSelector', label: 'Difficulty', name: 'difficulty', options: CONSTANTS.PROBLEM_DIFFICULTY }
+        { value: '', type: 'text', label: this.props.language.labels.name, name: 'name' },
+        { value: '', type: 'text', label: this.props.language.labels.steps, name: 'steps' },
+        { value: '', type: 'number', label: this.props.language.labels.price, name: 'price' },
+        { value: '', type: 'dropdownSelector', label: this.props.language.labels.difficulty, name: 'difficulty', options: CONSTANTS.PROBLEM_DIFFICULTY }
     ]
 
     newStepInitialFields = [
-        { value: '', type: 'text', label: 'New step', name: 'newStep' },
-        { value: '', type: 'dropdownSelector', label: 'Add after', name: 'stepAfter', options: [] }
+        { value: '', type: 'text', label: this.props.language.labels.newStep, name: 'newStep' },
+        { value: '', type: 'dropdownSelector', label: this.props.language.labels.addAfter, name: 'stepAfter', options: [] }
     ]
 
     state = {
@@ -233,8 +233,8 @@ class CreateCarProblem extends Component {
             </div>
             {stepsIndex > -1 && this.state.modalFields[stepsIndex].value.length && <div className={this.props.classes.stepsContainer}>
                 <div className={this.props.classes.stepsContainerHeader}>
-                    <p className={this.props.classes.stepsTitle}>Steps</p>
-                    <Button color="primary" onClick={() => this.addNewStepHandler()} className={`${this.props.classes.marginLeftAuto}`}>ADD NEW STEP</Button>
+                    <p className={this.props.classes.stepsTitle}>{this.props.language.titles.steps}</p>
+                    <Button color="primary" onClick={() => this.addNewStepHandler()} className={`${this.props.classes.marginLeftAuto}`}>{this.props.language.buttons.add}</Button>
                 </div>
                 <div className={this.props.classes.steps}>
                     <div className={this.props.classes.currentSteps}>
@@ -279,11 +279,11 @@ class CreateCarProblem extends Component {
         return (
             <>
                 <SimpleModal
-                    acceptButtonText="Adauga"
-                    cancelButtonText="Anuleaza"
+                    acceptButtonText={this.props.language.buttons.add}
+                    cancelButtonText={this.props.language.buttons.cancel}
                     onAccept={this.props.type === CONSTANTS.CREATE ? this.onAddHandler : this.onEditHandler}
                     maxWidth={"md"}
-                    title={"Adauga problema"}
+                    title={this.props.type === CONSTANTS.CREATE ? this.props.language.titles.addProblem : this.props.language.titles.editProblem}
                     open={this.props.open}
                     onCancel={() => this.onCancelHandler()}>
                     {this.renderProblemFields()}
@@ -294,6 +294,7 @@ class CreateCarProblem extends Component {
 }
 
 const mapStateToProps = state => ({
+    language: state.language.i18n
 })
 
 const mapDispatchToProps = dispatch => {
