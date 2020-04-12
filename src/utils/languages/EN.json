@@ -10,7 +10,8 @@
             "admin": "Admin",
             "car": "Cars",
             "problem": "Problems",
-            "user": "Users"
+            "user": "Users",
+            "settings": "Settings"
         },
         "reservation": "Reservations",
         "stoc": "Stock",

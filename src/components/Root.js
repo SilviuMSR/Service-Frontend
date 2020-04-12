@@ -33,6 +33,10 @@ class Root extends Component {
                 {
                     to: '/admin/user',
                     label: 'user'
+                },
+                {
+                    to: '/admin/settings',
+                    label: 'settings'
                 }
             ]
         },
