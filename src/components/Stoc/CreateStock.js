@@ -5,10 +5,12 @@ import moment from 'moment'
 import { withStyles } from '@material-ui/core'
 
 import { mapToDropdownSelector, findIndexInArray } from '../../utils/apiFunctions'
+
 import * as CONSTANTS from '../../utils/constants'
 import * as BRANDS from '../../redux/actions/brands'
 import * as MODELS from '../../redux/actions/models'
 import * as STOCK from '../../redux/actions/stocks'
+import * as NOTIFICATIONS from '../../utils/notification'
 
 import InputGenerator from '../common/InputGenerator'
 import SimpleModal from '../common/SimpleModal'
@@ -110,7 +112,7 @@ class CreateStock extends Component {
                     modalFields: modalFieldsCopy
                 })
             }).catch(() => {
-                alert("NOT FOUND")
+                NOTIFICATIONS.error(this.props.language.toastr.notFound)
             })
         })
     }
@@ -138,16 +140,20 @@ class CreateStock extends Component {
 
     onAddHandler = () => {
         this.props.createStock(this.createStockJson()).then(() => {
+            NOTIFICATIONS.success(this.props.language.toastr.add)
             this.onCancelHandler()
             this.props.getStocks()
         })
+            .catch(() => NOTIFICATIONS.error(this.props.language.toastr.failAdd))
     }
 
     onEditHandler = () => {
         this.props.edit(this.props.stockId, this.createStockJson()).then(() => {
+            NOTIFICATIONS.success(this.props.language.toastr.edit)
             this.onCancelHandler()
             this.props.getStocks()
         })
+            .catch(() => NOTIFICATIONS.error(this.props.language.toastr.failEdit))
     }
 
     onChangeHandler = event => {

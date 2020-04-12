@@ -6,6 +6,7 @@ import { withStyles } from '@material-ui/core'
 
 import * as CONSTANTS from '../../../utils/constants'
 import * as BRANDS from '../../../redux/actions/brands'
+import * as NOTIFICATIONS from '../../../utils/notification'
 
 import InputGenerator from '../../common/InputGenerator'
 import SimpleModal from '../../common/SimpleModal'
@@ -91,6 +92,7 @@ class CreateCarBrand extends Component {
         const logoIndex = this.state.modalFields.findIndex(index => index.name === 'logo')
 
         this.props.createBrand(brandJson).then(createdBrand => {
+            NOTIFICATIONS.success(this.props.language.toastr.add)
             if (logoIndex > -1 && this.state.modalFields[logoIndex].files && this.state.modalFields[logoIndex].files.length) {
                 let files = Array.from(this.state.modalFields[logoIndex].files)
                 const formData = new FormData()
@@ -105,6 +107,7 @@ class CreateCarBrand extends Component {
                 this.props.getBrands()
             }
         })
+        .catch(() => NOTIFICATIONS.error(this.props.language.toastr.failAdd))
     }
 
     onEditHandler = () => {
@@ -112,6 +115,7 @@ class CreateCarBrand extends Component {
         const logoIndex = this.state.modalFields.findIndex(index => index.name === 'logo')
 
         this.props.edit(this.props.carBrandId, brandJson).then(() => {
+            NOTIFICATIONS.success(this.props.language.toastr.edit)
             if (logoIndex > -1 && this.state.modalFields[logoIndex].files && this.state.modalFields[logoIndex].files.length) {
                 let files = Array.from(this.state.modalFields[logoIndex].files)
                 const formData = new FormData()
@@ -126,6 +130,7 @@ class CreateCarBrand extends Component {
                 this.props.getBrands()
             }
         })
+        .catch(() => NOTIFICATIONS.error(this.props.language.toastr.failEdit))
     }
 
     onChangeHandler = event => {

@@ -7,6 +7,7 @@ import { Edit, Delete } from '@material-ui/icons'
 import * as BRAND from '../../../redux/actions/brands'
 import * as MODELS from '../../../redux/actions/models'
 import * as CONSTANTS from '../../../utils/constants'
+import * as NOTIFICATIONS from '../../../utils/notification'
 
 import ConfirmationModal from '../../common/ConfirmationDialog'
 import RenderCards from '../../common/RenderCards'
@@ -100,9 +101,11 @@ class CarBrand extends Component {
 
     deleteBrandHandler = () => {
         this.props.deleteBrand(this.brandToDelete._id).then(() => {
+            NOTIFICATIONS.success(this.props.language.toastr.delete)
             this.getBrands()
             this.setState({ openConfirmationModal: false, selectedBrandId: null })
         })
+        .catch(() => NOTIFICATIONS.error(this.props.language.toastr.failDelete))
     }
 
     closeConfirmationModalHandler = () => {

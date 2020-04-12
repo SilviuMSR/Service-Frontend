@@ -9,6 +9,7 @@ import RenderCards from '../../common/RenderCards'
 
 import * as CONSTANTS from '../../../utils/constants'
 import * as USERS from '../../../redux/actions/users'
+import * as NOTIFICATIONS from '../../../utils/notification'
 
 import UserModal from './UserModal'
 
@@ -77,9 +78,11 @@ class User extends Component {
 
     deleteUserHandler = () => {
         this.props.delete(this.userToDelete._id).then(() => {
+            NOTIFICATIONS.success(this.props.language.toastr.delete)
             this.getUsers()
             this.setState({ openConfirmationModal: false })
         })
+        .catch(() => NOTIFICATIONS.error(this.props.language.toastr.failDelete))
     }
 
     closeConfirmationModalHandler = () => {

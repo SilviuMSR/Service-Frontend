@@ -5,6 +5,7 @@ import { withStyles, Button } from '@material-ui/core'
 
 import * as CONSTANTS from '../../../utils/constants'
 import * as USERS from '../../../redux/actions/users'
+import * as NOTIFICATIONS from '../../../utils/notification'
 
 import InputGenerator from '../../common/InputGenerator'
 import SimpleModal from '../../common/SimpleModal'
@@ -109,7 +110,6 @@ class UserModal extends Component {
                         ...field,
                         value: response[field.name],
                         options: field.options.map(option => {
-                            console.log(option)
                             return ({ ...option, value: String(option.id) === String(response[field.name]) ? true : false })
                         }),
                         touched: true
@@ -126,7 +126,7 @@ class UserModal extends Component {
                 modalFields: modalFieldsCopy
             })
         }).catch(() => {
-            alert("NOT FOUND")
+            NOTIFICATIONS.error(this.props.language.toastr.notFound)
         })
     }
 
@@ -142,16 +142,20 @@ class UserModal extends Component {
 
     onAddHandler = () => {
         this.props.createUser(this.createUserJson()).then(() => {
+            NOTIFICATIONS.success(this.props.language.toastr.add)
             this.onCancelHandler()
             this.props.getUsers()
         })
+        .catch(() => NOTIFICATIONS.error(this.props.language.toastr.failAdd))
     }
 
     onEditHandler = () => {
         this.props.edit(this.props.userId, this.createUserJson()).then(() => {
+            NOTIFICATIONS.success(this.props.language.toastr.edit)
             this.onCancelHandler()
             this.props.getUsers()
         })
+        .catch(() => NOTIFICATIONS.error(this.props.language.toastr.failEdit))
     }
 
     onChangeHandler = event => {

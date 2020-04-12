@@ -66,9 +66,27 @@
 }
 
 .toastSuccess{
-  background-color: #378e81 !important
+  background-color: #1976D2 !important
 }
 
 .toastError{
-  background-color: #ef4517 !important
+  background-color: #d32f2f !important
+}
+
+.toastErrorBody > div, .toastSuccessBody > div {
+    height: auto
+}
+
+.Toastify__toast{
+    min-height: 50px !important
+}
+
+.Toastify__close-button{
+    margin-top: 9px;
+    padding: 0px 12px 0px 10px;
+    font-weight: normal
+}
+
+.Toastify__toast-container{
+    width: 360px !important
 }

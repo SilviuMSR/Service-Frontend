@@ -131,9 +131,9 @@ class CreateReservation extends Component {
         this.props.createReservation(reservationJson).then(result => {
             this.onResetHandler()
             this.populateWithBrands()
-            return NOTIFICATION.success("Rezervarea a fost creata cu succes!")
+            return NOTIFICATION.success(this.props.language.toastr.add)
         })
-            .catch(() => NOTIFICATION.error("Rezervarea nu a fost creata!"))
+            .catch(() => NOTIFICATION.error(this.props.language.toastr.failAdd))
     }
 
     renderFields = () => {

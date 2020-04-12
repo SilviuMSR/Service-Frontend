@@ -9,6 +9,7 @@ import { mapToDropdownSelector } from '../../../utils/apiFunctions'
 
 import * as CONSTANTS from '../../../utils/constants'
 import * as PROBLEM from '../../../redux/actions/problems'
+import * as NOTIFICATIONS from '../../../utils/notification'
 
 import InputGenerator from '../../common/InputGenerator'
 import SimpleModal from '../../common/SimpleModal'
@@ -138,7 +139,7 @@ class CreateCarProblem extends Component {
                 modalFields: modalFieldsCopy
             })
         }).catch(() => {
-            alert("NOT FOUND")
+            NOTIFICATIONS.error(this.props.language.toastr.notFound)
         })
     }
 
@@ -165,17 +166,21 @@ class CreateCarProblem extends Component {
 
     onAddHandler = () => {
         this.props.createProblem(this.createProblemJson()).then(() => {
+            NOTIFICATIONS.success(this.props.language.toastr.add)
             this.onCancelHandler()
             this.props.getProblems()
         })
+        .catch(() => NOTIFICATIONS.error(this.props.language.toastr.failAdd))
     }
 
     onEditHandler = () => {
         const addNewStepJson = this.state.addNewStep ? this.createNewStepJson() : {}
         this.props.edit(this.props.problemId, this.createProblemJson(), this.state.addNewStep, addNewStepJson).then(() => {
+            NOTIFICATIONS.success(this.props.language.toastr.edit)
             this.onCancelHandler()
             this.props.getProblems()
         })
+        .catch(() => NOTIFICATIONS.error(this.props.language.toastr.failEdit))
     }
 
     onChangeHandler = event => {

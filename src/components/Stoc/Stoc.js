@@ -9,6 +9,7 @@ import RenderCards from '../common/RenderCards'
 
 import * as STOCK from '../../redux/actions/stocks'
 import * as CONSTANTS from '../../utils/constants'
+import * as NOTIFICATIONS from '../../utils/notification'
 
 import CreateStock from './CreateStock'
 
@@ -81,9 +82,11 @@ class Stoc extends Component {
 
     deleteStockHandler = () => {
         this.props.deleteStock(this.stockToDelete._id).then(() => {
+            NOTIFICATIONS.success(this.props.language.toastr.delete)
             this.getStocks()
             this.setState({ openConfirmationModal: false })
         })
+        .catch(() => NOTIFICATIONS.error(this.props.language.toastr.failDelete))
     }
 
     closeConfirmationModalHandler = () => {

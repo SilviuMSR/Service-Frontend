@@ -6,6 +6,7 @@ import { withStyles } from '@material-ui/core'
 
 import * as CONSTANTS from '../../../utils/constants'
 import * as MODELS from '../../../redux/actions/models'
+import * as NOTIFICATIONS from '../../../utils/notification'
 
 import InputGenerator from '../../common/InputGenerator'
 import SimpleModal from '../../common/SimpleModal'
@@ -75,7 +76,7 @@ class CreateCarBrand extends Component {
                 modalFields: modalFieldsCopy
             })
         }).catch(() => {
-            alert("NOT FOUND")
+            NOTIFICATIONS.error(this.props.language.toastr.notFound)
         })
     }
 
@@ -92,16 +93,20 @@ class CreateCarBrand extends Component {
 
     onAddHandler = () => {
         this.props.createModel(this.createModelJson()).then(() => {
+            NOTIFICATIONS.success(this.props.language.toastr.add)
             this.onCancelHandler()
             this.props.getModels()
         })
+        .catch(() => NOTIFICATIONS.error(this.props.language.toastr.failAdd))
     }
 
     onEditHandler = () => {
         this.props.edit(this.props.carModelId, this.createModelJson()).then(() => {
+            NOTIFICATIONS.success(this.props.language.toastr.edit)
             this.onCancelHandler()
             this.props.getModels()
         })
+        .catch(() => NOTIFICATIONS.error(this.props.language.toastr.failEdit))
     }
 
     onChangeHandler = event => {

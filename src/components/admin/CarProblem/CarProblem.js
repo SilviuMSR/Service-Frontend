@@ -2,11 +2,12 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
 import { withStyles, Button, TextField } from '@material-ui/core'
-import { Delete } from '@material-ui/icons'
 
 import ConfirmationModal from '../../common/ConfirmationDialog'
 import RenderCards from '../../common/RenderCards'
+
 import * as CONSTANTS from '../../../utils/constants'
+import * as NOTIFICATIONS from '../../../utils/notification'
 import * as PROBLEMS from '../../../redux/actions/problems'
 
 import CreateCarProblem from './CreateCarProblem'
@@ -76,9 +77,11 @@ class CarProblem extends Component {
 
     deleteProblemHandler = () => {
         this.props.delete(this.problemToDelete._id).then(() => {
+            NOTIFICATIONS.success(this.props.language.toastr.delete)
             this.getProblems()
             this.setState({ openConfirmationModal: false })
         })
+        .catch(() => NOTIFICATIONS.error(this.props.language.toastr.failDelete))
     }
 
     closeConfirmationModalHandler = () => {

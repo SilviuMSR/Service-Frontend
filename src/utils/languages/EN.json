@@ -16,7 +16,16 @@
         "stoc": "Stock",
         "dashboard": "Dashboard"
     },
-    "toastr": {},
+    "toastr": {
+        "newStep": "new step",
+        "add": "Successfully created",
+        "failAdd": "Fail to create",
+        "edit": "Successfully modified",
+        "failEdit": "Fail to edit",
+        "delete": "Successfully deleted",
+        "failDelete": "Fail to delete",
+        "notFound": "Not found"
+    },
     "labels": {
         "brand": "Brand",
         "name": "Name",
