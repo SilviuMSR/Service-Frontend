@@ -56,7 +56,8 @@ const styles = theme => ({
 class Settings extends Component {
 
     initialFields = [
-        { value: '', type: 'number', label: 'Months', name: 'months' }
+        { value: '', type: 'number', label: 'Months', name: 'months' },
+        { value: '', type: 'number', label: 'Check time', name: 'checkTime' }
     ]
 
     state = {
@@ -71,8 +72,10 @@ class Settings extends Component {
 
     onSave = () => {
         const noMonths = this.state.settingsFields[0].value
+        const checkTime = this.state.settingsFields[1].value
         const settingsJson = {
-            months: noMonths
+            months: noMonths,
+            checkTime
         }
         this.props.update(settingsJson).then(() => NOTIFICATIONS.success(this.props.language.toastr.edit))
             .catch(() => NOTIFICATIONS.error(this.props.language.toastr.editFail))
@@ -80,10 +83,12 @@ class Settings extends Component {
 
     getSettings = () => {
         this.props.get().then(result => {
-            const currentIndex = this.state.settingsFields.findIndex(index => index.name === "months")
-            if (currentIndex > -1) {
+            const monthsIndex = this.state.settingsFields.findIndex(index => index.name === "months")
+            const checkTimeIndex = this.state.settingsFields.findIndex(index => index.name === "checkTime")
+            if (monthsIndex > -1 && checkTimeIndex > -1) {
                 let stateCopy = this.state.settingsFields.map(field => ({ ...field }))
-                stateCopy[currentIndex].value = result.months
+                stateCopy[monthsIndex].value = result.settings.noMonths
+                stateCopy[checkTimeIndex].value = result.settings.checkTime
                 this.setState({ settingsFields: stateCopy })
             }
         })
@@ -126,12 +131,13 @@ class Settings extends Component {
                         </div>
                     </div>
                     <div style={{ backgroundColor: '#F8F8F8', margin: '20px 19px', flex: 1, display: 'flex', flexDirection: 'column', border: '1px solid rgba(0,0,0,0.1)', boxShadow: '1px 1px rgba(0,0,0,0.1)' }}>
-                        <div style={{ flex: 1, padding: 8 }}>
+                        <div style={{ flex: 1, padding: 8, display: 'flex', flexDirection: 'column' }}>
                             {this.state.settingsFields.map((field, index) => {
                                 return (
                                     <>
                                         <InputGenerator
                                             key={index}
+                                            fullWidth={false}
                                             margin="dense"
                                             onChange={event => this.onChangeHandler(event)}
                                             {...field} />
