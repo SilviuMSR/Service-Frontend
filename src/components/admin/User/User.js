@@ -113,7 +113,7 @@ class User extends Component {
                 <div className={this.props.classes.container}>
                     <div className={this.props.classes.headersContainer}>
                         <div className={this.props.classes.titleContainer}>
-            <p className={this.props.classes.titleText}>{this.props.language.titles.users}</p>
+                            <p className={this.props.classes.titleText}>{this.props.language.titles.users}</p>
                         </div>
                         <div className={this.props.classes.addContainer}>
                             <Button color="primary" onClick={() => this.setState({ openModal: true, modalType: CONSTANTS.CREATE })}><AddIcon className={this.props.classes.addIcon} />{this.props.language.buttons.add}</Button>
@@ -124,6 +124,7 @@ class User extends Component {
                     </div>
                     <div style={{ backgroundColor: '#F8F8F8', margin: '20px 19px', flex: 1, border: '1px solid rgba(0,0,0,0.1)', boxShadow: '1px 1px rgba(0,0,0,0.1)' }}>
                         <RenderCards
+                            displayOptions={true}
                             displayMainPhoto={false}
                             onEdit={item => {
                                 this.userToEdit = item

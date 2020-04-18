@@ -122,6 +122,7 @@ class CarProblem extends Component {
                     </div>
                     <div style={{ backgroundColor: '#F8F8F8', margin: '20px 19px', flex: 1, border: '1px solid rgba(0,0,0,0.1)', boxShadow: '1px 1px rgba(0,0,0,0.1)' }}>
                         <RenderCards
+                            displayOptions={true}
                             displayMainPhoto={false}
                             type={CONSTANTS.BRAND_TYPE}
                             onEdit={item => {

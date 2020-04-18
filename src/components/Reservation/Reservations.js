@@ -336,7 +336,8 @@ class Reservations extends Component {
                     </div>
                     <div style={{ flex: 1, backgroundColor: '#F8F8F8', margin: '20px 19px', border: '1px solid rgba(0,0,0,0.1)', boxShadow: '1px 1px rgba(0,0,0,0.1)' }}>
                         <RenderCards
-                            extraWidth={true}
+                            tooltipMessage={this.props.language.tooltip.reservationDetails}
+                            displayOptions={false}
                             displayMainPhoto={true}
                             type={CONSTANTS.RESERVATION_TYPE}
                             onClick={item => { this.setState({ selectedReservation: item, openReservationDetails: true }) }}

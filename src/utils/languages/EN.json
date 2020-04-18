@@ -103,5 +103,8 @@
         "generateInvoiceFail": "You can generate invoices only when reservation is finished",
         "noProblem": "Problem for this car is unknown",
         "progress": "Progress details"
+    },
+    "tooltip": {
+        "reservationDetails": "Press for more details"
     }
 }

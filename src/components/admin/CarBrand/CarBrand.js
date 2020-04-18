@@ -166,7 +166,9 @@ class CarBrand extends Component {
                     <div className={this.props.classes.carContainer}>
                         <div style={{ flex: 1, backgroundColor: '#F8F8F8', margin: '20px 19px', border: '1px solid rgba(0,0,0,0.1)', boxShadow: '1px 1px rgba(0,0,0,0.1)' }}>
                             <RenderCards
+                                displayOptions={true}
                                 displayMainPhoto={true}
+                                extraWidth={true}
                                 type={CONSTANTS.BRAND_TYPE}
                                 onEdit={item => {
                                     this.brandToEdit = item

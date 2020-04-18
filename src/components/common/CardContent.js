@@ -3,13 +3,13 @@ import { withStyles } from '@material-ui/core/styles'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 
+import Tooltip from '@material-ui/core/Tooltip'
 import Card from '@material-ui/core/Card'
-import CardActionArea from '@material-ui/core/CardActionArea'
-import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
-import CardMedia from '@material-ui/core/CardMedia'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
+
+import { ClickWrapper } from '../../utils/helpers'
 
 import * as CONSTANTS from '../../utils/constants'
 
@@ -20,11 +20,14 @@ const styles = theme => ({
         border: '1px solid rgba(0,0,0,0.1)',
         maxWidth: 300,
         minWidth: 300,
-        margin: '12px 22px',
+        margin: '12px 36px',
     },
     cardContent: {
         display: 'flex',
         flexDirection: 'row'
+    },
+    displayNoneTooltip: {
+        display: 'none'
     },
     statusContainer: {
         display: 'flex',
@@ -145,36 +148,40 @@ class SimpleCardContent extends Component {
         const logoPath = this.computeLogoPath()
         const { classes } = this.props
         return (
-            <div onClick={() => this.props.onClick(this.props.item)}>
-                <Card className={`${classes.root} ${this.props.extraWidth ? classes.extraWidth : ''}`}>
-                    <CardContent className={`${this.props.extraWidth ? classes.extraWidth : ''} ${classes.cardContent}`}>
-                        {this.props.displayMainPhoto ? <div style={{ flex: 1, padding: 4 }}>
-                            <img src={logoPath || "https://via.placeholder.com/75x75"} height={75} width={100} />
-                        </div> : null}
-                        <div style={{ flex: 2, borderRight: '1px solid rgba(0,0,0,0.1)', padding: 4 }}>
+            <ClickWrapper onClick={() => this.props.onClick(this.props.item)}>
+                <Tooltip classes={{
+                    tooltip: !this.props.tooltipMessage ? classes.displayNoneTooltip : ''
+                }} placement="top-start" title={this.props.tooltipMessage}>
+                    <Card style={{ margin: this.props.extraWidth ? '12px 10px' : '12px 36px' }} className={`${classes.root} ${this.props.extraWidth ? classes.extraWidth : ''}`}>
+                        <CardContent className={`${this.props.extraWidth ? classes.extraWidth : ''} ${classes.cardContent}`}>
+                            {this.props.displayMainPhoto ? <div style={{ flex: 1, padding: 4 }}>
+                                <img src={logoPath || "https://via.placeholder.com/75x75"} height={75} width={100} />
+                            </div> : null}
+                            <div style={{ flex: 2, borderRight: this.props.displayOptions ? '1px solid rgba(0,0,0,0.1)' : '', padding: 4 }}>
 
-                            <Typography style={{ display: 'flex', flexDirection: 'column' }} variant="body2" color="textSecondary" component="div">
-                                {this.props.content.map(fieldObj => {
-                                    return (
-                                        this.props.item && this.props.item[fieldObj.populate ? fieldObj.populate : fieldObj.field] ? this.computeTitle(fieldObj) : <span>{fieldObj.label}: -</span>
-                                    )
-                                })}
-                            </Typography>
+                                <Typography style={{ display: 'flex', flexDirection: 'column' }} variant="body2" color="textSecondary" component="div">
+                                    {this.props.content.map(fieldObj => {
+                                        return (
+                                            this.props.item && this.props.item[fieldObj.populate ? fieldObj.populate : fieldObj.field] ? this.computeTitle(fieldObj) : <span>{fieldObj.label}: -</span>
+                                        )
+                                    })}
+                                </Typography>
 
-                        </div>
-                        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: 4 }}>
-                            <Button onClick={() => this.props.onDelete(this.props.item)} size="small" color="seconday">DELETE</Button>
-                            {this.props.type === CONSTANTS.RESERVATION_TYPE ? <Button onClick={() => this.props.onClick(this.props.item)} size="small" color="seconday">DETAILS</Button> : <Button onClick={() => this.props.onEdit(this.props.item)} size="small" color="seconday">EDIT</Button>}
-                        </div>
-                    </CardContent>
-                </Card>
-            </div>
+                            </div>
+                            {this.props.displayOptions && <div style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: 4 }}>
+                                <Button onClick={() => this.props.onDelete(this.props.item)} size="small" color="seconday">{this.props.language.buttons.delete}</Button>
+                                {this.props.type === CONSTANTS.RESERVATION_TYPE ? <Button onClick={() => this.props.onClick(this.props.item)} size="small" color="seconday">DETAILS</Button> : <Button onClick={() => this.props.onEdit(this.props.item)} size="small" color="seconday">EDIT</Button>}
+                            </div>}
+                        </CardContent>
+                    </Card>
+                </Tooltip>
+            </ClickWrapper >
         )
     }
 }
 
 const mapStateToProps = reducers => ({
-    language: reducers.language.i18n.sidebar,
+    language: reducers.language.i18n,
     navigationReducer: reducers.navigationReducer,
 })
 

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
-import { withStyles} from '@material-ui/core'
+import { withStyles } from '@material-ui/core'
 
 import * as MODELS from '../../../redux/actions/models'
 import * as CONSTANTS from '../../../utils/constants'
@@ -48,7 +48,7 @@ class CarModel extends Component {
             this.props.getModels()
             this.setState({ openConfirmationModal: false })
         })
-        .catch(() => NOTIFICATIONS.error(this.props.language.toastr.failDelete))
+            .catch(() => NOTIFICATIONS.error(this.props.language.toastr.failDelete))
     }
 
     closeConfirmationModalHandler = () => {
@@ -72,6 +72,7 @@ class CarModel extends Component {
                     this.setState({ openModal: false })
                 }} />
                 <RenderCards
+                    displayOptions={true}
                     displayMainPhoto={false}
                     type={CONSTANTS.MODEL_TYPE}
                     onEdit={item => {

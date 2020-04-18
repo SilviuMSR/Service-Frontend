@@ -24,7 +24,19 @@ class RenderCards extends React.Component {
             <>
                 <div className={`${classes.panelContainer}`}>
                     {this.props.items.map((item, index) => {
-                        return <CardContent extraWidth={this.props.extraWidth} position={index} displayMainPhoto={this.props.displayMainPhoto} content={this.props.content} type={this.props.type} onDelete={this.props.onDelete} onEdit={this.props.onEdit} onClick={this.props.onClick} key={index} item={item} />
+                        return <CardContent
+                            tooltipMessage={this.props.tooltipMessage}
+                            displayOptions={this.props.displayOptions}
+                            extraWidth={this.props.extraWidth}
+                            position={index}
+                            displayMainPhoto={this.props.displayMainPhoto}
+                            content={this.props.content}
+                            type={this.props.type}
+                            onDelete={this.props.onDelete}
+                            onEdit={this.props.onEdit}
+                            onClick={this.props.onClick}
+                            key={index}
+                            item={item} />
                     })}
                 </div>
             </>
