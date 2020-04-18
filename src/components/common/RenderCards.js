@@ -10,8 +10,7 @@ const styles = theme => ({
         flex: 1,
         display: 'flex',
         flexDirection: 'row',
-        flexWrap: 'wrap',
-        justifyContent: 'center'
+        flexWrap: 'wrap'
     }
 })
 

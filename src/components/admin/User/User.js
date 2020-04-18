@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
 import { withStyles, Button, TextField } from '@material-ui/core'
-import { Delete } from '@material-ui/icons'
+import { AddCircleOutline as AddIcon } from '@material-ui/icons'
 
 import ConfirmationModal from '../../common/ConfirmationDialog'
 import RenderCards from '../../common/RenderCards'
@@ -20,7 +20,7 @@ const styles = theme => ({
         overflow: 'auto'
     },
     headersContainer: {
-        height: 50,
+        height: 70,
         width: '100%',
         borderBottom: '1px solid rgba(0,0,0,0.1)',
         backgroundColor: 'white',
@@ -44,11 +44,16 @@ const styles = theme => ({
         fontWeight: 500
     },
     titleText: {
-        color: '#1976d2'
+        color: '#606771',
+        fontWeight: 500
     },
     searchContainer: {
         paddingLeft: 18,
         paddingTop: 7
+    },
+    addIcon: {
+        paddingRight: 6,
+        fontSize: 21
     }
 })
 
@@ -82,7 +87,7 @@ class User extends Component {
             this.getUsers()
             this.setState({ openConfirmationModal: false })
         })
-        .catch(() => NOTIFICATIONS.error(this.props.language.toastr.failDelete))
+            .catch(() => NOTIFICATIONS.error(this.props.language.toastr.failDelete))
     }
 
     closeConfirmationModalHandler = () => {
@@ -108,16 +113,16 @@ class User extends Component {
                 <div className={this.props.classes.container}>
                     <div className={this.props.classes.headersContainer}>
                         <div className={this.props.classes.titleContainer}>
-                            <p className={this.props.classes.titleText}>USERS</p>
+            <p className={this.props.classes.titleText}>{this.props.language.titles.users}</p>
                         </div>
                         <div className={this.props.classes.addContainer}>
-                            <Button color="primary" onClick={() => this.setState({ openModal: true, modalType: CONSTANTS.CREATE })}>ADD</Button>
+                            <Button color="primary" onClick={() => this.setState({ openModal: true, modalType: CONSTANTS.CREATE })}><AddIcon className={this.props.classes.addIcon} />{this.props.language.buttons.add}</Button>
                             <div className={this.props.classes.searchContainer}>
                                 <TextField placeholder={this.props.language.utils.search} />
                             </div>
                         </div>
                     </div>
-                    <div style={{ backgroundColor: '#F8F8F8', margin: '20px 55px', flex: 1, border: '1px solid rgba(0,0,0,0.1)', boxShadow: '1px 1px rgba(0,0,0,0.1)' }}>
+                    <div style={{ backgroundColor: '#F8F8F8', margin: '20px 19px', flex: 1, border: '1px solid rgba(0,0,0,0.1)', boxShadow: '1px 1px rgba(0,0,0,0.1)' }}>
                         <RenderCards
                             displayMainPhoto={false}
                             onEdit={item => {

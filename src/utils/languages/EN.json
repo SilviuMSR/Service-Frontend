@@ -69,12 +69,14 @@
         "editProblem": "Edit problem",
         "editUser": "Edit user",
         "editStock": "Edit piece",
-        "addStock": "Create new piece",
-        "addBrand": "Create new brand",
-        "addModel": "Create new model",
-        "addProblem": "Create new problem",
-        "addUser": "Create new user",
-        "reservationDetails": "Reservation details"
+        "addStock": "Add new piece",
+        "addBrand": "Add new brand",
+        "addModel": "Add new model",
+        "addProblem": "Add new problem",
+        "addUser": "Add new user",
+        "reservationDetails": "Reservation details",
+        "settings": "SETTINGS",
+        "users": "USERS"
     },
     "buttons": {
         "takeReservation": "Take reservation",
@@ -84,7 +86,10 @@
         "reset": "Reset",
         "accept": "ACCEPT",
         "decline": "DECLINE",
-        "files": "Files"
+        "files": "Files",
+        "start": "Start",
+        "stop": "Stop",
+        "save": "Save"
     },
     "utils": {
         "delete": "Are you sure you delete this?",

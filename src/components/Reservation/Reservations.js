@@ -4,6 +4,7 @@ import { Document, Page, pdfjs } from 'react-pdf'
 import localConfig from '../../config/local.json'
 
 import { withStyles } from '@material-ui/core'
+import { AddCircleOutline as AddIcon } from '@material-ui/icons'
 
 import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
@@ -129,7 +130,7 @@ const styles = theme => ({
         fontSize: 13
     },
     headersContainer: {
-        height: 50,
+        height: 70,
         width: '100%',
         borderBottom: '1px solid rgba(0,0,0,0.1)',
         backgroundColor: 'white',
@@ -152,7 +153,8 @@ const styles = theme => ({
         justifyContent: 'flex-end'
     },
     titleText: {
-        color: '#1976d2'
+        color: '#606771',
+        fontWeight: 500
     },
 
 })
@@ -332,7 +334,7 @@ class Reservations extends Component {
                             onCancel={() => this.setState({ openReservationDetails: false })}
                         />
                     </div>
-                    <div style={{ flex: 1, backgroundColor: '#F8F8F8', margin: '20px 55px', border: '1px solid rgba(0,0,0,0.1)', boxShadow: '1px 1px rgba(0,0,0,0.1)' }}>
+                    <div style={{ flex: 1, backgroundColor: '#F8F8F8', margin: '20px 19px', border: '1px solid rgba(0,0,0,0.1)', boxShadow: '1px 1px rgba(0,0,0,0.1)' }}>
                         <RenderCards
                             extraWidth={true}
                             displayMainPhoto={true}

@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
-import { withStyles, Button, TextField } from '@material-ui/core'
-import { Edit, Delete } from '@material-ui/icons'
+import { withStyles} from '@material-ui/core'
 
 import * as MODELS from '../../../redux/actions/models'
 import * as CONSTANTS from '../../../utils/constants'

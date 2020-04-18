@@ -97,7 +97,7 @@ class CreateCarBrand extends Component {
             this.onCancelHandler()
             this.props.getModels()
         })
-        .catch(() => NOTIFICATIONS.error(this.props.language.toastr.failAdd))
+            .catch(() => NOTIFICATIONS.error(this.props.language.toastr.failAdd))
     }
 
     onEditHandler = () => {
@@ -106,7 +106,7 @@ class CreateCarBrand extends Component {
             this.onCancelHandler()
             this.props.getModels()
         })
-        .catch(() => NOTIFICATIONS.error(this.props.language.toastr.failEdit))
+            .catch(() => NOTIFICATIONS.error(this.props.language.toastr.failEdit))
     }
 
     onChangeHandler = event => {
@@ -120,14 +120,15 @@ class CreateCarBrand extends Component {
     }
 
     renderCarModelFields = () => {
-        return this.state.modalFields.map((field, index) => {
-            return <InputGenerator
-                key={index}
-                margin="dense"
-                fullWidth={true}
-                onChange={event => this.onChangeHandler(event)}
-                {...field} />
-        })
+        return (
+            <div style={{ padding: 16 }}>{this.state.modalFields.map((field, index) => {
+                return <InputGenerator
+                    key={index}
+                    margin="dense"
+                    fullWidth={true}
+                    onChange={event => this.onChangeHandler(event)}
+                    {...field} />
+            })}</div>)
     }
 
     onCancelHandler = () => {
@@ -141,7 +142,7 @@ class CreateCarBrand extends Component {
         return (
             <>
                 <SimpleModal
-                    acceptButtonText={this.props.language.buttons.add}
+                    acceptButtonText={this.props.language.buttons.save}
                     cancelButtonText={this.props.language.buttons.cancel}
                     onAccept={this.props.type === CONSTANTS.CREATE ? this.onAddHandler : this.onEditHandler}
                     maxWidth={"md"}

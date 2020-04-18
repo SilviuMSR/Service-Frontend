@@ -55,8 +55,7 @@ const styles = theme => ({
     problemDetails: {
         flex: 1,
         alignItems: 'center',
-        padding: 16,
-        borderRight: '1px solid rgba(0,0,0,0.1)'
+        padding: 16
     },
     stepsContainer: {
         flex: 3,
@@ -170,7 +169,7 @@ class CreateCarProblem extends Component {
             this.onCancelHandler()
             this.props.getProblems()
         })
-        .catch(() => NOTIFICATIONS.error(this.props.language.toastr.failAdd))
+            .catch(() => NOTIFICATIONS.error(this.props.language.toastr.failAdd))
     }
 
     onEditHandler = () => {
@@ -180,7 +179,7 @@ class CreateCarProblem extends Component {
             this.onCancelHandler()
             this.props.getProblems()
         })
-        .catch(() => NOTIFICATIONS.error(this.props.language.toastr.failEdit))
+            .catch(() => NOTIFICATIONS.error(this.props.language.toastr.failEdit))
     }
 
     onChangeHandler = event => {
@@ -223,7 +222,7 @@ class CreateCarProblem extends Component {
     renderProblemFields = () => {
         const stepsIndex = this.state.modalFields.findIndex(field => field.name === 'steps')
         return (<div className={this.props.classes.modalContainer}>
-            <div className={this.props.classes.problemDetails}>
+            <div style={{ borderRight: this.props.type === CONSTANTS.EDIT ? '1px solid rgba(0,0,0,0.1)' : '' }} className={this.props.classes.problemDetails}>
                 {
                     this.state.modalFields.map((field, index) => {
                         if (field.name !== 'steps')
@@ -236,7 +235,7 @@ class CreateCarProblem extends Component {
                     })
                 }
             </div>
-            {stepsIndex > -1 && this.state.modalFields[stepsIndex].value.length && <div className={this.props.classes.stepsContainer}>
+            {this.props.type === CONSTANTS.EDIT && stepsIndex > -1 && this.state.modalFields[stepsIndex].value.length && <div className={this.props.classes.stepsContainer}>
                 <div className={this.props.classes.stepsContainerHeader}>
                     <p className={this.props.classes.stepsTitle}>{this.props.language.titles.steps}</p>
                     <Button color="primary" onClick={() => this.addNewStepHandler()} className={`${this.props.classes.marginLeftAuto}`}>{this.props.language.buttons.add}</Button>
@@ -284,7 +283,7 @@ class CreateCarProblem extends Component {
         return (
             <>
                 <SimpleModal
-                    acceptButtonText={this.props.language.buttons.add}
+                    acceptButtonText={this.props.language.buttons.save}
                     cancelButtonText={this.props.language.buttons.cancel}
                     onAccept={this.props.type === CONSTANTS.CREATE ? this.onAddHandler : this.onEditHandler}
                     maxWidth={"md"}

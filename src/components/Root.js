@@ -2,6 +2,16 @@ import React, { Component } from 'react'
 import { JssProvider } from 'react-jss'
 import { connect } from 'react-redux'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import {
+    Dashboard as DashboardIcon,
+    Lock as AdminIcon,
+    DirectionsCar as CarIcon,
+    ErrorOutline as ProblemIcon,
+    Person as UserIcon,
+    Settings as SettingsIcon,
+    EventSeat as ReservationIcon,
+    Extension as StockIcon
+} from '@material-ui/icons'
 
 import * as LOGIN from '../redux/actions/login'
 
@@ -18,37 +28,45 @@ class Root extends Component {
         logged: false,
         renderPage: false,
         sidebarItems: [{
+            icon: <AdminIcon />,
             label: 'admin',
             nested: true,
             expandedText: 'admin',
             nestedComponents: [
                 {
+                    icon: <CarIcon />,
                     to: '/admin/car',
                     label: 'car'
                 },
                 {
+                    icon: <ProblemIcon />,
                     to: '/admin/problem',
                     label: 'problem'
                 },
                 {
+                    icon: <UserIcon />,
                     to: '/admin/user',
                     label: 'user'
                 },
                 {
+                    icon: <SettingsIcon />,
                     to: '/admin/settings',
                     label: 'settings'
                 }
             ]
         },
         {
+            icon: <DashboardIcon />,
             label: 'dashboard',
             to: '/'
         },
         {
+            icon: <ReservationIcon />,
             label: 'reservation',
             to: '/reservations'
         },
         {
+            icon: <StockIcon />,
             label: 'stoc',
             to: '/stoc'
         }

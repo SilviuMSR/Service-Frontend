@@ -20,7 +20,7 @@ const styles = theme => ({
         border: '1px solid rgba(0,0,0,0.1)',
         maxWidth: 300,
         minWidth: 300,
-        margin: 20,
+        margin: '12px 22px',
     },
     cardContent: {
         display: 'flex',
@@ -71,8 +71,8 @@ const styles = theme => ({
         marginTop: 3
     },
     extraWidth: {
-        maxWidth: 340,
-        minWidth: 340
+        maxWidth: 330,
+        minWidth: 330
     }
 })
 

@@ -51,8 +51,7 @@ const styles = theme => ({
     problemDetails: {
         flex: 1,
         alignItems: 'center',
-        padding: 16,
-        borderRight: '1px solid rgba(0,0,0,0.1)'
+        padding: 16
     },
     stepsContainer: {
         flex: 3,
@@ -196,7 +195,7 @@ class UserModal extends Component {
         return (
             <>
                 <SimpleModal
-                    acceptButtonText={this.props.language.buttons.add}
+                    acceptButtonText={this.props.language.buttons.save}
                     cancelButtonText={this.props.language.buttons.cancel}
                     onAccept={this.props.type === CONSTANTS.CREATE ? this.onAddHandler : this.onEditHandler}
                     maxWidth={"md"}

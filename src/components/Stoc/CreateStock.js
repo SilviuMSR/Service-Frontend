@@ -177,14 +177,16 @@ class CreateStock extends Component {
     }
 
     renderStocModalFields = () => {
-        return this.state.modalFields.map((field, index) => {
-            return <InputGenerator
-                key={index}
-                margin="dense"
-                fullWidth={true}
-                onChange={event => this.onChangeHandler(event)}
-                {...field} />
-        })
+        return (<div style={{ padding: 16 }}>
+            {this.state.modalFields.map((field, index) => {
+                return <InputGenerator
+                    key={index}
+                    margin="dense"
+                    fullWidth={true}
+                    onChange={event => this.onChangeHandler(event)}
+                    {...field} />
+            })}
+        </div>)
     }
 
     onCancelHandler = () => {
@@ -198,7 +200,7 @@ class CreateStock extends Component {
         return (
             <>
                 <SimpleModal
-                    acceptButtonText={this.props.language.buttons.add}
+                    acceptButtonText={this.props.language.buttons.save}
                     cancelButtonText={this.props.language.buttons.cancel}
                     onAccept={this.props.type === CONSTANTS.CREATE ? this.onAddHandler : this.onEditHandler}
                     maxWidth={"md"}

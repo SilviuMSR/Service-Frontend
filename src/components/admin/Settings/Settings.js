@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
 import { withStyles, Button, TextField } from '@material-ui/core'
+import { PlayArrow as PlayIcon, Stop as StopIcon, Check as AcceptIcon } from '@material-ui/icons'
 
 import * as SETTINGS from '../../../redux/actions/settings'
 import * as NOTIFICATIONS from '../../../utils/notification'
@@ -15,7 +16,7 @@ const styles = theme => ({
         overflow: 'auto'
     },
     headersContainer: {
-        height: 50,
+        height: 70,
         width: '100%',
         borderBottom: '1px solid rgba(0,0,0,0.1)',
         backgroundColor: 'white',
@@ -39,11 +40,16 @@ const styles = theme => ({
         fontWeight: 500
     },
     titleText: {
-        color: '#1976d2'
+        color: '#606771',
+        fontWeight: 500
     },
     searchContainer: {
         paddingLeft: 18,
         paddingTop: 7
+    },
+    addIcon: {
+        paddingRight: 6,
+        fontSize: 21
     }
 })
 
@@ -69,7 +75,7 @@ class Settings extends Component {
             months: noMonths
         }
         this.props.update(settingsJson).then(() => NOTIFICATIONS.success(this.props.language.toastr.edit))
-        .catch(() => NOTIFICATIONS.error(this.props.language.toastr.editFail))
+            .catch(() => NOTIFICATIONS.error(this.props.language.toastr.editFail))
     }
 
     getSettings = () => {
@@ -113,13 +119,13 @@ class Settings extends Component {
                 <div className={this.props.classes.container}>
                     <div className={this.props.classes.headersContainer}>
                         <div className={this.props.classes.titleContainer}>
-                            <p className={this.props.classes.titleText}>SETTINGS</p>
+                            <p className={this.props.classes.titleText}>{this.props.language.titles.settings}</p>
                         </div>
                         <div className={this.props.classes.addContainer}>
-                            <Button onClick={() => this.startStopHandler()} color="primary">{this.state.isStarted ? 'STOP' : 'START'}</Button>
+                            <Button onClick={() => this.startStopHandler()} color="primary">{this.state.isStarted ? <StopIcon /> : <PlayIcon />}{this.state.isStarted ? this.props.language.buttons.stop : this.props.language.buttons.start}</Button>
                         </div>
                     </div>
-                    <div style={{ backgroundColor: '#F8F8F8', margin: '20px 55px', flex: 1, display: 'flex', flexDirection: 'column', border: '1px solid rgba(0,0,0,0.1)', boxShadow: '1px 1px rgba(0,0,0,0.1)' }}>
+                    <div style={{ backgroundColor: '#F8F8F8', margin: '20px 19px', flex: 1, display: 'flex', flexDirection: 'column', border: '1px solid rgba(0,0,0,0.1)', boxShadow: '1px 1px rgba(0,0,0,0.1)' }}>
                         <div style={{ flex: 1, padding: 8 }}>
                             {this.state.settingsFields.map((field, index) => {
                                 return (
@@ -134,7 +140,7 @@ class Settings extends Component {
                             })}
                         </div>
                         <div style={{ flex: 1, padding: 8 }}>
-                            <Button onClick={() => this.onSave()} color="primary">Save changes</Button>
+                            <Button onClick={() => this.onSave()} color="primary"><AcceptIcon />{this.props.language.buttons.save}</Button>
                         </div>
                     </div>
                 </div>

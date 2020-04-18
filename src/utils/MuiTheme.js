@@ -94,7 +94,7 @@ const MuiTheme = createMuiTheme({
             flatPrimary: {
                 color: whiteColor,
                 backgroundColor: primaryButtonColor,
-                padding: 9,
+                padding: '0px 9px',
                 fontSize: 12,
                 '&:hover': {
                     backgroundColor: primaryColor,
@@ -102,7 +102,7 @@ const MuiTheme = createMuiTheme({
                 },
             },
             label: {
-                fontSize: 12
+                fontSize: 14
             }
         },
         MuiCheckbox: {
