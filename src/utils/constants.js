@@ -30,25 +30,25 @@ export const PROBLEMS_TAB = 'PROBLEMS'
 export const INVOICES_TAB = 'INVOICES'
 
 export const HOMEPAGE_OPTIONS = [
-    { name: 'REZERVARE', value: true },
-    { name: 'LOGIN', value: false }
+    { name: 'REZERVARE', value: true, icon: 'ResIcon' },
+    { name: 'LOGIN', value: false, icon: 'LoginIcon' }
 ]
 
 export const PROBLEM_DIFFICULTY = [
-    { label: '', value: false},
+    { label: '', value: false },
     { label: 'EASY', value: false },
     { label: 'MEDIUM', value: false },
     { label: 'HARD', value: false },
 ]
 
 export const USER_POSITION = [
-    { label: '', value: false},
+    { label: '', value: false },
     { label: 'EMPLOYEE', value: false },
     { label: 'ADMIN', value: false }
 ]
 
 export const USER_STATUS = [
-    { label: '', value: false},
+    { label: '', value: false },
     { label: 'AVAILABLE', value: false },
     { label: 'ON VACATION', value: false }
 ]

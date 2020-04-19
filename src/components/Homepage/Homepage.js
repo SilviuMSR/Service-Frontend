@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Button, withStyles } from '@material-ui/core'
+import { LockOpen as LoginIcon, EventSeat as ResIcon } from '@material-ui/icons'
 
 import * as CONSTANTS from '../../utils/constants'
 
@@ -11,13 +12,15 @@ import '../../styles/Homepage.css'
 
 const styles = () => ({
     optionButton: {
-
+        margin: '0px 10px 10px 10px'
     },
     equalFlex: {
-        flex: 1
+        width: 200
     },
     selectedOption: {
-        backgroundColor: '#ccc'
+        backgroundColor: '#d8dce6',
+        opacity: 0.75,
+        color: 'black'
     }
 })
 
@@ -43,6 +46,11 @@ class Homepage extends Component {
         }
     }
 
+    iconHandler = icon => {
+        if (icon === 'ResIcon') return <ResIcon style={{ paddingRight: 8 }} />
+        if (icon === 'LoginIcon') return <LoginIcon style={{ paddingRight: 8 }} />
+    }
+
     render() {
 
         const { classes } = this.props
@@ -52,12 +60,15 @@ class Homepage extends Component {
                 <div className="container">
                     <div className="modalContainer">
                         <div className="titleContainer">
-                            <p>Here will be application name!</p>
+                            <img src="/assets/logoservice.png" alt="SERVICE-MANAGET" />
                         </div>
                         <div className="optionsContainer">
                             {this.state.options.map(option => {
                                 return (
-                                    <Button onClick={() => this.selectedOptionHandler(option)} className={`${classes.equalFlex} ${classes.optionButton} ${option.value ? classes.selectedOption : ""}`}>{option.name}</Button>
+                                    <Button color="secondary"
+                                        onClick={() => this.selectedOptionHandler(option)}
+                                        className={`${classes.equalFlex} ${classes.optionButton} ${option.value ? classes.selectedOption : ""}`}
+                                    >{this.iconHandler(option.icon)} {option.name}</Button>
                                 )
                             })}
                         </div>

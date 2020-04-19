@@ -198,8 +198,8 @@ class CreateReservation extends Component {
                         })
                         : ""}
                     <div className="buttonsContainer">
-                        <Button onClick={this.onSubmitHandler}>{this.props.language.buttons.add}</Button>
-                        <Button onClick={this.onResetHandler}>{this.props.language.buttons.reset}</Button>
+                        <Button style={{margin: 3}} color="primary" onClick={this.onSubmitHandler}>{this.props.language.buttons.add}</Button>
+                        <Button style={{margin: 3}} color="secondary" onClick={this.onResetHandler}>{this.props.language.buttons.reset}</Button>
                     </div>
                 </div>
             </div>

@@ -76,7 +76,7 @@ class Login extends Component {
                             {...field} />
                     })}
                     <div className="buttonsContainer">
-                        <Button onClick={this.onSubmitHandler}>Login</Button>
+                        <Button style={{marginTop: 10}} color="primary" onClick={this.onSubmitHandler}>Login</Button>
                     </div>
                 </div>
             </div>
