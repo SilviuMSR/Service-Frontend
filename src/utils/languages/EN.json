@@ -96,7 +96,8 @@
         "start": "Start",
         "stop": "Stop",
         "save": "Save",
-        "submit": "Submit"
+        "submit": "Submit",
+        "invoice": "Generate Invoice"
     },
     "utils": {
         "delete": "Are you sure you delete this?",
@@ -109,7 +110,9 @@
         "reservationWaitForEmployee": "Waiting for employee",
         "generateInvoiceFail": "You can generate invoices only when reservation is finished",
         "noProblem": "Problem for this car is unknown",
-        "progress": "Progress details"
+        "progress": "Progress details",
+        "noDocument": "Invoice is not generated",
+        "warning": "WARNING!"
     },
     "tooltip": {
         "reservationDetails": "Press for more details"

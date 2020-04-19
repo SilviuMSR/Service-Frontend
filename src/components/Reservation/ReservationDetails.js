@@ -5,7 +5,7 @@ import { Document, Page, pdfjs } from 'react-pdf'
 import localConfig from '../../config/local.json'
 
 import { withStyles, Button } from '@material-ui/core'
-import ChevronRightIcon from '@material-ui/icons/ChevronRight'
+import { Warning } from '@material-ui/icons'
 import CheckIcon from '@material-ui/icons/Check'
 
 import SimpleModal from '../common/SimpleModal'
@@ -17,6 +17,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = `${localConfig.frontend}/pdf.worker.js`
 const styles = theme => ({
     mainContainer: {
         maxHeight: 400,
+        minHeight: 400,
         width: '100%'
     },
     statusContainer: {
@@ -72,6 +73,7 @@ const styles = theme => ({
         flexDirection: 'row'
     },
     navbarItem: {
+        cursor: 'pointer',
         flex: 1,
         borderRight: '1px solid #eaedf3',
         textAlign: 'center',
@@ -154,7 +156,7 @@ const styles = theme => ({
         padding: 8
     },
     selectedProblem: {
-        borderBottom: '1px solid rgba(0,0,0,0.2)'
+        // borderBottom: '1px solid rgba(0,0,0,0.2)'
     }
 })
 
@@ -249,13 +251,13 @@ class ReservationDetails extends Component {
 
         if (this.props.item.reservationStatus === CONSTANTS.RESERVATION_IN_PROGRESS) return (
             <>
-            <div className={this.props.classes.options}>
-                <span className={this.props.classes.item}>{this.props.item.userId.username.charAt(0).toUpperCase() + this.props.item.userId.username.slice(1)} works at this car.</span>
-            </div>
-                           {this.props.login.position.toLowerCase() === 'employee' && <div className={this.props.classes.optionsContainer}>
-                           <CheckIcon onClick={() => this.props.modifyStatus(this.props.item._id, CONSTANTS.RESERVATION_DONE, this.props.login.userId)} />
-                       </div>}
-                       </>
+                <div className={this.props.classes.options}>
+                    <span className={this.props.classes.item}>{this.props.item.userId.username.charAt(0).toUpperCase() + this.props.item.userId.username.slice(1)} works at this car.</span>
+                </div>
+                {this.props.login.position.toLowerCase() === 'employee' && <div className={this.props.classes.optionsContainer}>
+                    <CheckIcon onClick={() => this.props.modifyStatus(this.props.item._id, CONSTANTS.RESERVATION_DONE, this.props.login.userId)} />
+                </div>}
+            </>
         )
 
         if (this.props.item.reservationStatus === CONSTANTS.RESERVATION_DECLINED) return (
@@ -349,7 +351,14 @@ class ReservationDetails extends Component {
         if (this.props.item.reservationStatus === CONSTANTS.RESERVATION_DONE) return (
             <div className={this.props.classes.options}>
                 <div className={this.props.classes.optionsContainer}>
-                    {!this.props.item.file.length ? <><span className={this.props.classes.item}>You must generate invoice for this reservations!</span><Button onClick={() => this.props.generateInvoice(this.props.item._id)}>GENERATE DOCUMENTS</Button></> :
+                    {!this.props.item.file.length ? <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+                        <div style={{ display: 'flex', flexDirection: 'row' }}>
+                            <Warning style={{ paddingRight: 8, fontSize: 28 }} />
+                            <h2 style={{ letterSpacing: 4, margin: '-4px 0px 4px 0px', marginTop: '-4px' }}>{this.props.language.utils.warning}</h2>
+                        </div>
+                        <span>{this.props.language.utils.noDocument}</span>
+                        <Button color="secondary" onClick={() => this.props.generateInvoice(this.props.item._id)}>{this.props.language.buttons.invoice}</Button>
+                    </div> :
                         <>
                             <div className={this.props.classes.filesContainer}>
                                 <div className={this.props.classes.filesList}>
@@ -397,7 +406,7 @@ class ReservationDetails extends Component {
                                     <div onClick={() => this.onProblemClickHandler(pr)} className={`${this.state.currentProblem ? this.state.currentProblem._id === pr._id ? this.props.classes.selectedProblem : "" : ""} ${this.props.classes.problemWrapper}`}>
                                         <div className={this.props.classes.problemDetails}>
                                             <span>{pr.name}</span>
-                                <span>{pr.price} {this.props.language.utils.ron}</span>
+                                            <span>{pr.price} {this.props.language.utils.ron}</span>
                                         </div>
                                     </div>
                                 )
@@ -416,7 +425,14 @@ class ReservationDetails extends Component {
                 </>
             )
         }
-    else return (<span>{this.props.language.utils.noProblem}</span>)
+        else return (
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+                <div style={{ display: 'flex', flexDirection: 'row' }}>
+                    <Warning style={{ paddingRight: 8, fontSize: 28 }} />
+                    <h2 style={{ letterSpacing: 4, margin: 0, marginTop: '-4px' }}>{this.props.language.utils.warning}</h2>
+                </div>
+                <span>{this.props.language.utils.noProblem}</span>
+            </div>)
     }
 
     renderContent = () => {
