@@ -26,7 +26,8 @@
         "failEdit": "Fail to edit",
         "delete": "Successfully deleted",
         "failDelete": "Fail to delete",
-        "notFound": "Not found"
+        "notFound": "Not found",
+        "passMatch": "Password don't match"
     },
     "labels": {
         "brand": "Brand",
@@ -34,6 +35,8 @@
         "logo": "Logo",
         "model": "Model",
         "price": "Price",
+        "email": "Email",
+        "phoneNumber": "Phone Number",
         "noSteps": "No. steps",
         "difficulty": "Difficulty",
         "newStep": "New step",
@@ -92,7 +95,8 @@
         "files": "Files",
         "start": "Start",
         "stop": "Stop",
-        "save": "Save"
+        "save": "Save",
+        "submit": "Submit"
     },
     "utils": {
         "delete": "Are you sure you delete this?",

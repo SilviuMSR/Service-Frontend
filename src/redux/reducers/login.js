@@ -3,10 +3,7 @@ import * as TYPES from '../actionTypes'
 const initialState = {
     isLogged: false,
     logged: false,
-    roles: [],
-    allRoles: [],
     username: '',
-    providerId: '',
     position: '',
     userId: null
 }

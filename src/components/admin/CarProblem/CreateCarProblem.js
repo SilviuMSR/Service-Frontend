@@ -7,6 +7,8 @@ import { Delete } from '@material-ui/icons'
 
 import { mapToDropdownSelector } from '../../../utils/apiFunctions'
 
+import { validations } from '../../../utils/validations'
+
 import * as CONSTANTS from '../../../utils/constants'
 import * as PROBLEM from '../../../redux/actions/problems'
 import * as NOTIFICATIONS from '../../../utils/notification'
@@ -93,9 +95,9 @@ class CreateCarProblem extends Component {
     todayValue = moment().format(CONSTANTS.INPUT_TYPE_DATE_FORMAT)
 
     initialFields = [
-        { value: '', type: 'text', label: this.props.language.labels.name, name: 'name' },
+        { value: '', type: 'text', label: this.props.language.labels.name, name: 'name', validation: { checks: [validations.notEmpty] } },
         { value: '', type: 'text', label: this.props.language.labels.steps, name: 'steps' },
-        { value: '', type: 'number', label: this.props.language.labels.price, name: 'price' },
+        { value: '', type: 'number', label: this.props.language.labels.price, name: 'price', validation: { checks: [validations.notEmpty] } },
         { value: '', type: 'dropdownSelector', label: this.props.language.labels.difficulty, name: 'difficulty', options: CONSTANTS.PROBLEM_DIFFICULTY }
     ]
 
@@ -124,7 +126,8 @@ class CreateCarProblem extends Component {
                         options: field.options.map(option => {
                             return ({ ...option, value: String(option.id) === String(response[field.name]) ? true : false })
                         }),
-                        touched: true
+                        touched: true,
+                        error: false
                     })
                 }
 
@@ -163,7 +166,31 @@ class CreateCarProblem extends Component {
         return newStepJson
     }
 
+    validate = () => {
+        let newFields = [...this.state.modalFields]
+        let nameIndex = newFields.findIndex(index => index.name === 'name')
+        let priceIndex = newFields.findIndex(index => index.name === 'price')
+        let isValid = true
+
+        // Check if name field is completed
+        let name = newFields[nameIndex].value
+        let price = newFields[priceIndex].value
+        if (name === '') {
+            newFields[nameIndex].error = true
+            isValid = false
+        }
+
+        if (!price) {
+            newFields[priceIndex].error = true
+            isValid = false
+        }
+
+        this.setState({ modalFields: [...Object.values(newFields)] })
+        return isValid
+    }
+
     onAddHandler = () => {
+        if (!this.validate()) return NOTIFICATIONS.error(this.props.language.toastr.failAdd)
         this.props.createProblem(this.createProblemJson()).then(() => {
             NOTIFICATIONS.success(this.props.language.toastr.add)
             this.onCancelHandler()
@@ -173,6 +200,7 @@ class CreateCarProblem extends Component {
     }
 
     onEditHandler = () => {
+        if (!this.validate()) return NOTIFICATIONS.error(this.props.language.toastr.failAdd)
         const addNewStepJson = this.state.addNewStep ? this.createNewStepJson() : {}
         this.props.edit(this.props.problemId, this.createProblemJson(), this.state.addNewStep, addNewStepJson).then(() => {
             NOTIFICATIONS.success(this.props.language.toastr.edit)

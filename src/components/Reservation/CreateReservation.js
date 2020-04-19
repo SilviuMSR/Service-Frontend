@@ -7,6 +7,7 @@ import InputGenerator from '../common/InputGenerator'
 import SimpleModal from '../common/SimpleModal'
 
 import { mapToDropdownSelector, mapToMultipleSelector, findIndexInArray } from '../../utils/apiFunctions'
+import { validations } from '../../utils/validations'
 
 import * as CONSTANTS from '../../utils/constants'
 import * as PROBLEMS from '../../redux/actions/problems'
@@ -24,9 +25,9 @@ class CreateReservation extends Component {
     initialFields = [
         { value: '', type: 'dropdownSelector', label: this.props.language.labels.brand, name: 'carBrandId', options: [] },
         { value: '', type: 'dropdownSelector', label: this.props.language.labels.model, name: 'carModelId', options: [] },
-        { value: '', type: 'text', label: this.props.language.labels.clientEmail, name: 'clientEmail' },
-        { value: '', type: 'text', label: this.props.language.labels.clientName, name: 'clientName' },
-        { value: 'Nu', type: 'radioSelector', label: this.props.language.labels.problemKnow, name: 'knowingStatus', options: CONSTANTS.RESERVATION_PROBLEMS_OPTION.map(op => ({...op, label: this.props.language.labels.knowProblem[op.name]})) }
+        { value: '', type: 'text', label: this.props.language.labels.clientEmail, name: 'clientEmail', validation: { checks: [validations.notEmpty] } },
+        { value: '', type: 'text', label: this.props.language.labels.clientName, name: 'clientName', validation: { checks: [validations.notEmpty] } },
+        { value: 'Nu', type: 'radioSelector', label: this.props.language.labels.problemKnow, name: 'knowingStatus', options: CONSTANTS.RESERVATION_PROBLEMS_OPTION.map(op => ({ ...op, label: this.props.language.labels.knowProblem[op.name] })) }
     ]
 
     knowingProblem = [
@@ -126,7 +127,31 @@ class CreateReservation extends Component {
 
     }
 
+    validate = () => {
+        let newFields = [...this.state.modalFields]
+        let emailIndex = newFields.findIndex(index => index.name === 'clientEmail')
+        let nameIndex = newFields.findIndex(index => index.name === 'clientName')
+        let isValid = true
+
+        // Check if name field is completed
+        let name = newFields[nameIndex].value
+        if (name === '') {
+            newFields[nameIndex].error = true
+            isValid = false
+        }
+
+        let email = newFields[emailIndex].value
+        if (email === '') {
+            newFields[emailIndex].error = true
+            isValid = false
+        }
+
+        this.setState({ modalFields: [...Object.values(newFields)] })
+        return isValid
+    }
+
     onSubmitHandler = () => {
+        if (!this.validate()) return NOTIFICATION.error(this.props.language.toastr.failAdd)
         let reservationJson = this.createReservationJson()
         this.props.createReservation(reservationJson).then(result => {
             this.onResetHandler()
@@ -173,8 +198,8 @@ class CreateReservation extends Component {
                         })
                         : ""}
                     <div className="buttonsContainer">
-                    <Button onClick={this.onSubmitHandler}>{this.props.language.buttons.add}</Button>
-                    <Button onClick={this.onResetHandler}>{this.props.language.buttons.reset}</Button>
+                        <Button onClick={this.onSubmitHandler}>{this.props.language.buttons.add}</Button>
+                        <Button onClick={this.onResetHandler}>{this.props.language.buttons.reset}</Button>
                     </div>
                 </div>
             </div>

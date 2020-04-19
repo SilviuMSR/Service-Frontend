@@ -8,6 +8,8 @@ import * as CONSTANTS from '../../../utils/constants'
 import * as MODELS from '../../../redux/actions/models'
 import * as NOTIFICATIONS from '../../../utils/notification'
 
+import { validations } from '../../../utils/validations'
+
 import InputGenerator from '../../common/InputGenerator'
 import SimpleModal from '../../common/SimpleModal'
 
@@ -52,7 +54,7 @@ class CreateCarBrand extends Component {
     todayValue = moment().format(CONSTANTS.INPUT_TYPE_DATE_FORMAT)
 
     initialFields = [
-        { value: '', type: 'text', label: this.props.language.labels.name, name: 'name' }
+        { value: '', type: 'text', label: this.props.language.labels.name, name: 'name', validation: { checks: [validations.notEmpty] } }
     ]
 
     state = {
@@ -68,7 +70,8 @@ class CreateCarBrand extends Component {
             let modalFieldsCopy = [...this.state.modalFields].map(field => {
                 return ({
                     ...field,
-                    value: response[field.name]
+                    value: response[field.name],
+                    error: false
                 })
             })
 
@@ -91,7 +94,24 @@ class CreateCarBrand extends Component {
 
     }
 
+    validate = () => {
+        let newFields = [...this.state.modalFields]
+        let nameIndex = newFields.findIndex(index => index.name === 'name')
+        let isValid = true
+
+        // Check if name field is completed
+        let name = newFields[nameIndex].value
+        if (name === '') {
+            newFields[nameIndex].error = true
+            isValid = false
+        }
+
+        this.setState({ modalFields: [...Object.values(newFields)] })
+        return isValid
+    }
+
     onAddHandler = () => {
+        if (!this.validate()) return NOTIFICATIONS.error(this.props.language.toastr.failAdd)
         this.props.createModel(this.createModelJson()).then(() => {
             NOTIFICATIONS.success(this.props.language.toastr.add)
             this.onCancelHandler()
@@ -101,6 +121,7 @@ class CreateCarBrand extends Component {
     }
 
     onEditHandler = () => {
+        if (!this.validate()) return NOTIFICATIONS.error(this.props.language.toastr.failAdd)
         this.props.edit(this.props.carModelId, this.createModelJson()).then(() => {
             NOTIFICATIONS.success(this.props.language.toastr.edit)
             this.onCancelHandler()

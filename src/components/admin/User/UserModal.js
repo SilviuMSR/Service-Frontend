@@ -7,6 +7,8 @@ import * as CONSTANTS from '../../../utils/constants'
 import * as USERS from '../../../redux/actions/users'
 import * as NOTIFICATIONS from '../../../utils/notification'
 
+import { validations } from '../../../utils/validations'
+
 import InputGenerator from '../../common/InputGenerator'
 import SimpleModal from '../../common/SimpleModal'
 
@@ -87,8 +89,10 @@ const styles = theme => ({
 class UserModal extends Component {
 
     initialFields = [
-        { value: '', type: 'text', label: this.props.language.labels.username, name: 'username' },
-        { value: '', type: 'password', label: this.props.language.labels.password, name: 'password' },
+        { value: '', type: 'text', label: this.props.language.labels.username, name: 'username', validation: { checks: [validations.notEmpty] } },
+        { value: '', type: 'text', label: this.props.language.labels.email, name: 'email' },
+        { value: '', type: 'text', label: this.props.language.labels.phoneNumber, name: 'phoneNumber' },
+        { value: '', type: 'password', label: this.props.language.labels.password, name: 'password', validation: { checks: [validations.notEmpty] } },
         { value: '', type: 'dropdownSelector', label: this.props.language.labels.position, name: 'position', options: CONSTANTS.USER_POSITION },
         { value: '', type: 'dropdownSelector', label: this.props.language.labels.status, name: 'userStatus', options: CONSTANTS.USER_STATUS }
     ]
@@ -111,13 +115,15 @@ class UserModal extends Component {
                         options: field.options.map(option => {
                             return ({ ...option, value: String(option.id) === String(response[field.name]) ? true : false })
                         }),
-                        touched: true
+                        touched: true,
+                        error: false
                     })
                 }
 
                 return ({
                     ...field,
-                    value: response[field.name]
+                    value: response[field.name],
+                    error: false
                 })
             })
 
@@ -139,22 +145,47 @@ class UserModal extends Component {
         return userJson
     }
 
+    validate = () => {
+        let newFields = [...this.state.modalFields]
+        let nameIndex = newFields.findIndex(index => index.name === 'username')
+        let passIndex = newFields.findIndex(index => index.name === 'password')
+        let isValid = true
+
+        // Check if name field is completed
+        let name = newFields[nameIndex].value
+        let pass = newFields[passIndex].value
+        if (name === '') {
+            newFields[nameIndex].error = true
+            isValid = false
+        }
+
+        if (pass === '') {
+            newFields[passIndex].error = true
+            isValid = false
+        }
+
+        this.setState({ modalFields: [...Object.values(newFields)] })
+        return isValid
+    }
+
     onAddHandler = () => {
+        if (!this.validate()) return NOTIFICATIONS.error(this.props.language.toastr.failAdd)
         this.props.createUser(this.createUserJson()).then(() => {
             NOTIFICATIONS.success(this.props.language.toastr.add)
             this.onCancelHandler()
             this.props.getUsers()
         })
-        .catch(() => NOTIFICATIONS.error(this.props.language.toastr.failAdd))
+            .catch(() => NOTIFICATIONS.error(this.props.language.toastr.failAdd))
     }
 
     onEditHandler = () => {
+        if (!this.validate()) return NOTIFICATIONS.error(this.props.language.toastr.failAdd)
         this.props.edit(this.props.userId, this.createUserJson()).then(() => {
             NOTIFICATIONS.success(this.props.language.toastr.edit)
             this.onCancelHandler()
             this.props.getUsers()
         })
-        .catch(() => NOTIFICATIONS.error(this.props.language.toastr.failEdit))
+            .catch(() => NOTIFICATIONS.error(this.props.language.toastr.failEdit))
     }
 
     onChangeHandler = event => {

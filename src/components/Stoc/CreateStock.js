@@ -5,6 +5,7 @@ import moment from 'moment'
 import { withStyles } from '@material-ui/core'
 
 import { mapToDropdownSelector, findIndexInArray } from '../../utils/apiFunctions'
+import { validations } from '../../utils/validations'
 
 import * as CONSTANTS from '../../utils/constants'
 import * as BRANDS from '../../redux/actions/brands'
@@ -58,8 +59,8 @@ class CreateStock extends Component {
     initialFields = [
         { value: '', type: 'dropdownSelector', label: this.props.language.labels.brand, name: 'carBrandId', options: [] },
         { value: '', type: 'dropdownSelector', label: this.props.language.labels.model, name: 'carModelId', options: [] },
-        { value: '', type: 'text', label: this.props.language.labels.name, name: 'name' },
-        { value: '', type: 'text', label: this.props.language.labels.price, name: 'price' },
+        { value: '', type: 'text', label: this.props.language.labels.name, name: 'name', validation: { checks: [validations.notEmpty] } },
+        { value: '', type: 'number', label: this.props.language.labels.price, name: 'price', validation: { checks: [validations.notEmpty] } },
         { value: 0, type: "number", label: this.props.language.labels.quantity, name: 'no' }
     ]
 
@@ -104,7 +105,8 @@ class CreateStock extends Component {
 
                     return ({
                         ...field,
-                        value: response[field.name]
+                        value: response[field.name],
+                        error: false
                     })
                 })
 
@@ -138,7 +140,32 @@ class CreateStock extends Component {
 
     }
 
+
+    validate = () => {
+        let newFields = [...this.state.modalFields]
+        let nameIndex = newFields.findIndex(index => index.name === 'name')
+        let priceIndex = newFields.findIndex(index => index.name === 'price')
+        let isValid = true
+
+        // Check if name field is completed
+        let name = newFields[nameIndex].value
+        if (name === '') {
+            newFields[nameIndex].error = true
+            isValid = false
+        }
+
+        let price = newFields[priceIndex].value
+        if (!price) {
+            newFields[priceIndex].error = true
+            isValid = false
+        }
+
+        this.setState({ modalFields: [...Object.values(newFields)] })
+        return isValid
+    }
+
     onAddHandler = () => {
+        if (!this.validate()) return NOTIFICATIONS.error(this.props.language.toastr.failAdd)
         this.props.createStock(this.createStockJson()).then(() => {
             NOTIFICATIONS.success(this.props.language.toastr.add)
             this.onCancelHandler()
@@ -148,6 +175,7 @@ class CreateStock extends Component {
     }
 
     onEditHandler = () => {
+        if (!this.validate()) return NOTIFICATIONS.error(this.props.language.toastr.failAdd)
         this.props.edit(this.props.stockId, this.createStockJson()).then(() => {
             NOTIFICATIONS.success(this.props.language.toastr.edit)
             this.onCancelHandler()
