@@ -44,6 +44,7 @@ const styles = theme => ({
         boxSizing: 'content-box'
     },
     options: {
+        paddingTop: 3,
         paddingRight: '10px',
         cursor: 'pointer'
     },
@@ -334,7 +335,7 @@ class Reservations extends Component {
                             onCancel={() => this.setState({ openReservationDetails: false })}
                         />
                     </div>
-                    <div style={{ flex: 1, backgroundColor: '#F8F8F8', margin: '20px 19px', border: '1px solid rgba(0,0,0,0.1)', boxShadow: '1px 1px rgba(0,0,0,0.1)' }}>
+                    {this.state.reservations && this.state.reservations.length ? <div style={{ flex: 1, backgroundColor: '#F8F8F8', margin: '20px 19px', border: '1px solid rgba(0,0,0,0.1)', boxShadow: '1px 1px rgba(0,0,0,0.1)' }}>
                         <RenderCards
                             tooltipMessage={this.props.language.tooltip.reservationDetails}
                             displayOptions={false}
@@ -343,7 +344,7 @@ class Reservations extends Component {
                             onClick={item => { this.setState({ selectedReservation: item, openReservationDetails: true }) }}
                             content={[{ field: 'reservationStatus', label: this.props.language.labels.status }, { populate: 'carBrandId', field: 'name', label: this.props.language.labels.brand }, { populate: 'carModelId', field: 'name', label: this.props.language.labels.model }, { field: 'price', label: this.props.language.labels.price }]}
                             items={this.state.reservations} />
-                    </div>
+                    </div> : <h4 style={{marginLeft: 19, color: '#606771'}}>{this.props.language.utils.noResult}</h4>}
                 </div>
             )
         }

@@ -71,7 +71,7 @@ class CarModel extends Component {
                     this.props.onCloseModal()
                     this.setState({ openModal: false })
                 }} />
-                <RenderCards
+                {this.props.models && this.props.models.length ? <RenderCards
                     displayOptions={true}
                     displayMainPhoto={false}
                     type={CONSTANTS.MODEL_TYPE}
@@ -86,6 +86,7 @@ class CarModel extends Component {
                     onClick={item => { }}
                     content={[{ field: 'name', label: this.props.language.labels.model }]}
                     items={this.props.models} />
+                    : <p style={{ marginLeft: 19, color: '#606771' }}>{this.props.language.utils.noResult}</p>}
 
 
             </>

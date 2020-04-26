@@ -82,7 +82,8 @@
         "settings": "SETTINGS",
         "users": "USERS",
         "userDetails": "GENERAL DETAILS",
-        "actions": "AVAILABLE ACTIONS"
+        "actions": "AVAILABLE ACTIONS",
+        "dashboard": "DASHBOARD"
     },
     "buttons": {
         "takeReservation": "Take reservation",
@@ -97,7 +98,10 @@
         "stop": "Stop",
         "save": "Save",
         "submit": "Submit",
-        "invoice": "Generate Invoice"
+        "invoice": "Generate Invoice",
+        "reservationDash": "RESERVATIONS",
+        "userDash": "EMPLOYEES",
+        "carDash": "CARS / PROBLEMS"
     },
     "utils": {
         "delete": "Are you sure you delete this?",
@@ -112,9 +116,16 @@
         "noProblem": "Problem for this car is unknown",
         "progress": "Progress details",
         "noDocument": "Invoice is not generated",
-        "warning": "WARNING!"
+        "warning": "WARNING!",
+        "noResult": "No results found",
+        "noBrandSelected": "Please select a brand"
     },
     "tooltip": {
         "reservationDetails": "Press for more details"
+    },
+    "statistics": {
+        "allReservations": "Total reservations",
+        "doneReservations": "Reservations Completed",
+        "acceptedReservations": "Reservations Accepted"
     }
 }

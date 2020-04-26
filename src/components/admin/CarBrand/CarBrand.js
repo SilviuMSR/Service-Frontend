@@ -164,7 +164,7 @@ class CarBrand extends Component {
 
                     </div>
                     <div className={this.props.classes.carContainer}>
-                        <div style={{ flex: 1, backgroundColor: '#F8F8F8', margin: '20px 19px', border: '1px solid rgba(0,0,0,0.1)', boxShadow: '1px 1px rgba(0,0,0,0.1)' }}>
+                        {this.state.brands && this.state.brands.length ? <div style={{ flex: 1, backgroundColor: '#F8F8F8', margin: '20px 19px', border: '1px solid rgba(0,0,0,0.1)', boxShadow: '1px 1px rgba(0,0,0,0.1)' }}>
                             <RenderCards
                                 displayOptions={true}
                                 displayMainPhoto={true}
@@ -181,10 +181,10 @@ class CarBrand extends Component {
                                 onClick={item => this.onSelectBrand(item)}
                                 content={[{ field: 'name', label: this.props.language.labels.brand }]}
                                 items={this.state.brands} />
-                        </div>
-                        <div style={{ flex: 1, backgroundColor: '#F8F8F8', margin: '20px 25px', border: '1px solid rgba(0,0,0,0.1)', boxShadow: '1px 1px rgba(0,0,0,0.1)' }}>
-                            {this.state.selectedBrandId ? <CarModel addClicked={this.state.addModel} onCloseModal={() => this.handleModelEvents(false)} carBrandId={this.state.selectedBrandId} models={this.state.associatedModels} getModels={() => this.getAssociatedModels()} /> : <p>Select brand</p>}
-                        </div>
+                        </div> : <h4 style={{ marginLeft: 19, color: '#606771' }}>{this.props.language.utils.noResult}</h4>}
+                        {this.state.brands && this.state.brands.length ? <div style={{ flex: 1, backgroundColor: '#F8F8F8', margin: '20px 25px', border: '1px solid rgba(0,0,0,0.1)', boxShadow: '1px 1px rgba(0,0,0,0.1)' }}>
+                            {this.state.selectedBrandId ? <CarModel addClicked={this.state.addModel} onCloseModal={() => this.handleModelEvents(false)} carBrandId={this.state.selectedBrandId} models={this.state.associatedModels} getModels={() => this.getAssociatedModels()} /> : <p style={{ marginLeft: 19, color: '#606771' }}>{this.props.language.utils.noBrandSelected}</p>}
+                        </div> : null}
                     </div>
                 </div>
             </>

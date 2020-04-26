@@ -284,7 +284,7 @@ class ReservationDetails extends Component {
         const detailFields = [
             { populate: 'carBrandId', label: this.props.language.labels.brand, field: 'name' },
             { populate: 'carModelId', label: this.props.language.labels.model, field: 'name' },
-            { field: 'clienName', label: this.props.language.labels.clientName },
+            { field: 'clientName', label: this.props.language.labels.clientName },
             { field: 'clientEmail', label: this.props.language.labels.clientEmail },
             { field: 'createdAt', label: this.props.language.labels.date },
             { field: 'price', label: this.props.language.labels.price }

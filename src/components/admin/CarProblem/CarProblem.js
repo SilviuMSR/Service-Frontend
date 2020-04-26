@@ -120,7 +120,7 @@ class CarProblem extends Component {
                             <div className={this.props.classes.searchContainer}><TextField placeholder={this.props.language.utils.search} /></div>
                         </div>
                     </div>
-                    <div style={{ backgroundColor: '#F8F8F8', margin: '20px 19px', flex: 1, border: '1px solid rgba(0,0,0,0.1)', boxShadow: '1px 1px rgba(0,0,0,0.1)' }}>
+                    {this.state.problems && this.state.problems.length ? <div style={{ backgroundColor: '#F8F8F8', margin: '20px 19px', flex: 1, border: '1px solid rgba(0,0,0,0.1)', boxShadow: '1px 1px rgba(0,0,0,0.1)' }}>
                         <RenderCards
                             displayOptions={true}
                             displayMainPhoto={false}
@@ -136,7 +136,7 @@ class CarProblem extends Component {
                             onClick={item => { }}
                             content={[{ field: 'name', label: this.props.language.labels.name }, { field: 'difficulty', label: this.props.language.labels.difficulty }, { field: 'price', label: this.props.language.labels.price }, { field: 'steps', label: this.props.language.labels.noSteps, length: true }]}
                             items={this.state.problems} />
-                    </div>
+                    </div> : <h4 style={{ marginLeft: 19, color: '#606771' }}>{this.props.language.utils.noResult}</h4>}
                 </div>
 
             </>

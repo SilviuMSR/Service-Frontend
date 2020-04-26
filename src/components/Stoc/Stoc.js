@@ -124,7 +124,7 @@ class Stoc extends Component {
                             </div>
                         </div>
                     </div>
-                    <div style={{ backgroundColor: '#F8F8F8', margin: '20px 19px', flex: 1, border: '1px solid rgba(0,0,0,0.1)', boxShadow: '1px 1px rgba(0,0,0,0.1)' }}>
+                    {this.state.stocks && this.state.stocks.length ? <div style={{ backgroundColor: '#F8F8F8', margin: '20px 19px', flex: 1, border: '1px solid rgba(0,0,0,0.1)', boxShadow: '1px 1px rgba(0,0,0,0.1)' }}>
                         <RenderCards
                             displayOptions={true}
                             displayMainPhoto={false}
@@ -140,7 +140,7 @@ class Stoc extends Component {
                             onClick={item => { }}
                             content={[{ populate: 'carBrandId', field: 'name', label: 'Brand' }, { populate: 'carModelId', field: 'name', label: 'Model' }, { field: 'name', label: 'Name' }, { field: 'price', label: 'Price' }, { field: 'no', label: 'Quantity' }]}
                             items={this.state.stocks} />
-                    </div>
+                    </div> : <h4 style={{marginLeft: 19, color: '#606771'}}>{this.props.language.utils.noResult}</h4>}
                 </div>
             </>
         )

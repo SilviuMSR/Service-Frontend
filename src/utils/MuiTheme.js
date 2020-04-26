@@ -10,7 +10,7 @@ const blueColor = '#1665d8'
 const greenColor = '#34aa44'
 const redColor = '#e6492d'
 
-const primaryButtonColor = '#34aa44'
+const primaryButtonColor = '#1976D2 '
 const secondarButtonColor = '#f6f7f9'
 
 const MuiTheme = createMuiTheme({
