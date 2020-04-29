@@ -25,6 +25,10 @@ const styles = theme => ({
         justifyContent: 'center'
     },
     resPercentContainer: {
+        '&:hover': {
+            boxShadow: '0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23)'
+        },
+        transition: 'all 280ms ease-in-out',
         minHeight: 60,
         background: '#f7f8fa',
         border: '#d9d9d9',
@@ -85,8 +89,8 @@ class ReservationDashboard extends Component {
             this.setState({
                 statistics: statistics,
                 reservationChartData: statistics.reservationsForDays.map(res => ({
-                    ["day"]: res.date,
-                    ["reservations"]: res.nrOfReservations
+                    ["Day"]: res.date,
+                    ["Reservations"]: res.nrOfReservations
                 })),
                 renderPage: true
             })

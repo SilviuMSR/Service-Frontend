@@ -11,8 +11,8 @@ class ReservationBarchart extends Component {
     render() {
         return (<ResponsiveBar
             data={this.props.data}
-            keys={['reservations']}
-            indexBy="day"
+            keys={['Reservations']}
+            indexBy="Day"
             margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
             padding={0.3}
             colors={{ scheme: 'accent' }}
@@ -23,7 +23,7 @@ class ReservationBarchart extends Component {
                 tickSize: 5,
                 tickPadding: 5,
                 tickRotation: 0,
-                legend: 'day',
+                legend: 'Day',
                 legendPosition: 'middle',
                 legendOffset: 32
             }}
@@ -31,7 +31,7 @@ class ReservationBarchart extends Component {
                 tickSize: 5,
                 tickPadding: 5,
                 tickRotation: 0,
-                legend: 'numberOfReservations',
+                legend: 'Reservation Number',
                 legendPosition: 'middle',
                 legendOffset: -40
             }}

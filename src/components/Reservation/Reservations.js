@@ -344,7 +344,7 @@ class Reservations extends Component {
                             onClick={item => { this.setState({ selectedReservation: item, openReservationDetails: true }) }}
                             content={[{ field: 'reservationStatus', label: this.props.language.labels.status }, { populate: 'carBrandId', field: 'name', label: this.props.language.labels.brand }, { populate: 'carModelId', field: 'name', label: this.props.language.labels.model }, { field: 'price', label: this.props.language.labels.price }]}
                             items={this.state.reservations} />
-                    </div> : <h4 style={{marginLeft: 19, color: '#606771'}}>{this.props.language.utils.noResult}</h4>}
+                    </div> : <h4 style={{ marginLeft: 19, color: '#606771' }}>{this.props.language.utils.noResult}</h4>}
                 </div>
             )
         }

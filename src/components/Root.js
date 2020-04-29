@@ -102,7 +102,7 @@ class Root extends Component {
                                     onLogout={this.props.logout}
                                     items={this.state.sidebarItems}
                                 />
-                                <div style={{ flex: 1 }}>
+                                <div style={{ flex: 1, width: 'calc(100% - 300px)' }}>
                                     <Switch>
                                         {<Route path="/" exact component={Dashboard} />}
                                         {<Route path="/reservations" exact component={Reservations} />}

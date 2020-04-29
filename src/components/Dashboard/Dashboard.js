@@ -118,11 +118,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => {
     return {
-        generateInvoice: reservationId => dispatch(RESERVATIONS.generateInvoice(reservationId)),
-        getReservations: options => dispatch(RESERVATIONS.get(options)),
-        getReservationById: reservationId => dispatch(RESERVATIONS.getById(reservationId)),
-        getByEmployeeId: employeeId => dispatch(RESERVATIONS.getByEmployeeId(employeeId)),
-        modifyStatus: (reservationId, newReservation) => dispatch(RESERVATIONS.edit(reservationId, newReservation))
     }
 }
 
