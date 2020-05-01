@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 
 import { withStyles, Button, TextField } from '@material-ui/core'
 import { AddCircleOutline as AddIcon } from '@material-ui/icons'
-import { Delete } from '@material-ui/icons'
+import { Delete, Edit } from '@material-ui/icons'
 
 import ConfirmationModal from '../common/ConfirmationDialog'
 import RenderCards from '../common/RenderCards'
@@ -129,18 +129,40 @@ class Stoc extends Component {
                             displayOptions={true}
                             displayMainPhoto={false}
                             type={CONSTANTS.BRAND_TYPE}
-                            onEdit={item => {
-                                this.stockToEdit = item
-                                this.setState({ openModal: true, modalType: CONSTANTS.EDIT })
-                            }}
-                            onDelete={item => {
-                                this.stockToDelete = item
-                                this.setState({ openConfirmationModal: true })
-                            }}
+                            actions={
+                                [
+                                    {
+                                        icon: <Edit />,
+                                        label: 'Edit',
+                                        action: item => {
+                                            this.stockToEdit = item
+                                            this.setState({ openModal: true, modalType: CONSTANTS.EDIT })
+                                        }
+                                    },
+                                    {
+                                        icon: <Delete />,
+                                        label: 'Delete',
+                                        action: item => {
+                                            this.stockToDelete = item
+                                            this.setState({ openConfirmationModal: true })
+
+                                        }
+                                    }
+                                ]
+                            }
                             onClick={item => { }}
-                            content={[{ populate: 'carBrandId', field: 'name', label: 'Brand' }, { populate: 'carModelId', field: 'name', label: 'Model' }, { field: 'name', label: 'Name' }, { field: 'price', label: 'Price' }, { field: 'no', label: 'Quantity' }]}
+                            content={[
+                                {
+                                    title: 'General details',
+                                    childrens: [
+                                        { populate: 'carBrandId', field: 'name', label: 'Brand' },
+                                        { populate: 'carModelId', field: 'name', label: 'Model' },
+                                        { field: 'name', label: 'Name' },
+                                        { field: 'price', label: 'Price' },
+                                        { field: 'no', label: 'Quantity' }]
+                                }]}
                             items={this.state.stocks} />
-                    </div> : <h4 style={{marginLeft: 19, color: '#606771'}}>{this.props.language.utils.noResult}</h4>}
+                    </div> : <h4 style={{ marginLeft: 19, color: '#606771' }}>{this.props.language.utils.noResult}</h4>}
                 </div>
             </>
         )

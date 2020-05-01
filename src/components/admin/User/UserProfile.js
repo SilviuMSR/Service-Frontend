@@ -4,12 +4,11 @@ import { connect } from 'react-redux'
 import { withStyles, Button } from '@material-ui/core'
 import { AddCircleOutline as UploadIcon } from '@material-ui/icons'
 
-import * as CONSTANTS from '../../../utils/constants'
+import * as VACANTION from '../../../redux/actions/vacationRequest'
 import * as USERS from '../../../redux/actions/users'
 import * as NOTIFICATIONS from '../../../utils/notification'
 
 import InputGenerator from '../../common/InputGenerator'
-import SimpleModal from '../../common/SimpleModal'
 
 const styles = theme => ({
     container: {
@@ -22,7 +21,7 @@ const styles = theme => ({
         maxHeight: 70
     },
     profileContainer: {
-        height: 'calc(100% - 70px)',
+        height: 'calc(100% - 120px)',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center'
@@ -44,7 +43,7 @@ const styles = theme => ({
     },
     profileContent: {
         height: '100%',
-        margin: '0px 10% 20px 10%',
+        margin: '0px 20% 20px 20%',
         padding: '15% 25px 25px 25px',
         backgroundColor: '#F8F8F8',
         display: 'flex',
@@ -109,6 +108,13 @@ class UserProfile extends Component {
         currentUser: null
     }
 
+    resetFields = () => {
+        this.setState({
+            vacantionFields: this.initialVacantion,
+            passwordFields: this.initialPassword
+        })
+    }
+
     componentDidMount() {
         this.props.getUserById(this.props.login.userId).then(result => {
             this.setState({ currentUser: result })
@@ -142,7 +148,27 @@ class UserProfile extends Component {
         if (newPassJson['newPassword'].toLowerCase() !== newPassJson['confirmPassword'].toLowerCase()) return NOTIFICATIONS.error(this.props.language.toastr.passMatch)
 
         this.props.updateUser(this.state.currentUser._id, { password: newPassJson['newPassword'] }).then(() => {
+            this.resetFields()
             return NOTIFICATIONS.success(this.props.language.toastr.edit)
+        })
+    }
+
+    submitAskForVacation = () => {
+        const stateJson = {}
+        this.state.vacantionFields.forEach(field => {
+            stateJson[field.name] = field.value
+        })
+
+        const vacationRequest = {}
+
+        vacationRequest.userId = this.props.login.userId
+        Object.keys(stateJson).forEach(key => {
+            vacationRequest[key] = stateJson[key]
+        })
+
+        this.props.createVacation(vacationRequest).then(() => {
+            this.resetFields()
+            return NOTIFICATIONS.success(this.props.language.toastr.add)
         })
     }
 
@@ -215,7 +241,7 @@ class UserProfile extends Component {
                                 {this.state.vacantionRequest &&
                                     <div>
                                         {this.renderVacantionRequest()}
-                                        <Button color="primary">{this.props.language.buttons.submit}</Button>
+                                        <Button onClick={() => this.submitAskForVacation()} color="primary">{this.props.language.buttons.submit}</Button>
                                     </div>}
                                 <Button onClick={() => {
                                     this.setState((prevState) => ({ changePass: !prevState.changePass, vacantionRequest: false }))
@@ -243,7 +269,8 @@ const mapDispatchToProps = dispatch => {
     return {
         getUserById: userId => dispatch(USERS.getById(userId)),
         updateUser: (userId, newPass) => dispatch(USERS.edit(userId, newPass)),
-        edit: (userId, user) => dispatch(USERS.edit(userId, user))
+        edit: (userId, user) => dispatch(USERS.edit(userId, user)),
+        createVacation: vacation => dispatch(VACANTION.create(vacation))
     }
 }
 

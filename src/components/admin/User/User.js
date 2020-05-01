@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
 import { withStyles, Button, TextField } from '@material-ui/core'
-import { AddCircleOutline as AddIcon } from '@material-ui/icons'
+import { AddCircleOutline as AddIcon, Edit, Delete } from '@material-ui/icons'
 
 import ConfirmationModal from '../../common/ConfirmationDialog'
 import RenderCards from '../../common/RenderCards'
@@ -125,17 +125,37 @@ class User extends Component {
                     <div style={{ backgroundColor: '#F8F8F8', margin: '20px 19px', flex: 1, border: '1px solid rgba(0,0,0,0.1)', boxShadow: '1px 1px rgba(0,0,0,0.1)' }}>
                         <RenderCards
                             displayOptions={true}
-                            displayMainPhoto={false}
-                            onEdit={item => {
-                                this.userToEdit = item
-                                this.setState({ openModal: true, modalType: CONSTANTS.EDIT })
-                            }}
-                            onDelete={item => {
-                                this.userToDelete = item
-                                this.setState({ openConfirmationModal: true })
-                            }}
+                            displayMainPhoto={true}
+                            actions={
+                                [
+                                    {
+                                        icon: <Edit />,
+                                        label: 'Edit',
+                                        action: item => {
+                                            this.userToEdit = item
+                                            this.setState({ openModal: true, modalType: CONSTANTS.EDIT })
+                                        }
+                                    },
+                                    {
+                                        icon: <Delete />,
+                                        label: 'Delete',
+                                        action: item => {
+                                            this.userToDelete = item
+                                            this.setState({ openConfirmationModal: true })
+                                        }
+                                    }
+                                ]
+                            }
                             onClick={item => { }}
-                            content={[{ field: 'username', label: this.props.language.labels.name }, { field: 'position', label: this.props.language.labels.position }, { field: 'userStatus', label: this.props.language.labels.status }]}
+                            content={[
+                                {
+                                    title: 'General details',
+                                    childrens: [{ field: 'username', label: this.props.language.labels.name },
+                                    { field: 'position', label: this.props.language.labels.position },
+                                    { field: 'userStatus', label: this.props.language.labels.status }
+                                    ]
+                                }
+                            ]}
                             items={this.state.users} />
                     </div>
                 </div>

@@ -342,7 +342,20 @@ class Reservations extends Component {
                             displayMainPhoto={true}
                             type={CONSTANTS.RESERVATION_TYPE}
                             onClick={item => { this.setState({ selectedReservation: item, openReservationDetails: true }) }}
-                            content={[{ field: 'reservationStatus', label: this.props.language.labels.status }, { populate: 'carBrandId', field: 'name', label: this.props.language.labels.brand }, { populate: 'carModelId', field: 'name', label: this.props.language.labels.model }, { field: 'price', label: this.props.language.labels.price }]}
+                            content={[
+                                {
+                                    title: 'General details',
+                                    childrens: [
+                                        { populate: 'carBrandId', field: 'name', label: this.props.language.labels.brand },
+                                        { populate: 'carModelId', field: 'name', label: this.props.language.labels.model },
+                                        { field: 'price', label: this.props.language.labels.price }]
+                                },
+                                {
+                                    title: this.props.language.labels.status,
+                                    childrens: [
+                                        { field: 'reservationStatus' }
+                                    ]
+                                }]}
                             items={this.state.reservations} />
                     </div> : <h4 style={{ marginLeft: 19, color: '#606771' }}>{this.props.language.utils.noResult}</h4>}
                 </div>

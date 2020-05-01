@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
 import { withStyles, Button, TextField } from '@material-ui/core'
-import { AddCircleOutline as AddIcon } from '@material-ui/icons'
+import { AddCircleOutline as AddIcon, Edit, Delete } from '@material-ui/icons'
 
 import ConfirmationModal from '../../common/ConfirmationDialog'
 import RenderCards from '../../common/RenderCards'
@@ -125,16 +125,37 @@ class CarProblem extends Component {
                             displayOptions={true}
                             displayMainPhoto={false}
                             type={CONSTANTS.BRAND_TYPE}
-                            onEdit={item => {
-                                this.problemToEdit = item
-                                this.setState({ openModal: true, modalType: CONSTANTS.EDIT })
-                            }}
-                            onDelete={item => {
-                                this.problemToDelete = item
-                                this.setState({ openConfirmationModal: true })
-                            }}
+                            actions={
+                                [
+                                    {
+                                        icon: <Edit />,
+                                        label: 'Edit',
+                                        action: item => {
+                                            this.problemToEdit = item
+                                            this.setState({ openModal: true, modalType: CONSTANTS.EDIT })
+                                        }
+                                    },
+                                    {
+                                        icon: <Delete />,
+                                        label: 'Delete',
+                                        action: item => {
+                                            this.problemToDelete = item
+                                            this.setState({ openConfirmationModal: true })
+
+                                        }
+                                    }
+                                ]
+                            }
                             onClick={item => { }}
-                            content={[{ field: 'name', label: this.props.language.labels.name }, { field: 'difficulty', label: this.props.language.labels.difficulty }, { field: 'price', label: this.props.language.labels.price }, { field: 'steps', label: this.props.language.labels.noSteps, length: true }]}
+                            content={[
+                                {
+                                    title: 'General details',
+                                    childrens: [{ field: 'name', label: this.props.language.labels.name },
+                                    { field: 'difficulty', label: this.props.language.labels.difficulty },
+                                    { field: 'price', label: this.props.language.labels.price },
+                                    { field: 'steps', label: this.props.language.labels.noSteps, length: true }
+                                    ]
+                                }]}
                             items={this.state.problems} />
                     </div> : <h4 style={{ marginLeft: 19, color: '#606771' }}>{this.props.language.utils.noResult}</h4>}
                 </div>

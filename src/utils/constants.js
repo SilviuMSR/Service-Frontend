@@ -50,7 +50,7 @@ export const USER_POSITION = [
 export const USER_STATUS = [
     { label: '', value: false },
     { label: 'AVAILABLE', value: false },
-    { label: 'ON VACATION', value: false }
+    { label: 'ONVACATION', value: false }
 ]
 
 export const RESERVATION_PROBLEMS_OPTION = [

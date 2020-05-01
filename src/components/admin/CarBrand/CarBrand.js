@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
 import { withStyles, Button, TextField } from '@material-ui/core'
-import { AddCircleOutline as AddIcon } from '@material-ui/icons'
+import { AddCircleOutline as AddIcon, Edit, Delete } from '@material-ui/icons'
 
 import * as BRAND from '../../../redux/actions/brands'
 import * as MODELS from '../../../redux/actions/models'
@@ -170,16 +170,34 @@ class CarBrand extends Component {
                                 displayMainPhoto={true}
                                 extraWidth={true}
                                 type={CONSTANTS.BRAND_TYPE}
-                                onEdit={item => {
-                                    this.brandToEdit = item
-                                    this.setState({ openModal: true, modalType: CONSTANTS.EDIT })
-                                }}
-                                onDelete={item => {
-                                    this.brandToDelete = item
-                                    this.setState({ openConfirmationModal: true })
-                                }}
+                                actions={
+                                    [
+                                        {
+                                            icon: <Edit />,
+                                            label: 'Edit',
+                                            action: item => {
+                                                this.brandToEdit = item
+                                                this.setState({ openModal: true, modalType: CONSTANTS.EDIT })
+                                            }
+                                        },
+                                        {
+                                            icon: <Delete />,
+                                            label: 'Delete',
+                                            action: item => {
+                                                this.brandToDelete = item
+                                                this.setState({ openConfirmationModal: true })
+
+                                            }
+                                        }
+                                    ]
+                                }
                                 onClick={item => this.onSelectBrand(item)}
-                                content={[{ field: 'name', label: this.props.language.labels.brand }]}
+                                content={[
+                                    {
+                                        title: 'General details',
+                                        childrens: [{ field: 'name', label: this.props.language.labels.brand }]
+                                    }
+                                ]}
                                 items={this.state.brands} />
                         </div> : <h4 style={{ marginLeft: 19, color: '#606771' }}>{this.props.language.utils.noResult}</h4>}
                         {this.state.brands && this.state.brands.length ? <div style={{ flex: 1, backgroundColor: '#F8F8F8', margin: '20px 25px', border: '1px solid rgba(0,0,0,0.1)', boxShadow: '1px 1px rgba(0,0,0,0.1)' }}>

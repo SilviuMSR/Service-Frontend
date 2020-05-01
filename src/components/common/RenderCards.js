@@ -3,14 +3,15 @@ import { withStyles } from '@material-ui/core'
 
 import * as CONSTANTS from '../../utils/constants'
 
-import CardContent from './CardContent'
+import CardContent from './CustomCard'
 
 const styles = theme => ({
     panelContainer: {
         flex: 1,
         display: 'flex',
         flexDirection: 'row',
-        flexWrap: 'wrap'
+        flexWrap: 'wrap',
+        justifyContent: 'center'
     }
 })
 
@@ -27,13 +28,13 @@ class RenderCards extends React.Component {
                         return <CardContent
                             tooltipMessage={this.props.tooltipMessage}
                             displayOptions={this.props.displayOptions}
-                            extraWidth={this.props.extraWidth}
                             position={index}
                             displayMainPhoto={this.props.displayMainPhoto}
                             content={this.props.content}
                             type={this.props.type}
                             onDelete={this.props.onDelete}
                             onEdit={this.props.onEdit}
+                            actions={this.props.actions}
                             onClick={this.props.onClick}
                             key={index}
                             item={item} />
