@@ -105,10 +105,27 @@ const MuiTheme = createMuiTheme({
                 fontSize: 14
             }
         },
+        MuiRadio: {
+            colorPrimary: {
+                '&$checked': {
+                    color: '#1976D2',
+                }
+            },
+            colorSecondary: {
+                '&$checked': {
+                    color: '#1976D2'
+                }
+            }
+        },
         MuiCheckbox: {
             colorPrimary: {
                 '&$checked': {
-                    color: primaryColor,
+                    color: '#1976D2',
+                }
+            },
+            colorSecondary: {
+                '&$checked': {
+                    color: '#1976D2'
                 }
             }
         },

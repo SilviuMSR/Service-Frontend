@@ -17,8 +17,7 @@ import CreateStock from './CreateStock'
 const styles = theme => ({
     container: {
         width: '100%',
-        height: '100%',
-        overflow: 'auto'
+        height: 'calc(100% - 42px)'
     },
     containerContent: {
     },
@@ -71,7 +70,8 @@ class Stoc extends Component {
         modalType: CONSTANTS.CREATE,
         stocks: [],
         openConfirmationModal: false,
-        modalFields: this.initialFields
+        modalFields: this.initialFields,
+        searchInput: ''
     }
 
     componentDidMount() {
@@ -79,7 +79,7 @@ class Stoc extends Component {
     }
 
     getStocks = () => {
-        this.props.getStocks().then(result => {
+        this.props.getStocks({ name: this.state.searchInput }).then(result => {
             this.setState({
                 stocks: result.pieces
             })
@@ -120,11 +120,11 @@ class Stoc extends Component {
                         <div className={this.props.classes.addContainer}>
                             <Button color="primary" onClick={() => this.setState({ openModal: true, modalType: CONSTANTS.CREATE })}><AddIcon className={this.props.classes.addIcon} /> {this.props.language.buttons.add}</Button>
                             <div className={this.props.classes.searchContainer}>
-                                <TextField placeholder={this.props.language.utils.search} />
+                                <TextField onChange={event => this.setState({ searchInput: event.target.value }, this.getStocks)} placeholder={this.props.language.utils.search} />
                             </div>
                         </div>
                     </div>
-                    {this.state.stocks && this.state.stocks.length ? <div style={{ backgroundColor: '#F8F8F8', margin: '20px 19px', flex: 1, border: '1px solid rgba(0,0,0,0.1)', boxShadow: '1px 1px rgba(0,0,0,0.1)' }}>
+                    {this.state.stocks && this.state.stocks.length ? <div style={{ flex: 1, maxHeight: 'calc(100% - 76px)', overflowY: 'auto', backgroundColor: '#F8F8F8', margin: '20px 19px', border: '1px solid rgba(0,0,0,0.1)', boxShadow: '1px 1px rgba(0,0,0,0.1)' }}>
                         <RenderCards
                             displayOptions={true}
                             displayMainPhoto={false}
@@ -175,7 +175,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => {
     return {
-        getStocks: () => dispatch(STOCK.get()),
+        getStocks: (options) => dispatch(STOCK.get(options)),
         deleteStock: stockId => dispatch(STOCK.del(stockId))
     }
 }

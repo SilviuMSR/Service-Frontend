@@ -17,8 +17,7 @@ import CarModel from '../CarModel/CarModel'
 const styles = theme => ({
     container: {
         width: '100%',
-        height: '100%',
-        overflow: 'auto'
+        height: 'calc(100% - 72px)'
     },
     containerContent: {
         margin: '24px 100px 24px 100px'
@@ -34,7 +33,8 @@ const styles = theme => ({
     },
     carContainer: {
         display: 'flex',
-        flexDirection: 'row'
+        flexDirection: 'row',
+        height: '100%'
     },
     addContainer: {
         flex: 1,
@@ -82,7 +82,8 @@ class CarBrand extends Component {
         associatedModels: [],
         selectedBrandId: null,
         modalFields: this.initialFields,
-        addModel: false
+        addModel: false,
+        searchInput: ''
     }
 
 
@@ -91,7 +92,7 @@ class CarBrand extends Component {
     }
 
     getBrands = () => {
-        this.props.getBrands().then(result => {
+        this.props.getBrands({ name: this.state.searchInput }).then(result => {
             this.setState({
                 brands: result.brands
             })
@@ -158,13 +159,13 @@ class CarBrand extends Component {
                                 </div>
                             </div>
                             <div className={this.props.classes.searchContainer}>
-                                <TextField placeholder={this.props.language.utils.search} />
+                                <TextField onChange={event => this.setState({ searchInput: event.target.value }, this.getBrands)} placeholder={this.props.language.utils.search} />
                             </div>
                         </div>
 
                     </div>
                     <div className={this.props.classes.carContainer}>
-                        {this.state.brands && this.state.brands.length ? <div style={{ flex: 1, backgroundColor: '#F8F8F8', margin: '20px 19px', border: '1px solid rgba(0,0,0,0.1)', boxShadow: '1px 1px rgba(0,0,0,0.1)' }}>
+                        {this.state.brands && this.state.brands.length ? <div style={{ flex: 2, maxHeight: 'calc(100% - 76px)', overflowY: 'auto', backgroundColor: '#F8F8F8', margin: '20px 19px', border: '1px solid rgba(0,0,0,0.1)', boxShadow: '1px 1px rgba(0,0,0,0.1)' }}>
                             <RenderCards
                                 displayOptions={true}
                                 displayMainPhoto={true}
@@ -200,7 +201,7 @@ class CarBrand extends Component {
                                 ]}
                                 items={this.state.brands} />
                         </div> : <h4 style={{ marginLeft: 19, color: '#606771' }}>{this.props.language.utils.noResult}</h4>}
-                        {this.state.brands && this.state.brands.length ? <div style={{ flex: 1, backgroundColor: '#F8F8F8', margin: '20px 25px', border: '1px solid rgba(0,0,0,0.1)', boxShadow: '1px 1px rgba(0,0,0,0.1)' }}>
+                        {this.state.brands && this.state.brands.length ? <div style={{ flex: 1, maxHeight: 'calc(100% - 76px)', overflowY: 'auto', backgroundColor: '#F8F8F8', margin: '20px 19px', border: '1px solid rgba(0,0,0,0.1)', boxShadow: '1px 1px rgba(0,0,0,0.1)' }}>
                             {this.state.selectedBrandId ? <CarModel addClicked={this.state.addModel} onCloseModal={() => this.handleModelEvents(false)} carBrandId={this.state.selectedBrandId} models={this.state.associatedModels} getModels={() => this.getAssociatedModels()} /> : <p style={{ marginLeft: 19, color: '#606771' }}>{this.props.language.utils.noBrandSelected}</p>}
                         </div> : null}
                     </div>
@@ -216,7 +217,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => {
     return {
-        getBrands: () => dispatch(BRAND.get()),
+        getBrands: options => dispatch(BRAND.get(options)),
         getModelsByBrandId: (brandId) => dispatch(MODELS.getModelByBrandId(brandId)),
         deleteBrand: brandId => dispatch(BRAND.del(brandId))
     }

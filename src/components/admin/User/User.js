@@ -16,8 +16,7 @@ import UserModal from './UserModal'
 const styles = theme => ({
     container: {
         width: '100%',
-        height: '100%',
-        overflow: 'auto'
+        height: 'calc(100% - 72px)'
     },
     headersContainer: {
         height: 70,
@@ -66,7 +65,8 @@ class User extends Component {
         openModal: false,
         modalType: CONSTANTS.CREATE,
         users: [],
-        openConfirmationModal: false
+        openConfirmationModal: false,
+        searchInput: ''
     }
 
     componentDidMount() {
@@ -74,7 +74,7 @@ class User extends Component {
     }
 
     getUsers = () => {
-        this.props.getUsers().then(result => {
+        this.props.getUsers({ name: this.state.searchInput }).then(result => {
             this.setState({
                 users: result.users
             })
@@ -118,11 +118,11 @@ class User extends Component {
                         <div className={this.props.classes.addContainer}>
                             <Button color="primary" onClick={() => this.setState({ openModal: true, modalType: CONSTANTS.CREATE })}><AddIcon className={this.props.classes.addIcon} />{this.props.language.buttons.add}</Button>
                             <div className={this.props.classes.searchContainer}>
-                                <TextField placeholder={this.props.language.utils.search} />
+                                <TextField onChange={event => this.setState({ searchInput: event.target.value }, this.getUsers)} placeholder={this.props.language.utils.search} />
                             </div>
                         </div>
                     </div>
-                    <div style={{ backgroundColor: '#F8F8F8', margin: '20px 19px', flex: 1, border: '1px solid rgba(0,0,0,0.1)', boxShadow: '1px 1px rgba(0,0,0,0.1)' }}>
+                    <div style={{ flex: 1, maxHeight: 'calc(100% - 76px)', overflowY: 'auto', backgroundColor: '#F8F8F8', margin: '20px 19px', border: '1px solid rgba(0,0,0,0.1)', boxShadow: '1px 1px rgba(0,0,0,0.1)' }}>
                         <RenderCards
                             displayOptions={true}
                             displayMainPhoto={true}
@@ -171,7 +171,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => {
     return {
-        getUsers: () => dispatch(USERS.get()),
+        getUsers: (options) => dispatch(USERS.get(options)),
         delete: userId => dispatch(USERS.del(userId))
     }
 }

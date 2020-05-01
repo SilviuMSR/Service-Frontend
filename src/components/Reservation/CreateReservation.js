@@ -27,7 +27,7 @@ class CreateReservation extends Component {
         { value: '', type: 'dropdownSelector', label: this.props.language.labels.model, name: 'carModelId', options: [] },
         { value: '', type: 'text', label: this.props.language.labels.clientEmail, name: 'clientEmail', validation: { checks: [validations.notEmpty] } },
         { value: '', type: 'text', label: this.props.language.labels.clientName, name: 'clientName', validation: { checks: [validations.notEmpty] } },
-        { value: 'Nu', type: 'radioSelector', label: this.props.language.labels.problemKnow, name: 'knowingStatus', options: CONSTANTS.RESERVATION_PROBLEMS_OPTION.map(op => ({ ...op, label: this.props.language.labels.knowProblem[op.name] })) }
+        { value: '', type: 'radioSelector', label: this.props.language.labels.problemKnow, name: 'knowingStatus', options: CONSTANTS.RESERVATION_PROBLEMS_OPTION.map(op => ({ ...op, label: this.props.language.labels.knowProblem[op.name] })) }
     ]
 
     knowingProblem = [
@@ -63,6 +63,7 @@ class CreateReservation extends Component {
         let problemIndex = findIndexInArray(modalFieldsProblemCopy, 'problem')
         let priceIndex = findIndexInArray(modalFieldsProblemCopy, 'price')
 
+        // Calculate prices for selected problems
         if (this.state.problemKnow && this.state.openProblemModal) {
             if (problemIndex > -1) {
                 modalFieldsProblemCopy[problemIndex].value = event.target.value
@@ -75,11 +76,12 @@ class CreateReservation extends Component {
             }
         }
 
+        // Handle input changes
         let currentIndex = this.state.modalFields.findIndex(field => field.name === event.target.name)
         if (currentIndex > -1) {
             let modalFieldsCopy = [...this.state.modalFields].map(field => ({ ...field }))
             if (modalFieldsCopy[currentIndex].name.toLowerCase() === CONSTANTS.PROBLEM.toLowerCase()) {
-                if (modalFieldsCopy[currentIndex].value === CONSTANTS.NO) {
+                if (event.target.value.toLowerCase() === CONSTANTS.YES.toLowerCase()) {
                     this.props.getProblems().then(problems => {
                         modalFieldsProblemCopy[problemIndex].value = mapToMultipleSelector(problems.carProblems)
                         this.setState({ modalFieldsProblem: modalFieldsProblemCopy, problemKnow: true, openProblemModal: true })
@@ -103,7 +105,7 @@ class CreateReservation extends Component {
     }
 
     onResetHandler = () => {
-        this.setState({ modalFields: this.initialFields, modalFieldsProblem: this.knowingProblem })
+        this.setState({ modalFields: this.initialFields, modalFieldsProblem: this.knowingProblem, problemKnow: false })
     }
 
     createReservationJson = () => {
@@ -174,7 +176,12 @@ class CreateReservation extends Component {
         return (
             <div className="container">
                 <div className="fieldsContainer">
-                    <SimpleModal title={this.props.language.titles.chooseProblem} open={this.state.openProblemModal} cancelButtonText={this.props.language.buttons.cancel} acceptButtonText={this.props.language.buttons.add} onAccept={() => this.setState({ openProblemModal: false })} onCancel={() => this.setState({ openProblemModal: false })}>
+                    <SimpleModal title={this.props.language.titles.chooseProblem}
+                        open={this.state.openProblemModal}
+                        cancelButtonText={this.props.language.buttons.cancel}
+                        acceptButtonText={this.props.language.buttons.add}
+                        onAccept={() => this.setState({ openProblemModal: false })}
+                        onCancel={() => this.setState({ openProblemModal: false })}>
                         {
                             this.state.modalFieldsProblem.filter(field => field.name === 'problem').map((field, index) => {
                                 return <InputGenerator
@@ -198,8 +205,8 @@ class CreateReservation extends Component {
                         })
                         : ""}
                     <div className="buttonsContainer">
-                        <Button style={{margin: 3}} color="primary" onClick={this.onSubmitHandler}>{this.props.language.buttons.add}</Button>
-                        <Button style={{margin: 3}} color="secondary" onClick={this.onResetHandler}>{this.props.language.buttons.reset}</Button>
+                        <Button style={{ margin: 3 }} color="primary" onClick={this.onSubmitHandler}>{this.props.language.buttons.add}</Button>
+                        <Button style={{ margin: 3 }} color="secondary" onClick={this.onResetHandler}>{this.props.language.buttons.reset}</Button>
                     </div>
                 </div>
             </div>

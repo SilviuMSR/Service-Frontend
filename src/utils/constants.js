@@ -3,7 +3,7 @@ export const INVOICES_URL = 'http://localhost:9000/static/invoices/'
 export const EDIT = 'edit'
 export const CREATE = 'create'
 
-export const RESERVATION_PANDING = 'PANDING'
+export const RESERVATION_PANDING = 'PENDING'
 export const RESERVATION_ACCEPTED = 'ACCEPTED'
 export const RESERVATION_DECLINED = 'DECLINED'
 export const RESERVATION_IN_PROGRESS = 'IN_PROGRESS'
@@ -15,7 +15,8 @@ export const RENDER_RESERVATION_PERSONAL = 'PERSONAL'
 
 export const PROBLEM = 'knowingStatus'
 export const CAR_BRAND_ID = 'carBrandId'
-export const NO = 'Nu'
+export const NO = 'NO'
+export const YES = 'YES'
 
 export const MODEL_TYPE = "MODEL_TYPE"
 export const BRAND_TYPE = "BRAND_TYPE"

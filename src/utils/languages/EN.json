@@ -30,6 +30,13 @@
         "passMatch": "Password don't match"
     },
     "labels": {
+        "reservationStatus": {
+            "DONE": "DONE",
+            "PENDING": "PENDING",
+            "IN_PROGRESS": "IN PROGRESS",
+            "ACCEPTED": "ACCEPTED",
+            "DECLINED": "DECLINED"
+        },
         "brand": "Brand",
         "name": "Name",
         "logo": "Logo",
@@ -118,7 +125,8 @@
         "noDocument": "Invoice is not generated",
         "warning": "WARNING!",
         "noResult": "No results found",
-        "noBrandSelected": "Please select a brand"
+        "noBrandSelected": "Please select a brand",
+        "isDone": "Done"
     },
     "tooltip": {
         "reservationDetails": "Press for more details"

@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { withStyles } from '@material-ui/core'
 import Card from '@material-ui/core/Card'
 import CardActionArea from '@material-ui/core/CardActionArea'
@@ -30,9 +31,9 @@ const styles = theme => ({
         borderRadius: '50%'
     },
     actionIcon: {
-       color: '#1976D2',
-       cursor: 'pointer',
-       padding: 3
+        color: '#1976D2',
+        cursor: 'pointer',
+        padding: 3
     },
     cardContent: {
         display: 'flex',
@@ -53,40 +54,35 @@ const styles = theme => ({
         height: 14,
         borderRadius: 7,
         backgroundColor: 'red',
-        marginRight: 10,
-        marginTop: 3
+        marginRight: 10
     },
     ovalGreen: {
         width: 14,
         height: 14,
         borderRadius: 7,
         backgroundColor: 'green',
-        marginRight: 10,
-        marginTop: 3
+        marginRight: 10
     },
     ovalPanding: {
         width: 14,
         height: 14,
         borderRadius: 7,
         backgroundColor: 'yellow',
-        marginRight: 10,
-        marginTop: 3
+        marginRight: 10
     },
     ovalProgress: {
         width: 14,
         height: 14,
         borderRadius: 7,
         backgroundColor: 'purple',
-        marginRight: 10,
-        marginTop: 3
+        marginRight: 10
     },
     ovalDone: {
         width: 14,
         height: 14,
         borderRadius: 7,
         backgroundColor: '#4d7549',
-        marginRight: 10,
-        marginTop: 3
+        marginRight: 10
     },
     titleText: {
         fontSize: 17,
@@ -117,31 +113,31 @@ const computeStatus = (props, reservationStatus) => {
     if (reservationStatus === CONSTANTS.RESERVATION_PANDING) return (
         <div className={props.classes.statusContainer}>
             <div className={props.classes.ovalPanding} />
-            <span className={props.classes.subtitleText}>{CONSTANTS.RESERVATION_PANDING}</span>
+            <span className={props.classes.subtitleText}>{props.language.labels.reservationStatus[reservationStatus]}</span>
         </div>
     )
     if (reservationStatus === CONSTANTS.RESERVATION_ACCEPTED) return (
         <div className={props.classes.statusContainer}>
             <div className={props.classes.ovalGreen} />
-            <span className={props.classes.subtitleText}>{CONSTANTS.RESERVATION_ACCEPTED}</span>
+            <span className={props.classes.subtitleText}>{props.language.labels.reservationStatus[reservationStatus]}</span>
         </div>
     )
     if (reservationStatus === CONSTANTS.RESERVATION_DECLINED) return (
         <div className={props.classes.statusContainer}>
             <div className={props.classes.ovalRed} />
-            <span className={props.classes.subtitleText}>{CONSTANTS.RESERVATION_DECLINED}</span>
+            <span className={props.classes.subtitleText}>{props.language.labels.reservationStatus[reservationStatus]}</span>
         </div>
     )
     if (reservationStatus === CONSTANTS.RESERVATION_IN_PROGRESS) return (
         <div className={props.classes.statusContainer}>
             <div className={props.classes.ovalProgress} />
-            <span className={props.classes.subtitleText}>{CONSTANTS.RESERVATION_IN_PROGRESS}</span>
+            <span className={props.classes.subtitleText}>{props.language.labels.reservationStatus[reservationStatus]}</span>
         </div>
     )
     if (reservationStatus === CONSTANTS.RESERVATION_DONE) return (
         <div className={props.classes.statusContainer}>
             <div className={props.classes.ovalDone} />
-            <span className={props.classes.subtitleText}>{CONSTANTS.RESERVATION_DONE}</span>
+            <span className={props.classes.subtitleText}>{props.language.labels.reservationStatus[reservationStatus]}</span>
         </div>
     )
 
@@ -217,4 +213,13 @@ const CustomCard = props => {
     )
 }
 
-export default withStyles(styles)(CustomCard)
+const mapStateToProps = state => ({
+    language: state.language.i18n
+})
+
+const mapDispatchToProps = dispatch => {
+    return {
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(CustomCard))

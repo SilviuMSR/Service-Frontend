@@ -137,7 +137,7 @@ class EmployeeReservation extends React.Component {
                 >
                     <Typography className={classes.heading}>
                         <div style={{ display: 'flex', flexDirection: 'row' }}>
-                            <Avatar alt="Remy Sharp" />
+                          
                         </div>
                     </Typography>
 

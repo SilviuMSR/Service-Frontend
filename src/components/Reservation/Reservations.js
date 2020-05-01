@@ -3,14 +3,11 @@ import { connect } from 'react-redux'
 import { Document, Page, pdfjs } from 'react-pdf'
 import localConfig from '../../config/local.json'
 
-import { withStyles } from '@material-ui/core'
-import { AddCircleOutline as AddIcon } from '@material-ui/icons'
+import { withStyles, TextField } from '@material-ui/core'
 
 import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 
-import RenderItems from '../common/RenderExpandItem'
-import SimpleModal from '../common/SimpleModal'
 import RenderCards from '../common/RenderCards'
 import ReservationDetails from './ReservationDetails'
 
@@ -23,8 +20,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = `${localConfig.frontend}/pdf.worker.js`
 const styles = theme => ({
     container: {
         width: '100%',
-        height: '100%',
-        overflow: 'auto'
+        height: 'calc(100% - 42px)'
     },
     containerContent: {
         margin: '24px 100px 24px 100px'
@@ -157,6 +153,10 @@ const styles = theme => ({
         color: '#606771',
         fontWeight: 500
     },
+    searchContainer: {
+        paddingRight: 24,
+        paddingTop: 7
+    }
 
 })
 
@@ -172,7 +172,8 @@ class Reservations extends Component {
         currentFile: null,
         currentReservation: null,
         selectedReservation: null,
-        openReservationDetails: false
+        openReservationDetails: false,
+        searchInput: ''
     }
 
     componentDidMount() {
@@ -185,10 +186,10 @@ class Reservations extends Component {
 
     handlerReservations = () => {
         if (this.props.login.position.toLowerCase() === 'admin') {
-            this.getReservationsHandler()
+            this.getReservationsHandler({ name: this.state.searchInput })
         }
         else if (this.state.selectedOption === CONSTANTS.RENDER_RESERVATION_EMPLOYEE) {
-            this.getReservationsHandler({ employee: true })
+            this.getReservationsHandler({ employee: true, name: this.state.searchInput })
         }
         else if (this.state.selectedOption === CONSTANTS.RENDER_RESERVATION_PERSONAL) {
             this.getByEmployeeIdHandler(this.props.login.userId)
@@ -196,11 +197,11 @@ class Reservations extends Component {
     }
 
     getByEmployeeIdHandler = employeeId => {
-        this.props.getByEmployeeId(employeeId).then(res => this.setState({ reservations: res.reservations, renderPage: true }))
+        this.props.getByEmployeeId(employeeId).then(res => this.setState({ reservations: res.reservations, renderPage: true, openReservationDetails: false }))
     }
 
     getReservationsHandler = (options) => {
-        this.props.getReservations(options).then(res => this.setState({ reservations: res.reservations, renderPage: true }))
+        this.props.getReservations(options).then(res => this.setState({ reservations: res.reservations, renderPage: true, openReservationDetails: false }))
     }
 
     generateReservationMessageHandler = status => {
@@ -310,6 +311,9 @@ class Reservations extends Component {
     }
 
     render() {
+        const tabsAdmin = [CONSTANTS.DETAILS_TAB, CONSTANTS.PROBLEMS_TAB, CONSTANTS.INVOICES_TAB]
+        const tabsEmployee = [CONSTANTS.DETAILS_TAB, CONSTANTS.PROBLEMS_TAB]
+
         if (this.state.renderPage) {
             return (
                 <div className={this.props.classes.container}>
@@ -321,11 +325,14 @@ class Reservations extends Component {
                             <div className={this.props.classes.optionsIcon}><VisibilityOutlinedIcon /></div>
                             <div onClick={() => this.selectOptionHandler(CONSTANTS.RENDER_RESERVATION_EMPLOYEE)} className={this.props.classes.options}><span className={`${this.state.selectedOption === CONSTANTS.RENDER_RESERVATION_EMPLOYEE ? this.props.classes.selectedOption : ""} ${this.props.classes.optionText}`}>{this.props.language.titles.reservations}</span></div>
                             <div onClick={() => this.selectOptionHandler(CONSTANTS.RENDER_RESERVATION_PERSONAL)} className={this.props.classes.options}><span className={`${this.state.selectedOption === CONSTANTS.RENDER_RESERVATION_PERSONAL ? this.props.classes.selectedOption : ""} ${this.props.classes.optionText}`}>{this.props.language.titles.personalReservations}</span></div>
-                        </div> : null}
+                        </div> : <>
+                                <div className={this.props.classes.searchContainer}>
+                                    <TextField onChange={event => this.setState({ searchInput: event.target.value }, this.handlerReservations)} placeholder={this.props.language.utils.search} />
+                                </div></>}
                     </div>
                     <div className={this.props.classes.containerContent}>
                         <ReservationDetails
-                            tabs={[CONSTANTS.DETAILS_TAB, CONSTANTS.PROBLEMS_TAB, CONSTANTS.INVOICES_TAB]}
+                            tabs={this.props.login.position.toLowerCase() === 'admin' ? tabsAdmin : tabsEmployee}
                             open={this.state.openReservationDetails}
                             item={this.state.selectedReservation}
                             generateInvoice={reservationId => {
@@ -335,7 +342,7 @@ class Reservations extends Component {
                             onCancel={() => this.setState({ openReservationDetails: false })}
                         />
                     </div>
-                    {this.state.reservations && this.state.reservations.length ? <div style={{ flex: 1, backgroundColor: '#F8F8F8', margin: '20px 19px', border: '1px solid rgba(0,0,0,0.1)', boxShadow: '1px 1px rgba(0,0,0,0.1)' }}>
+                    {this.state.reservations && this.state.reservations.length ? <div style={{ flex: 1, maxHeight: 'calc(100% - 76px)', overflowY: 'auto', backgroundColor: '#F8F8F8', margin: '20px 19px', border: '1px solid rgba(0,0,0,0.1)', boxShadow: '1px 1px rgba(0,0,0,0.1)' }}>
                         <RenderCards
                             tooltipMessage={this.props.language.tooltip.reservationDetails}
                             displayOptions={false}
@@ -348,7 +355,8 @@ class Reservations extends Component {
                                     childrens: [
                                         { populate: 'carBrandId', field: 'name', label: this.props.language.labels.brand },
                                         { populate: 'carModelId', field: 'name', label: this.props.language.labels.model },
-                                        { field: 'price', label: this.props.language.labels.price }]
+                                        { field: 'price', label: this.props.language.labels.price },
+                                        { field: 'clientName', label: this.props.language.labels.clientName }]
                                 },
                                 {
                                     title: this.props.language.labels.status,

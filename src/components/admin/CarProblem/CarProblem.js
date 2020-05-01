@@ -16,8 +16,7 @@ import CreateCarProblem from './CreateCarProblem'
 const styles = theme => ({
     container: {
         width: '100%',
-        height: '100%',
-        overflow: 'auto'
+        height: 'calc(100% - 72px)',
     },
     headersContainer: {
         height: 70,
@@ -66,7 +65,8 @@ class CarProblem extends Component {
         openModal: false,
         modalType: CONSTANTS.CREATE,
         problems: [],
-        openConfirmationModal: false
+        openConfirmationModal: false,
+        searchInput: ''
     }
 
     componentDidMount() {
@@ -74,7 +74,7 @@ class CarProblem extends Component {
     }
 
     getProblems = () => {
-        this.props.getProblems().then(result => {
+        this.props.getProblems({ name: this.state.searchInput }).then(result => {
             this.setState({
                 problems: result.carProblems
             })
@@ -117,10 +117,10 @@ class CarProblem extends Component {
                         </div>
                         <div className={this.props.classes.addContainer}>
                             <Button color="primary" onClick={() => this.setState({ openModal: true, modalType: CONSTANTS.CREATE })}><AddIcon className={this.props.classes.addIcon} /> {this.props.language.buttons.add}</Button>
-                            <div className={this.props.classes.searchContainer}><TextField placeholder={this.props.language.utils.search} /></div>
+                            <div className={this.props.classes.searchContainer}><TextField onChange={event => this.setState({ searchInput: event.target.value }, this.getProblems)} placeholder={this.props.language.utils.search} /></div>
                         </div>
                     </div>
-                    {this.state.problems && this.state.problems.length ? <div style={{ backgroundColor: '#F8F8F8', margin: '20px 19px', flex: 1, border: '1px solid rgba(0,0,0,0.1)', boxShadow: '1px 1px rgba(0,0,0,0.1)' }}>
+                    {this.state.problems && this.state.problems.length ? <div style={{ flex: 1, maxHeight: 'calc(100% - 76px)', overflowY: 'auto', backgroundColor: '#F8F8F8', margin: '20px 19px', border: '1px solid rgba(0,0,0,0.1)', boxShadow: '1px 1px rgba(0,0,0,0.1)' }}>
                         <RenderCards
                             displayOptions={true}
                             displayMainPhoto={false}
@@ -171,7 +171,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => {
     return {
-        getProblems: () => dispatch(PROBLEMS.get()),
+        getProblems: (options) => dispatch(PROBLEMS.get(options)),
         delete: problemId => dispatch(PROBLEMS.del(problemId))
     }
 }

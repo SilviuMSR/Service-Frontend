@@ -111,7 +111,9 @@ class UserProfile extends Component {
     resetFields = () => {
         this.setState({
             vacantionFields: this.initialVacantion,
-            passwordFields: this.initialPassword
+            passwordFields: this.initialPassword,
+            vacationRequest: false,
+            changePass: false
         })
     }
 

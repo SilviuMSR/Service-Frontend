@@ -12,8 +12,7 @@ import InputGenerator from '../../common/InputGenerator'
 const styles = theme => ({
     container: {
         width: '100%',
-        height: '100%',
-        overflow: 'auto'
+        height: 'calc(100% - 72px)'
     },
     headersContainer: {
         height: 70,
@@ -130,7 +129,7 @@ class Settings extends Component {
                             <Button onClick={() => this.startStopHandler()} color="primary">{this.state.isStarted ? <StopIcon /> : <PlayIcon />}{this.state.isStarted ? this.props.language.buttons.stop : this.props.language.buttons.start}</Button>
                         </div>
                     </div>
-                    <div style={{ backgroundColor: '#F8F8F8', margin: '20px 19px', flex: 1, display: 'flex', flexDirection: 'column', border: '1px solid rgba(0,0,0,0.1)', boxShadow: '1px 1px rgba(0,0,0,0.1)' }}>
+                    <div style={{ flex: 1, maxHeight: 'calc(100% - 76px)', overflowY: 'auto', backgroundColor: '#F8F8F8', margin: '20px 19px', border: '1px solid rgba(0,0,0,0.1)', boxShadow: '1px 1px rgba(0,0,0,0.1)' }}>
                         <div style={{ flex: 1, padding: 8, display: 'flex', flexDirection: 'column' }}>
                             {this.state.settingsFields.map((field, index) => {
                                 return (

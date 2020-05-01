@@ -20,7 +20,7 @@ const style = theme => ({
         paddingTop: 8
     },
     dialogContent: {
-        padding: 0,
+        padding: '0px 25px',
         overflow: 'hidden'
     },
     acceptButton: {
@@ -51,7 +51,7 @@ class SimpleModal extends Component {
                     <span className={this.props.classes.titleText}>{this.props.title.toUpperCase()}</span>
                     <Close onClick={this.props.onCancel} className={this.props.classes.topRightCancelButton} />
                 </DialogTitle>
-                <DialogContent className={this.props.styles ? this.props.styles.contentStyle : this.props.classes.dialogContent}>
+                <DialogContent className={this.props.classes.dialogContent}>
                     {this.props.children}
                 </DialogContent>
                 <DialogActions className={this.props.classes.dialogActions}>
