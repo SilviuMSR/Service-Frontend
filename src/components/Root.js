@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { JssProvider } from 'react-jss'
 import { connect } from 'react-redux'
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom'
 import {
     AccountBox as ProfileIcon,
     Dashboard as DashboardIcon,
@@ -33,10 +33,12 @@ class Root extends Component {
             {
                 icon: <ProfileIcon />,
                 label: 'profile',
+                requireAdmin: false,
                 to: '/profile'
             },
             {
                 icon: <AdminIcon />,
+                requireAdmin: true,
                 label: 'admin',
                 nested: true,
                 expandedText: 'admin',
@@ -66,19 +68,29 @@ class Root extends Component {
             {
                 icon: <DashboardIcon />,
                 label: 'dashboard',
+                requireAdmin: true,
                 to: '/'
             },
             {
                 icon: <ReservationIcon />,
                 label: 'reservation',
+                requireAdmin: false,
                 to: '/reservations'
             },
             {
                 icon: <StockIcon />,
+                requireAdmin: true,
                 label: 'stoc',
                 to: '/stoc'
             }
         ]
+    }
+
+    checkRights = () => this.props.login.position.toLowerCase() === 'admin' ? true : false
+
+    computeSidebarItems = () => {
+        if (!this.checkRights()) return this.state.sidebarItems.filter(item => !item.requireAdmin)
+        return this.state.sidebarItems
     }
 
     componentDidMount() {
@@ -100,16 +112,16 @@ class Root extends Component {
                             <div style={{ display: 'flex', height: '100%' }}>
                                 <RootSidebar
                                     onLogout={this.props.logout}
-                                    items={this.state.sidebarItems}
+                                    items={this.computeSidebarItems()}
                                 />
                                 <div style={{ flex: 1, width: 'calc(100% - 300px)' }}>
                                     <Switch>
-                                        {<Route path="/" exact component={Dashboard} />}
+                                        {this.checkRights() && <Route path="/" exact component={Dashboard} />}
                                         {<Route path="/reservations" exact component={Reservations} />}
-                                        {<Route path="/stoc" exact component={Stoc} />}
+                                        {this.checkRights() && <Route path="/stoc" exact component={Stoc} />}
                                         {<Route path="/profile" exact component={UserProfile} />}
-                                        {<Route path="/admin" component={Admin} />}
-
+                                        {this.checkRights() && <Route path="/admin" component={Admin} />}
+                                        {<Redirect to="/reservations" component={Reservations} />}
                                     </Switch>
                                 </div>
                             </div>
