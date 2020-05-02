@@ -141,7 +141,7 @@ class CreateCarBrand extends Component {
                 let files = Array.from(this.state.modalFields[logoIndex].files)
                 const formData = new FormData()
                 formData.append('file', files[0])
-                return this.props.editLogo(this.props.carBrandId, formData).then(() => {
+                return this.props.uploadLogo(this.props.carBrandId, formData).then(() => {
                     this.onCancelHandler()
                     this.props.getBrands()
                 })
@@ -216,8 +216,7 @@ const mapDispatchToProps = dispatch => {
         createBrand: brand => dispatch(BRANDS.create(brand)),
         getBrandById: brandId => dispatch(BRANDS.getById(brandId)),
         edit: (brand, brandId) => dispatch(BRANDS.edit(brand, brandId)),
-        uploadLogo: (brandId, form) => dispatch(BRANDS.uploadLogo(brandId, form)),
-        editLogo: (brandId, form) => dispatch(BRANDS.editLogo(brandId, form)),
+        uploadLogo: (brandId, form) => dispatch(BRANDS.uploadLogo(brandId, form))
     }
 }
 

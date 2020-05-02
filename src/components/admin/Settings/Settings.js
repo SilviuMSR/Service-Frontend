@@ -108,11 +108,11 @@ class Settings extends Component {
     startStopHandler = () => {
         if (this.state.isStarted) {
             this.props.stop()
-            NOTIFICATIONS.success("Notifications are stopped!")
+            NOTIFICATIONS.success(this.props.language.toastr.notificationStopped)
         }
         else {
             this.props.start()
-            NOTIFICATIONS.success("Notifications started successfully!")
+            NOTIFICATIONS.success(this.props.language.toastr.notificationStarted)
         }
         this.setState((prevState, props) => ({
             isStarted: !prevState.isStarted

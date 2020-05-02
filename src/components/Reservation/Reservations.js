@@ -207,13 +207,13 @@ class Reservations extends Component {
     generateReservationMessageHandler = status => {
         switch (status) {
             case CONSTANTS.RESERVATION_ACCEPTED:
-                return NOTIFICATION.success("Reservation was successfully accepted!")
+                return NOTIFICATION.success(this.props.language.toastr.reservationAccepted)
             case CONSTANTS.RESERVATION_DECLINED:
-                return NOTIFICATION.error("Reservation was declined!")
+                return NOTIFICATION.error(this.props.language.toastr.reservationDeclined)
             case CONSTANTS.RESERVATION_IN_PROGRESS:
-                return NOTIFICATION.success("Reservation was added to your list!")
+                return NOTIFICATION.success(this.props.language.toastr.reservationInProgress)
             case CONSTANTS.RESERVATION_DONE:
-                return NOTIFICATION.success("Reservation was completed!")
+                return NOTIFICATION.success(this.props.language.toastr.reservationDone)
         }
     }
 

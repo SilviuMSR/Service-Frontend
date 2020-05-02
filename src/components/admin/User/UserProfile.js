@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
-import { withStyles, Button } from '@material-ui/core'
+import { withStyles, Button, Tooltip } from '@material-ui/core'
 import { AddCircleOutline as UploadIcon } from '@material-ui/icons'
 
 import * as VACANTION from '../../../redux/actions/vacationRequest'
@@ -51,14 +51,6 @@ const styles = theme => ({
         justifyContent: 'center',
         border: '1px solid rgba(0,0,0,0.1)'
     },
-    uploadIcon: {
-        fontSize: 33,
-        position: 'relative',
-        top: 20,
-        right: 50,
-        color: 'rgba(0,0,0,0.4)',
-        cursor: 'pointer'
-    },
     details: {
         flex: 1,
         display: 'flex',
@@ -78,7 +70,8 @@ const styles = theme => ({
         fontSize: 18
     },
     optionButton: {
-        margin: 10
+        margin: 10,
+        minWidth: 171
     },
     fieldsContainer: {
         display: 'flex',
@@ -118,8 +111,22 @@ class UserProfile extends Component {
     }
 
     componentDidMount() {
+        this.getCurrentUser()
+    }
+
+    getCurrentUser = () => {
         this.props.getUserById(this.props.login.userId).then(result => {
             this.setState({ currentUser: result })
+        })
+    }
+
+    uploadPhoto = uploadFiles => {
+        let files = Array.from(uploadFiles)
+        const formData = new FormData()
+        formData.append('file', files[0])
+        return this.props.uploadPhoto(this.state.currentUser._id, formData).then(() => {
+            NOTIFICATIONS.success(this.props.language.toastr.successfullyPhoto)
+            this.getCurrentUser()
         })
     }
 
@@ -219,8 +226,7 @@ class UserProfile extends Component {
                     <div className={this.props.classes.profileContainer}>
                         <div className={this.props.classes.profilePhotoContainer}>
                             <div className={this.props.classes.photo}>
-                                <img className={this.props.classes.photoImg} src={"/assets/profileIcon.jpeg" || "https://via.placeholder.com/250"} />
-                                <UploadIcon className={this.props.classes.uploadIcon} />
+                                <img className={this.props.classes.photoImg} src={`http://localhost:9000/static/${this.state.currentUser.photoPath}` || "https://via.placeholder.com/250"} />
                             </div>
                         </div>
                         <div className={this.props.classes.profileContent}>
@@ -253,6 +259,19 @@ class UserProfile extends Component {
                                         {this.renderChangePass()}
                                         <Button onClick={() => this.submitChangePassword()} color="primary">{this.props.language.buttons.submit}</Button>
                                     </div>}
+                                <input
+                                    onChange={event => this.uploadPhoto(event.target.files)}
+                                    accept="image/*"
+                                    style={{ display: 'none' }}
+                                    id="raised-button-file"
+                                    multiple
+                                    type="file"
+                                />
+                                <label htmlFor="raised-button-file">
+                                    <Button className={this.props.classes.optionButton} color="secondary" variant="raised" component="span" >
+                                        Upload image
+  </Button>
+                                </label>
                             </div>
                         </div>
                     </div>
@@ -272,7 +291,8 @@ const mapDispatchToProps = dispatch => {
         getUserById: userId => dispatch(USERS.getById(userId)),
         updateUser: (userId, newPass) => dispatch(USERS.edit(userId, newPass)),
         edit: (userId, user) => dispatch(USERS.edit(userId, user)),
-        createVacation: vacation => dispatch(VACANTION.create(vacation))
+        createVacation: vacation => dispatch(VACANTION.create(vacation)),
+        uploadPhoto: (id, photo) => dispatch(USERS.uploadImage(id, photo))
     }
 }
 

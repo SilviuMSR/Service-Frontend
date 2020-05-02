@@ -29,3 +29,8 @@ export const del = (userId) => dispatch =>
     axios.delete(`${baseRoute}/${userId}`)
         .then(response => Promise.resolve(response.data))
         .catch(errorHandler)
+
+export const uploadImage = (userId, files) => dispatch =>
+    axios.post(`${baseRoute}/${userId}/image`, files)
+        .then(response => Promise.resolve(response.data))
+        .catch(errorHandler)

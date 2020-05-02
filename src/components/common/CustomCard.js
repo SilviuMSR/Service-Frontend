@@ -26,8 +26,10 @@ const styles = theme => ({
         flexDirection: 'row'
     },
     media: {
+        paddingTop: 12,
         height: 100,
-        objectFit: 'contain'
+        display: 'flex',
+        justifyContent: 'center'
     },
     actionIcon: {
         color: '#1976D2'
@@ -35,7 +37,7 @@ const styles = theme => ({
     cardContent: {
         display: 'flex',
         flexDirection: 'column',
-        padding: 20
+        padding: '8px 20px 20px 20px'
     },
     titleContainer: {
         flex: 1,
@@ -64,7 +66,7 @@ const styles = theme => ({
         width: 14,
         height: 14,
         borderRadius: 7,
-        backgroundColor: 'yellow',
+        backgroundColor: '#ff5722',
         marginRight: 10
     },
     ovalProgress: {
@@ -104,7 +106,7 @@ const styles = theme => ({
         flexDirection: 'row',
         justifyContent: 'center',
         padding: '4px 4px 2px 4px'
-    },  
+    },
 })
 
 const computeStatus = (props, reservationStatus) => {
@@ -164,20 +166,24 @@ const computeTitle = (props, fieldObj) => {
 }
 
 const computeLogoPath = props => {
-    if (props.item.carBrandId && props.item.carBrandId.logoPath) return `http://localhost:9000/brands/${props.item.carBrandId._id}/image`
-    return `http://localhost:9000/brands/${props.item._id}/image`
+    if (props.item && props.item.logoPath) return `http://localhost:9000/static/${props.item.logoPath}`
+    if (props.item.carBrandId && props.item.carBrandId.logoPath) return `http://localhost:9000/static/${props.item.carBrandId.logoPath}`
+    if (props && props.item && props.item.photoPath && props.item.position) return `http://localhost:9000/static/${props.item.photoPath}`
+    return undefined
 }
+
 
 const CustomCard = props => {
     const { classes } = props
     const logoPath = computeLogoPath(props)
+    console.log(logoPath)
     return (
         <Card className={classes.root} style={{ height: props.smallCard ? '240px' : '' }}>
             <CardActionArea>
                 {props.displayMainPhoto && <CardMedia
-                    className={classes.media}
-                    image={logoPath || "https://via.placeholder.com/75x75"}
-                />}
+                    className={classes.media}>
+                    <img style={{width: 100, objectFit: 'contain', borderRadius: '74%'}} src={logoPath || "https://via.placeholder.com/75x75"} />
+                </CardMedia>}
                 <CardContent onClick={() => props.onClick(props.item)} className={classes.cardContent}>
                     {props.content.map(obj => {
                         return (

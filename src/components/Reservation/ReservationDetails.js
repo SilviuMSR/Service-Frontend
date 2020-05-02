@@ -45,7 +45,7 @@ const styles = theme => ({
         width: 14,
         height: 14,
         borderRadius: 7,
-        backgroundColor: 'yellow',
+        backgroundColor: '#ff5722',
         marginRight: 10,
         marginTop: 5
     },

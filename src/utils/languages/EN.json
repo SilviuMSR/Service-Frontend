@@ -20,6 +20,13 @@
         "dashboard": "Dashboard"
     },
     "toastr": {
+        "reservationAccepted": "Reservation was successfully accepted!",
+        "reservationDeclined": "Reservation was declined!",
+        "reservationInProgress": "Reservation was added to your list!",
+        "reservationDone": "Reservation was completed!",
+        "successfullyPhoto": "Photo uploaded successfully",
+        "notificationStopped": "Notifications are stopped",
+        "notificationStarted": "Notifications started successfully",
         "newStep": "new step",
         "add": "Successfully created",
         "failAdd": "Fail to create",
