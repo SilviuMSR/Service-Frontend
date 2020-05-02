@@ -167,6 +167,7 @@ class CarBrand extends Component {
                     <div className={this.props.classes.carContainer}>
                         {this.state.brands && this.state.brands.length ? <div style={{ flex: 2, maxHeight: 'calc(100% - 76px)', overflowY: 'auto', backgroundColor: '#F8F8F8', margin: '20px 19px', border: '1px solid rgba(0,0,0,0.1)', boxShadow: '1px 1px rgba(0,0,0,0.1)' }}>
                             <RenderCards
+                                smallCard={true}
                                 displayOptions={true}
                                 displayMainPhoto={true}
                                 extraWidth={true}

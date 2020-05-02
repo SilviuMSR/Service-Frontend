@@ -30,6 +30,10 @@ export const DETAILS_TAB = 'DETAILS'
 export const PROBLEMS_TAB = 'PROBLEMS'
 export const INVOICES_TAB = 'INVOICES'
 
+export const VACATION_ACCEPTED = 'ACCEPTED'
+export const VACATION_PENDING = 'PENDING'
+export const VACATION_DECLINED = 'DECLINED'
+
 export const HOMEPAGE_OPTIONS = [
     { name: 'REZERVARE', value: true, icon: 'ResIcon' },
     { name: 'LOGIN', value: false, icon: 'LoginIcon' }
@@ -52,6 +56,13 @@ export const USER_STATUS = [
     { label: '', value: false },
     { label: 'AVAILABLE', value: false },
     { label: 'ONVACATION', value: false }
+]
+
+export const CHECK_TIME_TYPE = [
+    { label: '', value: false },
+    { label: 'minutes', value: false },
+    { label: 'hours', value: false },
+    { label: 'days', value: false }
 ]
 
 export const RESERVATION_PROBLEMS_OPTION = [

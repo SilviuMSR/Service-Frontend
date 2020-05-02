@@ -37,6 +37,7 @@ class RenderCards extends React.Component {
                             actions={this.props.actions}
                             onClick={this.props.onClick}
                             key={index}
+                            smallCard={this.props.smallCard}
                             item={item} />
                     })}
                 </div>

@@ -11,7 +11,8 @@ import {
     SupervisorAccount as UserIcon,
     Settings as SettingsIcon,
     EventSeat as ReservationIcon,
-    Extension as StockIcon
+    Extension as StockIcon,
+    Assignment as VacationIcon
 } from '@material-ui/icons'
 
 import * as LOGIN from '../redux/actions/login'
@@ -23,6 +24,7 @@ import RootSidebar from '../components/common/RootSidebar'
 import Admin from '../components/admin/Admin/Admin'
 import Stoc from '../components/Stoc/Stoc'
 import UserProfile from '../components/admin/User/UserProfile'
+import Vacations from '../components/Vacations/Vacations'
 
 class Root extends Component {
 
@@ -35,6 +37,12 @@ class Root extends Component {
                 label: 'profile',
                 requireAdmin: false,
                 to: '/profile'
+            },
+            {
+                icon: <DashboardIcon />,
+                label: 'dashboard',
+                requireAdmin: true,
+                to: '/'
             },
             {
                 icon: <AdminIcon />,
@@ -66,12 +74,6 @@ class Root extends Component {
                 ]
             },
             {
-                icon: <DashboardIcon />,
-                label: 'dashboard',
-                requireAdmin: true,
-                to: '/'
-            },
-            {
                 icon: <ReservationIcon />,
                 label: 'reservation',
                 requireAdmin: false,
@@ -82,6 +84,11 @@ class Root extends Component {
                 requireAdmin: true,
                 label: 'stoc',
                 to: '/stoc'
+            },
+            {
+                icon: <VacationIcon />,
+                to: '/vacations',
+                label: 'vacations'
             }
         ]
     }
@@ -121,6 +128,7 @@ class Root extends Component {
                                         {this.checkRights() && <Route path="/stoc" exact component={Stoc} />}
                                         {<Route path="/profile" exact component={UserProfile} />}
                                         {this.checkRights() && <Route path="/admin" component={Admin} />}
+                                        {<Route path="/vacations" component={Vacations} />}
                                         {<Redirect to="/reservations" component={Reservations} />}
                                     </Switch>
                                 </div>

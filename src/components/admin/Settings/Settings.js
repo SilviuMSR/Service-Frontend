@@ -6,6 +6,7 @@ import { PlayArrow as PlayIcon, Stop as StopIcon, Check as AcceptIcon } from '@m
 
 import * as SETTINGS from '../../../redux/actions/settings'
 import * as NOTIFICATIONS from '../../../utils/notification'
+import * as CONSTANTS from '../../../utils/constants'
 
 import InputGenerator from '../../common/InputGenerator'
 
@@ -55,8 +56,9 @@ const styles = theme => ({
 class Settings extends Component {
 
     initialFields = [
-        { value: '', type: 'number', label: 'Months', name: 'months' },
-        { value: '', type: 'number', label: 'Check time', name: 'checkTime' }
+        { value: '', type: 'number', label: this.props.language.labels.months, name: 'months' },
+        { value: '', type: 'number', label: this.props.language.labels.checkTime, name: 'checkTime' },
+        { value: '', type: 'dropdownSelector', label: this.props.language.labels.checkTimeType.checkTimeType, name: 'checkTimeType', options: CONSTANTS.CHECK_TIME_TYPE.map(field => ({ ...field, name: field.label, label: this.props.language.labels.checkTimeType[field.label] })) }
     ]
 
     state = {
@@ -72,9 +74,11 @@ class Settings extends Component {
     onSave = () => {
         const noMonths = this.state.settingsFields[0].value
         const checkTime = this.state.settingsFields[1].value
+        const checkTimeType = this.state.settingsFields[2].value
         const settingsJson = {
             months: noMonths,
-            checkTime
+            checkTime,
+            checkTimeType
         }
         this.props.update(settingsJson).then(() => NOTIFICATIONS.success(this.props.language.toastr.edit))
             .catch(() => NOTIFICATIONS.error(this.props.language.toastr.editFail))
@@ -84,10 +88,18 @@ class Settings extends Component {
         this.props.get().then(result => {
             const monthsIndex = this.state.settingsFields.findIndex(index => index.name === "months")
             const checkTimeIndex = this.state.settingsFields.findIndex(index => index.name === "checkTime")
+            const checkTimeTypeIndex = this.state.settingsFields.findIndex(index => index.name === 'checkTimeType')
             if (monthsIndex > -1 && checkTimeIndex > -1) {
                 let stateCopy = this.state.settingsFields.map(field => ({ ...field }))
                 stateCopy[monthsIndex].value = result.settings.noMonths
                 stateCopy[checkTimeIndex].value = result.settings.checkTime
+
+                // Handle check time type received value
+                stateCopy[checkTimeTypeIndex].value = this.props.language.labels.checkTimeType[result.settings.checkTimeType]
+                stateCopy[checkTimeTypeIndex].options = stateCopy[checkTimeTypeIndex].options.map(op => ({
+                    ...op, value: String(op.name) === String(result.settings.checkTimeType) ? true : false
+                }))
+
                 this.setState({ settingsFields: stateCopy })
             }
         })
@@ -113,6 +125,7 @@ class Settings extends Component {
         if (currentIndex > -1) {
             let stateCopy = this.state.settingsFields.map(field => ({ ...field }))
             stateCopy[currentIndex].value = event.target.value
+            console.log(stateCopy)
             this.setState({ settingsFields: stateCopy })
         }
     }

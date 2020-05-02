@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { withStyles } from '@material-ui/core'
+import { withStyles, Button } from '@material-ui/core'
 import Card from '@material-ui/core/Card'
 import CardActionArea from '@material-ui/core/CardActionArea'
 import CardActions from '@material-ui/core/CardActions'
@@ -26,14 +26,11 @@ const styles = theme => ({
         flexDirection: 'row'
     },
     media: {
-        height: 150,
-        objectFit: 'contain',
-        borderRadius: '50%'
+        height: 100,
+        objectFit: 'contain'
     },
     actionIcon: {
-        color: '#1976D2',
-        cursor: 'pointer',
-        padding: 3
+        color: '#1976D2'
     },
     cardContent: {
         display: 'flex',
@@ -105,8 +102,9 @@ const styles = theme => ({
         borderTop: '1px solid rgba(0,0,0,0.1)',
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'center'
-    }
+        justifyContent: 'center',
+        padding: '4px 4px 2px 4px'
+    },  
 })
 
 const computeStatus = (props, reservationStatus) => {
@@ -174,7 +172,7 @@ const CustomCard = props => {
     const { classes } = props
     const logoPath = computeLogoPath(props)
     return (
-        <Card className={classes.root}>
+        <Card className={classes.root} style={{ height: props.smallCard ? '240px' : '' }}>
             <CardActionArea>
                 {props.displayMainPhoto && <CardMedia
                     className={classes.media}
@@ -204,8 +202,8 @@ const CustomCard = props => {
             }}>
 
                 {props.actions.map(action => (
-                    <div className={classes.actionIcon} color="primary" onClick={() => action.action(props.item)}>
-                        {action.icon}
+                    <div onClick={() => action.action(props.item)}>
+                        <Button className={classes.actionIcon}>{action.icon}</Button>
                     </div>
                 ))}
             </CardActions>}

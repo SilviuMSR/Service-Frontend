@@ -13,6 +13,7 @@
             "user": "Users",
             "settings": "Settings"
         },
+        "vacations": "Vacation Requests",
         "profile": "My account",
         "reservation": "Reservations",
         "stoc": "Stock",
@@ -27,7 +28,10 @@
         "delete": "Successfully deleted",
         "failDelete": "Fail to delete",
         "notFound": "Not found",
-        "passMatch": "Password don't match"
+        "passMatch": "Password don't match",
+        "successAsk": "Successfully modified",
+        "failAsk": "Fail to modifiy",
+        "alreadyAsked": "This request was already handled"
     },
     "labels": {
         "reservationStatus": {
@@ -37,6 +41,16 @@
             "ACCEPTED": "ACCEPTED",
             "DECLINED": "DECLINED"
         },
+        "checkTimeType": {
+            "checkTimeType": "Check time type",
+            "minutes": "Minutes",
+            "hours": "Hours",
+            "days": "Days",
+            "months": "Months",
+            "years": "Years"
+        },
+        "months": "Months",
+        "checkTime": "Check time",
         "brand": "Brand",
         "name": "Name",
         "logo": "Logo",
@@ -65,6 +79,7 @@
         "quantity": "Quantity"
     },
     "titles": {
+        "vacations": "VACATION REQUESTS",
         "stock": "STOCK",
         "chooseProblem": "Choose problems",
         "personalReservations": "MY RESERVATIONS",
