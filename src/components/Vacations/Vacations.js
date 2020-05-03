@@ -61,7 +61,11 @@ class Vacations extends Component {
 
     state = {
         vacations: [],
-        searchInput: ''
+        searchInput: '',
+        from: 0,
+        limit: 10,
+        itemsPerPage: 10,
+        count: 0
     }
 
     componentDidMount() {
@@ -71,9 +75,12 @@ class Vacations extends Component {
     getVacations = () => {
         this.props.getVacations({
             name: this.state.searchInput,
+            from: this.state.from,
+            limit: this.state.limit,
             employee: this.props.login.position.toLowerCase() === 'employee' ? this.props.login.userId : null
         }).then(result => {
             this.setState({
+                count: result.count,
                 vacations: result.vacationRequests.map(vacation => ({
                     ...vacation,
                     from: moment(vacation.from).format(CONSTANTS.DEFAULT_DATE_FORMAT),
@@ -96,6 +103,18 @@ class Vacations extends Component {
             NOTIFICATIONS.success(this.props.language.toastr.successAsk)
         })
             .catch(err => NOTIFICATIONS.error(this.props.language.toastr.failAsk))
+    }
+
+    changePageHandler = option => {
+        if (option === 'next') {
+            const newFrom = this.state.from + this.state.itemsPerPage
+            this.setState({ from: newFrom }, this.getVacations)
+        }
+
+        if (option === 'prev') {
+            const newFrom = this.state.from - this.state.itemsPerPage
+            this.setState({ from: newFrom }, this.getVacations)
+        }
     }
 
     render() {
@@ -152,6 +171,10 @@ class Vacations extends Component {
                                     ]
                                 }]}
                             items={this.state.vacations} />
+                        <div style={{ display: 'flex', flexDirection: 'row', float: 'right' }}>
+                            <Button disabled={this.state.from === 0 ? true : false} style={{ margin: 8 }} color="secondary" onClick={() => this.changePageHandler('prev')}>{this.props.language.buttons.prev}</Button>
+                            <Button disabled={this.state.count < this.state.itemsPerPage ? true : false} style={{ margin: 8 }} color="secondary" onClick={() => this.changePageHandler('next')}>{this.props.language.buttons.next}</Button>
+                        </div>
                     </div> : <h4 style={{ marginLeft: 19, color: '#606771' }}>{this.props.language.utils.noResult}</h4>}
                 </div>
             </>

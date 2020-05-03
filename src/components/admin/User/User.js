@@ -66,7 +66,11 @@ class User extends Component {
         modalType: CONSTANTS.CREATE,
         users: [],
         openConfirmationModal: false,
-        searchInput: ''
+        searchInput: '',
+        from: 0,
+        limit: 10,
+        itemsPerPage: 10,
+        count: 0
     }
 
     componentDidMount() {
@@ -74,8 +78,13 @@ class User extends Component {
     }
 
     getUsers = () => {
-        this.props.getUsers({ name: this.state.searchInput }).then(result => {
+        this.props.getUsers({
+            name: this.state.searchInput,
+            from: this.state.from,
+            limit: this.state.limit,
+        }).then(result => {
             this.setState({
+                count: result.count,
                 users: result.users
             })
         })
@@ -93,6 +102,19 @@ class User extends Component {
     closeConfirmationModalHandler = () => {
         this.userToDelete = {}
         this.setState({ openConfirmationModal: false })
+    }
+
+
+    changePageHandler = option => {
+        if (option === 'next') {
+            const newFrom = this.state.from + this.state.itemsPerPage
+            this.setState({ from: newFrom }, this.getUsers)
+        }
+
+        if (option === 'prev') {
+            const newFrom = this.state.from - this.state.itemsPerPage
+            this.setState({ from: newFrom }, this.getUsers)
+        }
     }
 
     render() {
@@ -157,6 +179,10 @@ class User extends Component {
                                 }
                             ]}
                             items={this.state.users} />
+                        <div style={{ display: 'flex', flexDirection: 'row', float: 'right' }}>
+                            <Button disabled={this.state.from === 0 ? true : false} style={{ margin: 8 }} color="secondary" onClick={() => this.changePageHandler('prev')}>{this.props.language.buttons.prev}</Button>
+                            <Button disabled={this.state.count < this.state.itemsPerPage ? true : false} style={{ margin: 8 }} color="secondary" onClick={() => this.changePageHandler('next')}>{this.props.language.buttons.next}</Button>
+                        </div>
                     </div>
                 </div>
 

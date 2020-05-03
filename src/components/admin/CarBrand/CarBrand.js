@@ -83,7 +83,11 @@ class CarBrand extends Component {
         selectedBrandId: null,
         modalFields: this.initialFields,
         addModel: false,
-        searchInput: ''
+        searchInput: '',
+        from: 0,
+        limit: 10,
+        itemsPerPage: 10,
+        count: 0
     }
 
 
@@ -92,8 +96,13 @@ class CarBrand extends Component {
     }
 
     getBrands = () => {
-        this.props.getBrands({ name: this.state.searchInput }).then(result => {
+        this.props.getBrands({
+            name: this.state.searchInput,
+            from: this.state.from,
+            limit: this.state.limit,
+        }).then(result => {
             this.setState({
+                count: result.count,
                 brands: result.brands
             })
         })
@@ -128,6 +137,18 @@ class CarBrand extends Component {
             this.setState({
                 addModel: value
             })
+        }
+    }
+
+    changePageHandler = option => {
+        if (option === 'next') {
+            const newFrom = this.state.from + this.state.itemsPerPage
+            this.setState({ from: newFrom }, this.getBrands)
+        }
+
+        if (option === 'prev') {
+            const newFrom = this.state.from - this.state.itemsPerPage
+            this.setState({ from: newFrom }, this.getBrands)
         }
     }
 
@@ -201,6 +222,10 @@ class CarBrand extends Component {
                                     }
                                 ]}
                                 items={this.state.brands} />
+                            <div style={{ display: 'flex', flexDirection: 'row', float: 'right' }}>
+                                <Button disabled={this.state.from === 0 ? true : false} style={{ margin: 8 }} color="secondary" onClick={() => this.changePageHandler('prev')}>{this.props.language.buttons.prev}</Button>
+                                <Button disabled={this.state.count < this.state.itemsPerPage ? true : false} style={{ margin: 8 }} color="secondary" onClick={() => this.changePageHandler('next')}>{this.props.language.buttons.next}</Button>
+                            </div>
                         </div> : <h4 style={{ marginLeft: 19, color: '#606771' }}>{this.props.language.utils.noResult}</h4>}
                         {this.state.brands && this.state.brands.length ? <div style={{ flex: 1, maxHeight: 'calc(100% - 76px)', overflowY: 'auto', backgroundColor: '#F8F8F8', margin: '20px 19px', border: '1px solid rgba(0,0,0,0.1)', boxShadow: '1px 1px rgba(0,0,0,0.1)' }}>
                             {this.state.selectedBrandId ? <CarModel addClicked={this.state.addModel} onCloseModal={() => this.handleModelEvents(false)} carBrandId={this.state.selectedBrandId} models={this.state.associatedModels} getModels={() => this.getAssociatedModels()} /> : <p style={{ marginLeft: 19, color: '#606771' }}>{this.props.language.utils.noBrandSelected}</p>}

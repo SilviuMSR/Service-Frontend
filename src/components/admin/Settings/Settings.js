@@ -125,7 +125,6 @@ class Settings extends Component {
         if (currentIndex > -1) {
             let stateCopy = this.state.settingsFields.map(field => ({ ...field }))
             stateCopy[currentIndex].value = event.target.value
-            console.log(stateCopy)
             this.setState({ settingsFields: stateCopy })
         }
     }

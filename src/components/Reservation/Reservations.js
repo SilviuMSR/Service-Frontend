@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { Document, Page, pdfjs } from 'react-pdf'
 import localConfig from '../../config/local.json'
 
-import { withStyles, TextField } from '@material-ui/core'
+import { withStyles, TextField, Button } from '@material-ui/core'
 
 import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
@@ -173,7 +173,11 @@ class Reservations extends Component {
         currentReservation: null,
         selectedReservation: null,
         openReservationDetails: false,
-        searchInput: ''
+        searchInput: '',
+        from: 0,
+        limit: 10,
+        itemsPerPage: 10,
+        count: 0
     }
 
     componentDidMount() {
@@ -186,10 +190,10 @@ class Reservations extends Component {
 
     handlerReservations = () => {
         if (this.props.login.position.toLowerCase() === 'admin') {
-            this.getReservationsHandler({ name: this.state.searchInput })
+            this.getReservationsHandler({ name: this.state.searchInput, from: this.state.from, limit: this.state.limit })
         }
         else if (this.state.selectedOption === CONSTANTS.RENDER_RESERVATION_EMPLOYEE) {
-            this.getReservationsHandler({ employee: true, name: this.state.searchInput })
+            this.getReservationsHandler({ employee: true, name: this.state.searchInput, from: this.state.from, limit: this.state.limi })
         }
         else if (this.state.selectedOption === CONSTANTS.RENDER_RESERVATION_PERSONAL) {
             this.getByEmployeeIdHandler(this.props.login.userId)
@@ -201,7 +205,7 @@ class Reservations extends Component {
     }
 
     getReservationsHandler = (options) => {
-        this.props.getReservations(options).then(res => this.setState({ reservations: res.reservations, renderPage: true, openReservationDetails: false }))
+        this.props.getReservations(options).then(res => this.setState({ reservations: res.reservations, count: res.count, renderPage: true, openReservationDetails: false }))
     }
 
     generateReservationMessageHandler = status => {
@@ -245,6 +249,18 @@ class Reservations extends Component {
 
     onFileLoadSuccess = () => {
         this.setState({ pdfPage: 1 })
+    }
+
+    changePageHandler = option => {
+        if (option === 'next') {
+            const newFrom = this.state.from + this.state.itemsPerPage
+            this.setState({ from: newFrom }, this.handlerReservations)
+        }
+
+        if (option === 'prev') {
+            const newFrom = this.state.from - this.state.itemsPerPage
+            this.setState({ from: newFrom }, this.handlerReservations)
+        }
     }
 
     renderModalContentHandler = () => {
@@ -365,6 +381,10 @@ class Reservations extends Component {
                                     ]
                                 }]}
                             items={this.state.reservations} />
+                        <div style={{ display: 'flex', flexDirection: 'row', float: 'right' }}>
+                            <Button disabled={this.state.from === 0 ? true : false} style={{ margin: 8 }} color="secondary" onClick={() => this.changePageHandler('prev')}>{this.props.language.buttons.prev}</Button>
+                            <Button disabled={this.state.count < this.state.itemsPerPage ? true : false} style={{ margin: 8 }} color="secondary" onClick={() => this.changePageHandler('next')}>{this.props.language.buttons.next}</Button>
+                        </div>
                     </div> : <h4 style={{ marginLeft: 19, color: '#606771' }}>{this.props.language.utils.noResult}</h4>}
                 </div>
             )

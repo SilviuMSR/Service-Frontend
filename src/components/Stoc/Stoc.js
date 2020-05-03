@@ -71,7 +71,11 @@ class Stoc extends Component {
         stocks: [],
         openConfirmationModal: false,
         modalFields: this.initialFields,
-        searchInput: ''
+        searchInput: '',
+        from: 0,
+        limit: 10,
+        itemsPerPage: 10,
+        count: 0
     }
 
     componentDidMount() {
@@ -79,9 +83,10 @@ class Stoc extends Component {
     }
 
     getStocks = () => {
-        this.props.getStocks({ name: this.state.searchInput }).then(result => {
+        this.props.getStocks({ name: this.state.searchInput, from: this.state.from, limit: this.state.limit }).then(result => {
             this.setState({
-                stocks: result.pieces
+                stocks: result.pieces,
+                count: result.count
             })
         })
     }
@@ -98,6 +103,18 @@ class Stoc extends Component {
     closeConfirmationModalHandler = () => {
         this.stockToDelete = {}
         this.setState({ openConfirmationModal: false })
+    }
+
+    changePageHandler = option => {
+        if (option === 'next') {
+            const newFrom = this.state.from + this.state.itemsPerPage
+            this.setState({ from: newFrom }, this.getStocks)
+        }
+
+        if (option === 'prev') {
+            const newFrom = this.state.from - this.state.itemsPerPage
+            this.setState({ from: newFrom }, this.getStocks)
+        }
     }
 
     render() {
@@ -162,6 +179,10 @@ class Stoc extends Component {
                                         { field: 'no', label: 'Quantity' }]
                                 }]}
                             items={this.state.stocks} />
+                        <div style={{ display: 'flex', flexDirection: 'row', float: 'right' }}>
+                            <Button disabled={this.state.from === 0 ? true : false} style={{ margin: 8 }} color="secondary" onClick={() => this.changePageHandler('prev')}>{this.props.language.buttons.prev}</Button>
+                            <Button disabled={this.state.count < this.state.itemsPerPage ? true : false} style={{ margin: 8 }} color="secondary" onClick={() => this.changePageHandler('next')}>{this.props.language.buttons.next}</Button>
+                        </div>
                     </div> : <h4 style={{ marginLeft: 19, color: '#606771' }}>{this.props.language.utils.noResult}</h4>}
                 </div>
             </>

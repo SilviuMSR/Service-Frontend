@@ -166,9 +166,11 @@ const computeTitle = (props, fieldObj) => {
 }
 
 const computeLogoPath = props => {
+
     if (props.item && props.item.logoPath) return `http://localhost:9000/static/${props.item.logoPath}`
     if (props.item.carBrandId && props.item.carBrandId.logoPath) return `http://localhost:9000/static/${props.item.carBrandId.logoPath}`
     if (props && props.item && props.item.photoPath && props.item.position) return `http://localhost:9000/static/${props.item.photoPath}`
+    if (props && props.item && props.item.userId && props.item.userId.photoPath) return `http://localhost:9000/static/${props.item.userId.photoPath}`
     return undefined
 }
 
@@ -176,13 +178,12 @@ const computeLogoPath = props => {
 const CustomCard = props => {
     const { classes } = props
     const logoPath = computeLogoPath(props)
-    console.log(logoPath)
     return (
         <Card className={classes.root} style={{ height: props.smallCard ? '240px' : '' }}>
             <CardActionArea>
                 {props.displayMainPhoto && <CardMedia
                     className={classes.media}>
-                    <img style={{width: 100, objectFit: 'contain', borderRadius: '74%'}} src={logoPath || "https://via.placeholder.com/75x75"} />
+                    <img style={{ width: 100, objectFit: 'contain', borderRadius: '74%' }} src={logoPath || "https://via.placeholder.com/75x75"} />
                 </CardMedia>}
                 <CardContent onClick={() => props.onClick(props.item)} className={classes.cardContent}>
                     {props.content.map(obj => {

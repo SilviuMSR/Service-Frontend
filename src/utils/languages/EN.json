@@ -130,7 +130,9 @@
         "invoice": "Generate Invoice",
         "reservationDash": "RESERVATIONS",
         "userDash": "EMPLOYEES",
-        "carDash": "CARS / PROBLEMS"
+        "carDash": "CARS / PROBLEMS",
+        "next": "NEXT",
+        "prev": "PREV"
     },
     "utils": {
         "delete": "Are you sure you delete this?",

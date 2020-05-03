@@ -66,7 +66,11 @@ class CarProblem extends Component {
         modalType: CONSTANTS.CREATE,
         problems: [],
         openConfirmationModal: false,
-        searchInput: ''
+        searchInput: '',
+        from: 0,
+        limit: 10,
+        itemsPerPage: 10,
+        count: 0
     }
 
     componentDidMount() {
@@ -74,8 +78,13 @@ class CarProblem extends Component {
     }
 
     getProblems = () => {
-        this.props.getProblems({ name: this.state.searchInput }).then(result => {
+        this.props.getProblems({
+            name: this.state.searchInput,
+            from: this.state.from,
+            limit: this.state.limit,
+        }).then(result => {
             this.setState({
+                count: result.count,
                 problems: result.carProblems
             })
         })
@@ -93,6 +102,19 @@ class CarProblem extends Component {
     closeConfirmationModalHandler = () => {
         this.problemToDelete = {}
         this.setState({ openConfirmationModal: false })
+    }
+
+
+    changePageHandler = option => {
+        if (option === 'next') {
+            const newFrom = this.state.from + this.state.itemsPerPage
+            this.setState({ from: newFrom }, this.getProblems)
+        }
+
+        if (option === 'prev') {
+            const newFrom = this.state.from - this.state.itemsPerPage
+            this.setState({ from: newFrom }, this.getProblems)
+        }
     }
 
     render() {
@@ -157,6 +179,10 @@ class CarProblem extends Component {
                                     ]
                                 }]}
                             items={this.state.problems} />
+                        <div style={{ display: 'flex', flexDirection: 'row', float: 'right' }}>
+                            <Button disabled={this.state.from === 0 ? true : false} style={{ margin: 8 }} color="secondary" onClick={() => this.changePageHandler('prev')}>{this.props.language.buttons.prev}</Button>
+                            <Button disabled={this.state.count < this.state.itemsPerPage ? true : false} style={{ margin: 8 }} color="secondary" onClick={() => this.changePageHandler('next')}>{this.props.language.buttons.next}</Button>
+                        </div>
                     </div> : <h4 style={{ marginLeft: 19, color: '#606771' }}>{this.props.language.utils.noResult}</h4>}
                 </div>
 
