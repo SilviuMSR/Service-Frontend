@@ -164,7 +164,7 @@ class CarDash extends Component {
                             </div>
                         </div>
                         <div className={this.props.classes.employeeDoneContainer}>
-                            <p className={`${this.props.classes.cardTitle}`}>Problems</p>
+                            <p className={`${this.props.classes.cardTitle}`}>{this.props.language.labels.problems}</p>
                             <CarProblemBar data={this.computeDataProblem()} />
                         </div>
                     </div>

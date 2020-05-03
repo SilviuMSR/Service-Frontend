@@ -217,7 +217,7 @@ class CarBrand extends Component {
                                 onClick={item => this.onSelectBrand(item)}
                                 content={[
                                     {
-                                        title: 'General details',
+                                        title: this.props.language.labels.generalDetails,
                                         childrens: [{ field: 'name', label: this.props.language.labels.brand }]
                                     }
                                 ]}

@@ -100,7 +100,7 @@ class CarModel extends Component {
                     onClick={item => { }}
                     content={[
                         {
-                            title: 'General details',
+                            title: this.props.language.labels.generalDetails,
                             childrens: [{ field: 'name', label: this.props.language.labels.model }]
                         }
                     ]}

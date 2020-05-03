@@ -34,6 +34,12 @@ export const VACATION_ACCEPTED = 'ACCEPTED'
 export const VACATION_PENDING = 'PENDING'
 export const VACATION_DECLINED = 'DECLINED'
 
+export const LANGUAGES = [
+    { name: '', value: false },
+    { name: 'RO', value: false },
+    { name: 'EN', value: false }
+]
+
 export const HOMEPAGE_OPTIONS = [
     { name: 'REZERVARE', value: true, icon: 'ResIcon' },
     { name: 'LOGIN', value: false, icon: 'LoginIcon' }

@@ -161,13 +161,13 @@ class Vacations extends Component {
                             onClick={item => { }}
                             content={[
                                 {
-                                    title: 'General details',
+                                    title: this.props.language.labels.generalDetails,
                                     childrens: [
-                                        { field: 'username', populate: 'userId', label: 'Requester' },
-                                        { field: 'from', label: 'From' },
-                                        { field: 'to', label: 'To' },
-                                        { field: 'reason', label: 'Reason' },
-                                        { field: 'requestStatus', label: 'Status' }
+                                        { field: 'username', populate: 'userId', label: this.props.language.labels.requester },
+                                        { field: 'from', label: this.props.language.labels.from },
+                                        { field: 'to', label: this.props.language.labels.to },
+                                        { field: 'reason', label: this.props.language.labels.reason },
+                                        { field: 'requestStatus', label: this.props.language.labels.status }
                                     ]
                                 }]}
                             items={this.state.vacations} />

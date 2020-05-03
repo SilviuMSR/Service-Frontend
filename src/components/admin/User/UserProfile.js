@@ -83,14 +83,14 @@ class UserProfile extends Component {
 
 
     initialVacantion = [
-        { type: 'date', label: 'From Date', value: '', name: 'from' },
-        { type: 'date', label: 'To Date', value: '', name: 'to' },
-        { type: 'text', label: 'Reason', value: '', name: 'reason' }
+        { type: 'date', label: this.props.language.labels.from, value: '', name: 'from' },
+        { type: 'date', label: this.props.language.labels.to, value: '', name: 'to' },
+        { type: 'text', label: this.props.language.labels.reason, value: '', name: 'reason' }
     ]
 
     initialPassword = [
-        { type: 'password', label: 'New password', value: '', name: 'newPassword' },
-        { type: 'password', label: 'Confirm Password', value: '', name: 'confirmPassword' }
+        { type: 'password', label: this.props.language.labels.newPass, value: '', name: 'newPassword' },
+        { type: 'password', label: this.props.language.labels.confirmNewPass, value: '', name: 'confirmPassword' }
     ]
 
     state = {
@@ -233,19 +233,19 @@ class UserProfile extends Component {
                             <div className={this.props.classes.details}>
                                 <span className={this.props.classes.titleText}>{this.props.language.titles.userDetails}</span>
                                 <div style={{ textAlign: 'center' }}>
-                                    <p className={this.props.classes.titleText}>FULLNAME</p>
+                                    <p className={this.props.classes.titleText}>{this.props.language.labels.fullName.toUpperCase()}</p>
                                     <p style={{ margin: 0, padding: 0 }}>{this.state.currentUser.username || '-'}</p>
-                                    <p className={this.props.classes.titleText}>EMAIL ADDRESS</p>
+                                    <p className={this.props.classes.titleText}>{this.props.language.labels.email.toUpperCase()}</p>
                                     <p style={{ margin: 0, padding: 0 }}>{this.state.currentUser.email || '-'}</p>
-                                    <p className={this.props.classes.titleText}>PHONE NUMBER</p>
+                                    <p className={this.props.classes.titleText}>{this.props.language.labels.phone.toUpperCase()}</p>
                                     <p style={{ margin: 0, padding: 0 }}>{this.state.currentUser.phoneNumber || '-'}</p>
-                                    <p className={this.props.classes.titleText}>CURRENT STATUS</p>
+                                    <p className={this.props.classes.titleText}>{this.props.language.labels.currentStatus.toUpperCase()}</p>
                                     <p style={{ margin: 0, padding: 0 }}>{this.state.currentUser.userStatus || '-'}</p>
                                 </div>
                             </div>
                             <div className={this.props.classes.actions}>
                                 <span className={this.props.classes.titleText}>{this.props.language.titles.actions}</span>
-                                <Button onClick={() => this.setState((prevState) => ({ vacantionRequest: !prevState.vacantionRequest, changePass: false }))} className={this.props.classes.optionButton} color="secondary">ASK FOR VACANTION</Button>
+            <Button onClick={() => this.setState((prevState) => ({ vacantionRequest: !prevState.vacantionRequest, changePass: false }))} className={this.props.classes.optionButton} color="secondary">{this.props.language.buttons.askVacation}</Button>
                                 {this.state.vacantionRequest &&
                                     <div>
                                         {this.renderVacantionRequest()}
@@ -253,7 +253,7 @@ class UserProfile extends Component {
                                     </div>}
                                 <Button onClick={() => {
                                     this.setState((prevState) => ({ changePass: !prevState.changePass, vacantionRequest: false }))
-                                }} className={this.props.classes.optionButton} color="secondary">CHANGE PASSWORD</Button>
+                                }} className={this.props.classes.optionButton} color="secondary">{this.props.language.buttons.changePass}</Button>
                                 {this.state.changePass &&
                                     <div>
                                         {this.renderChangePass()}
@@ -269,7 +269,7 @@ class UserProfile extends Component {
                                 />
                                 <label htmlFor="raised-button-file">
                                     <Button className={this.props.classes.optionButton} color="secondary" variant="raised" component="span" >
-                                        Upload image
+                                        {this.props.language.buttons.uploadImage}
   </Button>
                                 </label>
                             </div>

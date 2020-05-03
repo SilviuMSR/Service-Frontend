@@ -439,7 +439,7 @@ class ReservationDetails extends Component {
                             })}
                         </div>
                         <div className={this.props.classes.problemStep}>
-                            <p style={{ padding: 5, fontWeight: 500, fontSize: 18, color: '#545A63', margin: 0 }}>Follow next steps</p>
+                        <p style={{ padding: 5, fontWeight: 500, fontSize: 18, color: '#545A63', margin: 0 }}>{this.props.language.labels.followSteps}</p>
                             {this.state.currentProblem ? this.state.currentProblem.steps.map((step, index) => {
                                 if (index !== 0) {
                                     return (

@@ -170,14 +170,14 @@ class Stoc extends Component {
                             onClick={item => { }}
                             content={[
                                 {
-                                    title: 'General details',
+                                    title: this.props.language.labels.generalDetails,
                                     childrens: [
-                                        { populate: 'carBrandId', field: 'name', label: 'Brand' },
-                                        { populate: 'carModelId', field: 'name', label: 'Model' },
-                                        { field: 'name', label: 'Name' },
-                                        { field: 'price', label: 'Price' },
-                                        { field: 'no', label: 'Quantity' },
-                                        { field: 'code', label: 'Bar code' }]
+                                        { populate: 'carBrandId', field: 'name', label: this.props.language.labels.brand },
+                                        { populate: 'carModelId', field: 'name', label: this.props.language.labels.model },
+                                        { field: 'name', label: this.props.language.labels.name },
+                                        { field: 'price', label: this.props.language.labels.price },
+                                        { field: 'no', label: this.props.language.labels.quantity },
+                                        { field: 'code', label: this.props.language.labels.code }]
                                 }]}
                             items={this.state.stocks} />
                         <div style={{ display: 'flex', flexDirection: 'row', float: 'right' }}>

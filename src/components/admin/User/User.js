@@ -171,7 +171,7 @@ class User extends Component {
                             onClick={item => { }}
                             content={[
                                 {
-                                    title: 'General details',
+                                    title: this.props.language.labels.generalDetails,
                                     childrens: [{ field: 'username', label: this.props.language.labels.name },
                                     { field: 'position', label: this.props.language.labels.position },
                                     { field: 'userStatus', label: this.props.language.labels.status }

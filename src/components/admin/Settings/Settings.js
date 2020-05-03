@@ -7,6 +7,7 @@ import { PlayArrow as PlayIcon, Stop as StopIcon, Check as AcceptIcon } from '@m
 import * as SETTINGS from '../../../redux/actions/settings'
 import * as NOTIFICATIONS from '../../../utils/notification'
 import * as CONSTANTS from '../../../utils/constants'
+import * as LANGUAGE from '../../../redux/actions/language'
 
 import InputGenerator from '../../common/InputGenerator'
 
@@ -58,7 +59,8 @@ class Settings extends Component {
     initialFields = [
         { value: '', type: 'number', label: this.props.language.labels.months, name: 'months' },
         { value: '', type: 'number', label: this.props.language.labels.checkTime, name: 'checkTime' },
-        { value: '', type: 'dropdownSelector', label: this.props.language.labels.checkTimeType.checkTimeType, name: 'checkTimeType', options: CONSTANTS.CHECK_TIME_TYPE.map(field => ({ ...field, name: field.label, label: this.props.language.labels.checkTimeType[field.label] })) }
+        { value: '', type: 'dropdownSelector', label: this.props.language.labels.checkTimeType.checkTimeType, name: 'checkTimeType', options: CONSTANTS.CHECK_TIME_TYPE.map(field => ({ ...field, name: field.label, label: this.props.language.labels.checkTimeType[field.label] })) },
+        { value: '', type: 'dropdownSelector', label: this.props.language.labels.language, name: 'language', options: CONSTANTS.LANGUAGES.map(field => ({ ...field, name: field.name, label: field.name })) }
     ]
 
     state = {
@@ -89,6 +91,7 @@ class Settings extends Component {
             const monthsIndex = this.state.settingsFields.findIndex(index => index.name === "months")
             const checkTimeIndex = this.state.settingsFields.findIndex(index => index.name === "checkTime")
             const checkTimeTypeIndex = this.state.settingsFields.findIndex(index => index.name === 'checkTimeType')
+            const languageIndex = this.state.settingsFields.findIndex(index => index.name === 'language')
             if (monthsIndex > -1 && checkTimeIndex > -1) {
                 let stateCopy = this.state.settingsFields.map(field => ({ ...field }))
                 stateCopy[monthsIndex].value = result.settings.noMonths
@@ -99,6 +102,9 @@ class Settings extends Component {
                 stateCopy[checkTimeTypeIndex].options = stateCopy[checkTimeTypeIndex].options.map(op => ({
                     ...op, value: String(op.name) === String(result.settings.checkTimeType) ? true : false
                 }))
+
+                // Set current language
+                stateCopy[languageIndex].value = this.props.languageValue
 
                 this.setState({ settingsFields: stateCopy })
             }
@@ -125,6 +131,16 @@ class Settings extends Component {
         if (currentIndex > -1) {
             let stateCopy = this.state.settingsFields.map(field => ({ ...field }))
             stateCopy[currentIndex].value = event.target.value
+
+            // Case change language
+            if (event.target.name === 'language') {
+                this.props.changeLanguage(event.target.value).then(() => {
+                    NOTIFICATIONS.success(this.props.language.toastr.changeLanguageSuccess + event.target.value)
+                })
+                    .catch(err => {
+                        NOTIFICATIONS.error(this.props.language.toastr.changeLanguageFail)
+                    })
+            }
             this.setState({ settingsFields: stateCopy })
         }
     }
@@ -167,7 +183,8 @@ class Settings extends Component {
 }
 
 const mapStateToProps = state => ({
-    language: state.language.i18n
+    language: state.language.i18n,
+    languageValue: state.language.language
 })
 
 const mapDispatchToProps = dispatch => {
@@ -175,7 +192,8 @@ const mapDispatchToProps = dispatch => {
         start: () => dispatch(SETTINGS.startNotifications()),
         stop: () => dispatch(SETTINGS.stopNotifications()),
         update: settings => dispatch(SETTINGS.editSettings(settings)),
-        get: () => dispatch(SETTINGS.getSettings())
+        get: () => dispatch(SETTINGS.getSettings()),
+        changeLanguage: (newLanguage) => dispatch(LANGUAGE.changeLanguage(newLanguage))
     }
 }
 

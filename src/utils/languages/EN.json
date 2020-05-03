@@ -20,6 +20,8 @@
         "dashboard": "Dashboard"
     },
     "toastr": {
+        "changeLanguageSuccess": "Language changed in ",
+        "changeLanguageFail": "Fail to change language",
         "reservationAccepted": "Reservation was successfully accepted!",
         "reservationDeclined": "Reservation was declined!",
         "reservationInProgress": "Reservation was added to your list!",
@@ -41,6 +43,7 @@
         "alreadyAsked": "This request was already handled"
     },
     "labels": {
+        "language": "Language",
         "reservationStatus": {
             "DONE": "DONE",
             "PENDING": "PENDING",
@@ -60,8 +63,12 @@
         "checkTime": "Check time",
         "brand": "Brand",
         "name": "Name",
+        "fullName": "Fullname",
+        "currentStatus": "Current status",
+        "phone": "Phone number",
         "logo": "Logo",
         "code": "Bar code",
+        "generalDetails": "General details",
         "model": "Model",
         "price": "Price",
         "email": "Email",
@@ -77,6 +84,7 @@
         "date": "Date",
         "clientName": "Client name",
         "clientEmail": "Client email",
+        "requester": "Requester",
         "reservedBy": "Reserved by",
         "problemKnow": "Do you know the problem?",
         "chooseProblem": "Choose problems",
@@ -84,7 +92,17 @@
             "yes": "Yes",
             "no": "No"
         },
-        "quantity": "Quantity"
+        "quantity": "Quantity",
+        "from": "From",
+        "to": "To",
+        "reason": "Reason",
+        "newPass": "New password",
+        "confirmNewPass": "Confirm new password",
+        "problems": "Problems",
+        "top10": "Top 10 employees",
+        "employeeFinished": "Finished reservations by employee",
+        "daily": "Daily reservations",
+        "followSteps": "Follow next steps"
     },
     "titles": {
         "vacations": "VACATION REQUESTS",
@@ -116,6 +134,7 @@
         "dashboard": "DASHBOARD"
     },
     "buttons": {
+        "changePass": "CHANGE PASSWORD",
         "takeReservation": "Take reservation",
         "cancel": "Cancel",
         "delete": "Delete",
@@ -133,7 +152,9 @@
         "userDash": "EMPLOYEES",
         "carDash": "CARS / PROBLEMS",
         "next": "NEXT",
-        "prev": "PREV"
+        "prev": "PREV",
+        "askVacation": "VACATION REQUEST",
+        "uploadImage": "UPLOAD IMAGE"
     },
     "utils": {
         "delete": "Are you sure you delete this?",

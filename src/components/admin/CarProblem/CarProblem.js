@@ -171,7 +171,7 @@ class CarProblem extends Component {
                             onClick={item => { }}
                             content={[
                                 {
-                                    title: 'General details',
+                                    title: this.props.language.labels.generalDetails,
                                     childrens: [{ field: 'name', label: this.props.language.labels.name },
                                     { field: 'difficulty', label: this.props.language.labels.difficulty },
                                     { field: 'price', label: this.props.language.labels.price },

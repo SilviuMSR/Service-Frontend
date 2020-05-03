@@ -131,7 +131,7 @@ class ReservationDashboard extends Component {
                         </div>
                     </div>
                     <div className={this.props.classes.barContainer}>
-                        <p className={`${this.props.classes.cardTitle}`}>Daily reservations</p>
+            <p className={`${this.props.classes.cardTitle}`}>{this.props.language.labels.daily}</p>
                         <ReservationBarchart data={this.state.reservationChartData} />
                     </div>
                 </div>

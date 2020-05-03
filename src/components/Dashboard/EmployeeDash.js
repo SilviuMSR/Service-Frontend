@@ -143,11 +143,11 @@ class EmployeeDash extends Component {
                     </div>
                     <div style={{ display: 'flex', flexDirection: 'row', width: '100%', height: 'calc(100% - 171px)' }}>
                         <div className={this.props.classes.topTenContainer}>
-                            <p className={`${this.props.classes.cardTitle}`}>Top 10 employees</p>
+                            <p className={`${this.props.classes.cardTitle}`}>{this.props.language.labels.top10}</p>
                             <EmployeePie data={this.state.topTenEmployeePie} />
                         </div>
                         <div className={this.props.classes.employeeDoneContainer}>
-                            <p className={`${this.props.classes.cardTitle}`}>Finished reservations per employee</p>
+            <p className={`${this.props.classes.cardTitle}`}>{this.props.language.labels.employeeFinished}</p>
                             <EmployeeDonePie data={this.state.reservationsDonePerEmployee} />
                         </div>
                     </div>
