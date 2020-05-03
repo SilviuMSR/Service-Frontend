@@ -61,7 +61,8 @@ class CreateStock extends Component {
         { value: '', type: 'dropdownSelector', label: this.props.language.labels.model, name: 'carModelId', options: [] },
         { value: '', type: 'text', label: this.props.language.labels.name, name: 'name', validation: { checks: [validations.notEmpty] } },
         { value: '', type: 'number', label: this.props.language.labels.price, name: 'price', validation: { checks: [validations.notEmpty] } },
-        { value: 0, type: "number", label: this.props.language.labels.quantity, name: 'no' }
+        { value: 0, type: "number", label: this.props.language.labels.quantity, name: 'no' },
+        { value: '', type: "text", label: this.props.language.labels.code, name: 'code' }
     ]
 
     state = {

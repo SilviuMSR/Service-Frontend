@@ -176,7 +176,8 @@ class Stoc extends Component {
                                         { populate: 'carModelId', field: 'name', label: 'Model' },
                                         { field: 'name', label: 'Name' },
                                         { field: 'price', label: 'Price' },
-                                        { field: 'no', label: 'Quantity' }]
+                                        { field: 'no', label: 'Quantity' },
+                                        { field: 'code', label: 'Bar code' }]
                                 }]}
                             items={this.state.stocks} />
                         <div style={{ display: 'flex', flexDirection: 'row', float: 'right' }}>

@@ -143,7 +143,7 @@ class Vacations extends Component {
                                     :
                                     [
                                         {
-                                            icon: <DoneOutline style={{ color: '#4caf50' }} />,
+                                            icon: <DoneOutline style={{ color: '#1976D2' }} />,
                                             label: 'Accept',
                                             action: item => {
                                                 this.requestHandler(item, 'accepted')
