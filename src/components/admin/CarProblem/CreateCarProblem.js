@@ -7,8 +7,11 @@ import { Delete } from '@material-ui/icons'
 
 import { mapToDropdownSelector } from '../../../utils/apiFunctions'
 
+import { validations } from '../../../utils/validations'
+
 import * as CONSTANTS from '../../../utils/constants'
 import * as PROBLEM from '../../../redux/actions/problems'
+import * as NOTIFICATIONS from '../../../utils/notification'
 
 import InputGenerator from '../../common/InputGenerator'
 import SimpleModal from '../../common/SimpleModal'
@@ -54,8 +57,7 @@ const styles = theme => ({
     problemDetails: {
         flex: 1,
         alignItems: 'center',
-        padding: 16,
-        borderRight: '1px solid rgba(0,0,0,0.1)'
+        padding: 16
     },
     stepsContainer: {
         flex: 3,
@@ -72,8 +74,7 @@ const styles = theme => ({
         marginLeft: 'auto'
     },
     stepsTitle: {
-        fontSize: 18,
-        fontWeight: 500
+        padding: 5, fontWeight: 500, fontSize: 18, color: '#545A63', margin: 0
     },
     steps: {
         flex: 2,
@@ -93,9 +94,9 @@ class CreateCarProblem extends Component {
     todayValue = moment().format(CONSTANTS.INPUT_TYPE_DATE_FORMAT)
 
     initialFields = [
-        { value: '', type: 'text', label: this.props.language.labels.name, name: 'name' },
+        { value: '', type: 'text', label: this.props.language.labels.name, name: 'name', validation: { checks: [validations.notEmpty] } },
         { value: '', type: 'text', label: this.props.language.labels.steps, name: 'steps' },
-        { value: '', type: 'number', label: this.props.language.labels.price, name: 'price' },
+        { value: '', type: 'number', label: this.props.language.labels.price, name: 'price', validation: { checks: [validations.notEmpty] } },
         { value: '', type: 'dropdownSelector', label: this.props.language.labels.difficulty, name: 'difficulty', options: CONSTANTS.PROBLEM_DIFFICULTY }
     ]
 
@@ -124,7 +125,8 @@ class CreateCarProblem extends Component {
                         options: field.options.map(option => {
                             return ({ ...option, value: String(option.id) === String(response[field.name]) ? true : false })
                         }),
-                        touched: true
+                        touched: true,
+                        error: false
                     })
                 }
 
@@ -138,7 +140,7 @@ class CreateCarProblem extends Component {
                 modalFields: modalFieldsCopy
             })
         }).catch(() => {
-            alert("NOT FOUND")
+            NOTIFICATIONS.error(this.props.language.toastr.notFound)
         })
     }
 
@@ -163,19 +165,48 @@ class CreateCarProblem extends Component {
         return newStepJson
     }
 
+    validate = () => {
+        let newFields = [...this.state.modalFields]
+        let nameIndex = newFields.findIndex(index => index.name === 'name')
+        let priceIndex = newFields.findIndex(index => index.name === 'price')
+        let isValid = true
+
+        // Check if name field is completed
+        let name = newFields[nameIndex].value
+        let price = newFields[priceIndex].value
+        if (name === '') {
+            newFields[nameIndex].error = true
+            isValid = false
+        }
+
+        if (!price) {
+            newFields[priceIndex].error = true
+            isValid = false
+        }
+
+        this.setState({ modalFields: [...Object.values(newFields)] })
+        return isValid
+    }
+
     onAddHandler = () => {
+        if (!this.validate()) return NOTIFICATIONS.error(this.props.language.toastr.failAdd)
         this.props.createProblem(this.createProblemJson()).then(() => {
+            NOTIFICATIONS.success(this.props.language.toastr.add)
             this.onCancelHandler()
             this.props.getProblems()
         })
+            .catch(() => NOTIFICATIONS.error(this.props.language.toastr.failAdd))
     }
 
     onEditHandler = () => {
+        if (!this.validate()) return NOTIFICATIONS.error(this.props.language.toastr.failAdd)
         const addNewStepJson = this.state.addNewStep ? this.createNewStepJson() : {}
         this.props.edit(this.props.problemId, this.createProblemJson(), this.state.addNewStep, addNewStepJson).then(() => {
+            NOTIFICATIONS.success(this.props.language.toastr.edit)
             this.onCancelHandler()
             this.props.getProblems()
         })
+            .catch(() => NOTIFICATIONS.error(this.props.language.toastr.failEdit))
     }
 
     onChangeHandler = event => {
@@ -218,7 +249,7 @@ class CreateCarProblem extends Component {
     renderProblemFields = () => {
         const stepsIndex = this.state.modalFields.findIndex(field => field.name === 'steps')
         return (<div className={this.props.classes.modalContainer}>
-            <div className={this.props.classes.problemDetails}>
+            <div style={{ borderRight: this.props.type === CONSTANTS.EDIT ? '1px solid rgba(0,0,0,0.1)' : '' }} className={this.props.classes.problemDetails}>
                 {
                     this.state.modalFields.map((field, index) => {
                         if (field.name !== 'steps')
@@ -231,22 +262,24 @@ class CreateCarProblem extends Component {
                     })
                 }
             </div>
-            {stepsIndex > -1 && this.state.modalFields[stepsIndex].value.length && <div className={this.props.classes.stepsContainer}>
+            {this.props.type === CONSTANTS.EDIT && stepsIndex > -1 && this.state.modalFields[stepsIndex].value.length && <div className={this.props.classes.stepsContainer}>
                 <div className={this.props.classes.stepsContainerHeader}>
                     <p className={this.props.classes.stepsTitle}>{this.props.language.titles.steps}</p>
                     <Button color="primary" onClick={() => this.addNewStepHandler()} className={`${this.props.classes.marginLeftAuto}`}>{this.props.language.buttons.add}</Button>
                 </div>
                 <div className={this.props.classes.steps}>
                     <div className={this.props.classes.currentSteps}>
-                        {this.state.modalFields[stepsIndex].value.map(step => {
-                            return (
-                                <div style={{ display: 'flex', flexDirection: 'row' }}>
-                                    <li>{step}</li>
-                                    <Delete style={{ color: '#e53935', cursor: 'pointer' }} onClick={() => {
-                                        this.deleteStepHandler(step)
-                                    }} />
-                                </div>
-                            )
+                        {this.state.modalFields[stepsIndex].value.map((step, index) => {
+                            if (index !== 0) {
+                                return (
+                                    <div style={{ display: 'flex', flexDirection: 'row' }}>
+                                        <li style={{ fontWeight: 'bold', paddingLeft: 5 }}>{step}</li>
+                                        <Delete style={{ color: 'black', cursor: 'pointer' }} onClick={() => {
+                                            this.deleteStepHandler(step)
+                                        }} />
+                                    </div>
+                                )
+                            } else return null
                         })}
                     </div>
                     {this.state.addNewStep && <div className={this.props.classes.newStep}>
@@ -279,7 +312,7 @@ class CreateCarProblem extends Component {
         return (
             <>
                 <SimpleModal
-                    acceptButtonText={this.props.language.buttons.add}
+                    acceptButtonText={this.props.language.buttons.save}
                     cancelButtonText={this.props.language.buttons.cancel}
                     onAccept={this.props.type === CONSTANTS.CREATE ? this.onAddHandler : this.onEditHandler}
                     maxWidth={"md"}

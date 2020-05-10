@@ -5,7 +5,7 @@ import { Document, Page, pdfjs } from 'react-pdf'
 import localConfig from '../../config/local.json'
 
 import { withStyles, Button } from '@material-ui/core'
-import ChevronRightIcon from '@material-ui/icons/ChevronRight'
+import { Warning } from '@material-ui/icons'
 import CheckIcon from '@material-ui/icons/Check'
 
 import SimpleModal from '../common/SimpleModal'
@@ -17,6 +17,8 @@ pdfjs.GlobalWorkerOptions.workerSrc = `${localConfig.frontend}/pdf.worker.js`
 const styles = theme => ({
     mainContainer: {
         maxHeight: 400,
+        minHeight: 280,
+        height: 280,
         width: '100%'
     },
     statusContainer: {
@@ -29,7 +31,7 @@ const styles = theme => ({
         borderRadius: 7,
         backgroundColor: 'red',
         marginRight: 10,
-        marginTop: 3
+        marginTop: 5
     },
     ovalGreen: {
         width: 14,
@@ -37,15 +39,15 @@ const styles = theme => ({
         borderRadius: 7,
         backgroundColor: 'green',
         marginRight: 10,
-        marginTop: 3
+        marginTop: 5
     },
     ovalPanding: {
         width: 14,
         height: 14,
         borderRadius: 7,
-        backgroundColor: 'yellow',
+        backgroundColor: '#ff5722',
         marginRight: 10,
-        marginTop: 3
+        marginTop: 5
     },
     ovalProgress: {
         width: 14,
@@ -53,7 +55,7 @@ const styles = theme => ({
         borderRadius: 7,
         backgroundColor: 'purple',
         marginRight: 10,
-        marginTop: 3
+        marginTop: 5
     },
     ovalDone: {
         width: 14,
@@ -61,7 +63,7 @@ const styles = theme => ({
         borderRadius: 7,
         backgroundColor: '#4d7549',
         marginRight: 10,
-        marginTop: 3
+        marginTop: 5
     },
     navbar: {
         maxHeight: 50,
@@ -72,6 +74,7 @@ const styles = theme => ({
         flexDirection: 'row'
     },
     navbarItem: {
+        cursor: 'pointer',
         flex: 1,
         borderRight: '1px solid #eaedf3',
         textAlign: 'center',
@@ -87,9 +90,13 @@ const styles = theme => ({
         backgroundColor: 'rgba(0,0,0,0.1)'
     },
     content: {
+        height: 'calc(100% - 75px)',
         width: '100%',
-        padding: 22
+        padding: '22px 0px'
 
+    },
+    fullHeight: {
+        height: '100%'
     },
     contentStyle: {
         padding: 0,
@@ -116,28 +123,34 @@ const styles = theme => ({
         alingItems: 'flex-end'
     },
     item: {
-        padding: 8
+        padding: 2
     },
     itemTitle: {
-        fontWeight: 'bold'
+        fontWeight: 500
     },
     itemText: {
-        fontWeight: 500
+        fontWeight: 'bold',
+        fontSize: 15
     },
     filesContainer: {
         display: 'flex',
+        height: '100%',
         flexDirection: 'row'
     },
     filesList: {
         flex: 1,
+        height: '100%',
         borderRight: '1px solid rgba(0,0,0,0.2)'
     },
     filePdf: {
-        flex: 4
+        flex: 4,
+        overflowY: 'auto'
     },
     problemsContainer: {
         display: 'flex',
-        flexDirection: 'row'
+        flexDirection: 'row',
+        height: '100%',
+        overflowY: 'scroll'
     },
     problemsList: {
         flex: 1,
@@ -154,7 +167,19 @@ const styles = theme => ({
         padding: 8
     },
     selectedProblem: {
-        borderBottom: '1px solid rgba(0,0,0,0.2)'
+        // borderBottom: '1px solid rgba(0,0,0,0.2)'
+    },
+    options: {
+        height: '100%'
+    },
+    optionsContainer: {
+        height: '100%'
+    },
+    acceptIcon: {
+        margin: 4
+    },
+    declineIcon: {
+        margin: 4
     }
 })
 
@@ -193,31 +218,31 @@ class ReservationDetails extends Component {
         if (reservationStatus === CONSTANTS.RESERVATION_PANDING) return (
             <div className={this.props.classes.statusContainer}>
                 <div className={this.props.classes.ovalPanding} />
-                <span className={this.props.classes.subtitleText}>{CONSTANTS.RESERVATION_PANDING}</span>
+                <span className={this.props.classes.subtitleText}>{this.props.language.labels.reservationStatus[reservationStatus]}</span>
             </div>
         )
         if (reservationStatus === CONSTANTS.RESERVATION_ACCEPTED) return (
             <div className={this.props.classes.statusContainer}>
                 <div className={this.props.classes.ovalGreen} />
-                <span className={this.props.classes.subtitleText}>{CONSTANTS.RESERVATION_ACCEPTED}</span>
+                <span className={this.props.classes.subtitleText}>{this.props.language.labels.reservationStatus[reservationStatus]}</span>
             </div>
         )
         if (reservationStatus === CONSTANTS.RESERVATION_DECLINED) return (
             <div className={this.props.classes.statusContainer}>
                 <div className={this.props.classes.ovalRed} />
-                <span className={this.props.classes.subtitleText}>{CONSTANTS.RESERVATION_DECLINED}</span>
+                <span className={this.props.classes.subtitleText}>{this.props.language.labels.reservationStatus[reservationStatus]}</span>
             </div>
         )
         if (reservationStatus === CONSTANTS.RESERVATION_IN_PROGRESS) return (
             <div className={this.props.classes.statusContainer}>
                 <div className={this.props.classes.ovalProgress} />
-                <span className={this.props.classes.subtitleText}>{CONSTANTS.RESERVATION_IN_PROGRESS}</span>
+                <span className={this.props.classes.subtitleText}>{this.props.language.labels.reservationStatus[reservationStatus]}</span>
             </div>
         )
         if (reservationStatus === CONSTANTS.RESERVATION_DONE) return (
             <div className={this.props.classes.statusContainer}>
                 <div className={this.props.classes.ovalDone} />
-                <span className={this.props.classes.subtitleText}>{CONSTANTS.RESERVATION_DONE}</span>
+                <span className={this.props.classes.subtitleText}>{this.props.language.labels.reservationStatus[reservationStatus]}</span>
             </div>
         )
 
@@ -227,17 +252,17 @@ class ReservationDetails extends Component {
     renderStatusDetails = () => {
         if (this.props.item.reservationStatus === CONSTANTS.RESERVATION_PANDING) return (
             <div className={this.props.classes.options}>
-                <span className={this.props.classes.item}>{this.props.language.utils.reservationWait}</span>
+                <span style={{ color: '#606771' }} className={this.props.classes.item}>{this.props.language.utils.reservationWait}</span>
                 <div className={this.props.classes.optionsContainer}>
-                    <Button onClick={() => this.props.modifyStatus(this.props.item._id, CONSTANTS.RESERVATION_ACCEPTED)} className={this.props.classes.acceptIcon}>ACCEPT</Button>
-                    <Button onClick={() => this.props.modifyStatus(this.props.item._id, CONSTANTS.RESERVATION_DECLINED)} className={this.props.classes.declineIcon}>DECLINE</Button>
+                    <Button color="primary" onClick={() => this.props.modifyStatus(this.props.item._id, CONSTANTS.RESERVATION_ACCEPTED)} className={this.props.classes.acceptIcon}>ACCEPT</Button>
+                    <Button color="secondary" onClick={() => this.props.modifyStatus(this.props.item._id, CONSTANTS.RESERVATION_DECLINED)} className={this.props.classes.declineIcon}>DECLINE</Button>
                 </div>
             </div>
         )
 
         if (this.props.item.reservationStatus === CONSTANTS.RESERVATION_DONE) return (
             <div className={this.props.classes.options}>
-                <span className={this.props.classes.item}>{this.props.language.utils.reservationDone}</span>
+                <span style={{ color: '#606771' }} className={this.props.classes.item}>{this.props.language.utils.reservationDone}</span>
                 {/* <div className={this.props.classes.optionsContainer}>
                     {!this.props.item.file.length ? <Button onClick={() => this.props.generateInvoice(this.props.item._id)}>GENERATE DOCUMENTS</Button> :
                         <>
@@ -249,26 +274,23 @@ class ReservationDetails extends Component {
 
         if (this.props.item.reservationStatus === CONSTANTS.RESERVATION_IN_PROGRESS) return (
             <>
-            <div className={this.props.classes.options}>
-                <span className={this.props.classes.item}>{this.props.item.userId.username.charAt(0).toUpperCase() + this.props.item.userId.username.slice(1)} works at this car.</span>
-            </div>
-                           {this.props.login.position.toLowerCase() === 'employee' && <div className={this.props.classes.optionsContainer}>
-                           <CheckIcon onClick={() => this.props.modifyStatus(this.props.item._id, CONSTANTS.RESERVATION_DONE, this.props.login.userId)} />
-                       </div>}
-                       </>
+                {this.props.login.position.toLowerCase() === 'employee' && <div className={this.props.classes.optionsContainer}>
+                    <Button color="primary" onClick={() => this.props.modifyStatus(this.props.item._id, CONSTANTS.RESERVATION_DONE, this.props.login.userId)}>{this.props.language.utils.isDone}</Button>
+                </div>}
+            </>
         )
 
         if (this.props.item.reservationStatus === CONSTANTS.RESERVATION_DECLINED) return (
             <div className={this.props.classes.options}>
-                <span className={this.props.classes.item}>{this.props.language.utils.reservationDecline}</span>
+                <span style={{ color: '#606771' }} className={this.props.classes.item}>{this.props.language.utils.reservationDecline}</span>
             </div>
         )
 
         if (this.props.item.reservationStatus === CONSTANTS.RESERVATION_ACCEPTED) return (
             <div className={this.props.classes.options}>
-                <span className={this.props.classes.item}>{this.props.language.utils.reservationWaitForEmployee}</span>
+                <span style={{ color: '#606771' }} className={this.props.classes.item}>{this.props.language.utils.reservationWaitForEmployee}</span>
                 <div className={this.props.classes.optionsContainer}>
-                    <Button onClick={() => this.props.modifyStatus(this.props.item._id, CONSTANTS.RESERVATION_IN_PROGRESS, this.props.login.userId)}>Take this reservation</Button>
+                    <Button style={{ margin: 4 }} color="primary" onClick={() => this.props.modifyStatus(this.props.item._id, CONSTANTS.RESERVATION_IN_PROGRESS, this.props.login.userId)}>TAKE IT</Button>
                 </div>
             </div>
         )
@@ -282,7 +304,7 @@ class ReservationDetails extends Component {
         const detailFields = [
             { populate: 'carBrandId', label: this.props.language.labels.brand, field: 'name' },
             { populate: 'carModelId', label: this.props.language.labels.model, field: 'name' },
-            { field: 'clienName', label: this.props.language.labels.clientName },
+            { field: 'clientName', label: this.props.language.labels.clientName },
             { field: 'clientEmail', label: this.props.language.labels.clientEmail },
             { field: 'createdAt', label: this.props.language.labels.date },
             { field: 'price', label: this.props.language.labels.price }
@@ -349,20 +371,27 @@ class ReservationDetails extends Component {
         if (this.props.item.reservationStatus === CONSTANTS.RESERVATION_DONE) return (
             <div className={this.props.classes.options}>
                 <div className={this.props.classes.optionsContainer}>
-                    {!this.props.item.file.length ? <><span className={this.props.classes.item}>You must generate invoice for this reservations!</span><Button onClick={() => this.props.generateInvoice(this.props.item._id)}>GENERATE DOCUMENTS</Button></> :
-                        <>
+                    {!this.props.item.file.length ? <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%' }}>
+                        <div style={{ display: 'flex', flexDirection: 'row' }}>
+                            <Warning style={{ paddingRight: 8, fontSize: 28 }} />
+                            <h2 style={{ letterSpacing: 4, margin: '-4px 0px 4px 0px', marginTop: '-4px' }}>{this.props.language.utils.warning}</h2>
+                        </div>
+                        <span>{this.props.language.utils.noDocument}</span>
+                        <Button color="secondary" onClick={() => this.props.generateInvoice(this.props.item._id)}>{this.props.language.buttons.invoice}</Button>
+                    </div> :
+                        <div className={this.props.classes.fullHeight}>
                             <div className={this.props.classes.filesContainer}>
                                 <div className={this.props.classes.filesList}>
                                     {this.props.item.file.length ? this.props.item.file.map(file => {
                                         return (
                                             <div onClick={() => this.onFileClickHandler(file)} className={`${this.state.currentFile ? this.state.currentFile._id === file._id ? this.props.classes.selectedProblem : "" : ""} ${this.props.classes.fileWrapper}`}>
-                                                <span>{file.customName}</span>
+                                                <span style={{ cursor: 'pointer' }}>{file.customName}</span>
                                             </div>
                                         )
                                     }) : null}
                                 </div>
                                 <div className={this.props.classes.filePdf}>
-                                    <div>
+                                    <div className={this.props.classes.fullHeight}>
                                         {this.state.currentFile ? <Document
                                             file={`${CONSTANTS.INVOICES_URL}${this.state.currentFile.originalName}`}
                                             onLoadSuccess={this.onFileLoadSuccess}
@@ -372,13 +401,19 @@ class ReservationDetails extends Component {
                                     </div>
                                 </div>
                             </div>
-                        </>}
+                        </div>}
                 </div>
             </div>
         )
 
         return (
-            <span>{this.props.language.utils.generateInvoiceFail}</span>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ display: 'flex', flexDirection: 'row' }}>
+                    <Warning style={{ paddingRight: 8, fontSize: 28 }} />
+                    <h2 style={{ letterSpacing: 4, margin: '-4px 0px 4px 0px', marginTop: '-4px' }}>{this.props.language.utils.warning}</h2>
+                </div>
+                <span>{this.props.language.utils.generateInvoiceFail}</span>
+            </div>
         )
     }
 
@@ -396,27 +431,38 @@ class ReservationDetails extends Component {
                                 return (
                                     <div onClick={() => this.onProblemClickHandler(pr)} className={`${this.state.currentProblem ? this.state.currentProblem._id === pr._id ? this.props.classes.selectedProblem : "" : ""} ${this.props.classes.problemWrapper}`}>
                                         <div className={this.props.classes.problemDetails}>
-                                            <span>{pr.name}</span>
-                                <span>{pr.price} {this.props.language.utils.ron}</span>
+                                            <span style={{ cursor: 'pointer' }}>{pr.name}</span>
+                                            <span style={{ cursor: 'pointer' }}>{pr.price} {this.props.language.utils.ron}</span>
                                         </div>
                                     </div>
                                 )
                             })}
                         </div>
                         <div className={this.props.classes.problemStep}>
+                        <p style={{ padding: 5, fontWeight: 500, fontSize: 18, color: '#545A63', margin: 0 }}>{this.props.language.labels.followSteps}</p>
                             {this.state.currentProblem ? this.state.currentProblem.steps.map((step, index) => {
-                                return (
-                                    <div className={this.props.classes.stepsContainer}>
-                                        <span>{index + 1}.&nbsp;{step}</span>
-                                    </div>
-                                )
+                                if (index !== 0) {
+                                    return (
+                                        <div className={this.props.classes.stepsContainer}>
+                                            <li style={{ fontWeight: 'bold', paddingLeft: 5 }}>{step}</li>
+                                        </div>
+                                    )
+                                }
+                                else return null
                             }) : null}
                         </div>
                     </div>
                 </>
             )
         }
-    else return (<span>{this.props.language.utils.noProblem}</span>)
+        else return (
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+                <div style={{ display: 'flex', flexDirection: 'row' }}>
+                    <Warning style={{ paddingRight: 8, fontSize: 28 }} />
+                    <h2 style={{ letterSpacing: 4, margin: 0, marginTop: '-4px' }}>{this.props.language.utils.warning}</h2>
+                </div>
+                <span>{this.props.language.utils.noProblem}</span>
+            </div>)
     }
 
     renderContent = () => {

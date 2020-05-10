@@ -6,6 +6,9 @@ import { withStyles } from '@material-ui/core'
 
 import * as CONSTANTS from '../../../utils/constants'
 import * as BRANDS from '../../../redux/actions/brands'
+import * as NOTIFICATIONS from '../../../utils/notification'
+
+import { validations } from '../../../utils/validations'
 
 import InputGenerator from '../../common/InputGenerator'
 import SimpleModal from '../../common/SimpleModal'
@@ -51,7 +54,7 @@ class CreateCarBrand extends Component {
     todayValue = moment().format(CONSTANTS.INPUT_TYPE_DATE_FORMAT)
 
     initialFields = [
-        { value: '', type: 'text', label: this.props.language.labels.name, name: 'name' },
+        { value: '', type: 'text', label: this.props.language.labels.name, name: 'name', validation: { checks: [validations.notEmpty] } },
         { value: '', type: 'file', InputLabelProps: { shrink: true }, label: this.props.language.labels.logo, name: 'logo' }
     ]
 
@@ -68,7 +71,8 @@ class CreateCarBrand extends Component {
             let modalFieldsCopy = [...this.state.modalFields].map(field => {
                 return ({
                     ...field,
-                    value: response[field.name]
+                    value: response[field.name],
+                    error: false
                 })
             })
 
@@ -86,11 +90,29 @@ class CreateCarBrand extends Component {
 
     }
 
+    validate = () => {
+        let newFields = [...this.state.modalFields]
+        let nameIndex = newFields.findIndex(index => index.name === 'name')
+        let isValid = true
+
+        // Check if name field is completed
+        let name = newFields[nameIndex].value
+        if (name === '') {
+            newFields[nameIndex].error = true
+            isValid = false
+        }
+
+        this.setState({ modalFields: [...Object.values(newFields)] })
+        return isValid
+    }
+
     onAddHandler = () => {
+        if (!this.validate()) return NOTIFICATIONS.error(this.props.language.toastr.failAdd)
         const brandJson = this.createBrandJson()
         const logoIndex = this.state.modalFields.findIndex(index => index.name === 'logo')
 
         this.props.createBrand(brandJson).then(createdBrand => {
+            NOTIFICATIONS.success(this.props.language.toastr.add)
             if (logoIndex > -1 && this.state.modalFields[logoIndex].files && this.state.modalFields[logoIndex].files.length) {
                 let files = Array.from(this.state.modalFields[logoIndex].files)
                 const formData = new FormData()
@@ -105,18 +127,21 @@ class CreateCarBrand extends Component {
                 this.props.getBrands()
             }
         })
+            .catch(() => NOTIFICATIONS.error(this.props.language.toastr.failAdd))
     }
 
     onEditHandler = () => {
+        if (!this.validate()) return NOTIFICATIONS.error(this.props.language.toastr.failAdd)
         const brandJson = this.createBrandJson()
         const logoIndex = this.state.modalFields.findIndex(index => index.name === 'logo')
 
         this.props.edit(this.props.carBrandId, brandJson).then(() => {
+            NOTIFICATIONS.success(this.props.language.toastr.edit)
             if (logoIndex > -1 && this.state.modalFields[logoIndex].files && this.state.modalFields[logoIndex].files.length) {
                 let files = Array.from(this.state.modalFields[logoIndex].files)
                 const formData = new FormData()
                 formData.append('file', files[0])
-                return this.props.editLogo(this.props.carBrandId, formData).then(() => {
+                return this.props.uploadLogo(this.props.carBrandId, formData).then(() => {
                     this.onCancelHandler()
                     this.props.getBrands()
                 })
@@ -126,6 +151,7 @@ class CreateCarBrand extends Component {
                 this.props.getBrands()
             }
         })
+            .catch(() => NOTIFICATIONS.error(this.props.language.toastr.failEdit))
     }
 
     onChangeHandler = event => {
@@ -145,14 +171,15 @@ class CreateCarBrand extends Component {
     }
 
     renderCarBrandFields = () => {
-        return this.state.modalFields.map((field, index) => {
-            return <InputGenerator
-                key={index}
-                margin="dense"
-                fullWidth={true}
-                onChange={event => this.onChangeHandler(event)}
-                {...field} />
-        })
+        return (
+            <div style={{ padding: 16 }}>{this.state.modalFields.map((field, index) => {
+                return <InputGenerator
+                    key={index}
+                    margin="dense"
+                    fullWidth={true}
+                    onChange={event => this.onChangeHandler(event)}
+                    {...field} />
+            })}</div>)
     }
 
     onCancelHandler = () => {
@@ -166,7 +193,7 @@ class CreateCarBrand extends Component {
         return (
             <>
                 <SimpleModal
-                    acceptButtonText={this.props.language.buttons.add}
+                    acceptButtonText={this.props.language.buttons.save}
                     cancelButtonText={this.props.language.buttons.cancel}
                     onAccept={this.props.type === CONSTANTS.CREATE ? this.onAddHandler : this.onEditHandler}
                     maxWidth={"md"}
@@ -189,8 +216,7 @@ const mapDispatchToProps = dispatch => {
         createBrand: brand => dispatch(BRANDS.create(brand)),
         getBrandById: brandId => dispatch(BRANDS.getById(brandId)),
         edit: (brand, brandId) => dispatch(BRANDS.edit(brand, brandId)),
-        uploadLogo: (brandId, form) => dispatch(BRANDS.uploadLogo(brandId, form)),
-        editLogo: (brandId, form) => dispatch(BRANDS.editLogo(brandId, form)),
+        uploadLogo: (brandId, form) => dispatch(BRANDS.uploadLogo(brandId, form))
     }
 }
 

@@ -3,13 +3,11 @@ import { connect } from 'react-redux'
 import { Document, Page, pdfjs } from 'react-pdf'
 import localConfig from '../../config/local.json'
 
-import { withStyles } from '@material-ui/core'
+import { withStyles, TextField, Button } from '@material-ui/core'
 
 import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 
-import RenderItems from '../common/RenderExpandItem'
-import SimpleModal from '../common/SimpleModal'
 import RenderCards from '../common/RenderCards'
 import ReservationDetails from './ReservationDetails'
 
@@ -22,8 +20,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = `${localConfig.frontend}/pdf.worker.js`
 const styles = theme => ({
     container: {
         width: '100%',
-        height: '100%',
-        overflow: 'auto'
+        height: 'calc(100% - 42px)'
     },
     containerContent: {
         margin: '24px 100px 24px 100px'
@@ -43,6 +40,7 @@ const styles = theme => ({
         boxSizing: 'content-box'
     },
     options: {
+        paddingTop: 3,
         paddingRight: '10px',
         cursor: 'pointer'
     },
@@ -129,7 +127,7 @@ const styles = theme => ({
         fontSize: 13
     },
     headersContainer: {
-        height: 50,
+        height: 70,
         width: '100%',
         borderBottom: '1px solid rgba(0,0,0,0.1)',
         backgroundColor: 'white',
@@ -152,8 +150,13 @@ const styles = theme => ({
         justifyContent: 'flex-end'
     },
     titleText: {
-        color: '#1976d2'
+        color: '#606771',
+        fontWeight: 500
     },
+    searchContainer: {
+        paddingRight: 24,
+        paddingTop: 7
+    }
 
 })
 
@@ -169,7 +172,12 @@ class Reservations extends Component {
         currentFile: null,
         currentReservation: null,
         selectedReservation: null,
-        openReservationDetails: false
+        openReservationDetails: false,
+        searchInput: '',
+        from: 0,
+        limit: 10,
+        itemsPerPage: 10,
+        count: 0
     }
 
     componentDidMount() {
@@ -182,10 +190,10 @@ class Reservations extends Component {
 
     handlerReservations = () => {
         if (this.props.login.position.toLowerCase() === 'admin') {
-            this.getReservationsHandler()
+            this.getReservationsHandler({ name: this.state.searchInput, from: this.state.from, limit: this.state.limit })
         }
         else if (this.state.selectedOption === CONSTANTS.RENDER_RESERVATION_EMPLOYEE) {
-            this.getReservationsHandler({ employee: true })
+            this.getReservationsHandler({ employee: true, name: this.state.searchInput, from: this.state.from, limit: this.state.limi })
         }
         else if (this.state.selectedOption === CONSTANTS.RENDER_RESERVATION_PERSONAL) {
             this.getByEmployeeIdHandler(this.props.login.userId)
@@ -193,23 +201,23 @@ class Reservations extends Component {
     }
 
     getByEmployeeIdHandler = employeeId => {
-        this.props.getByEmployeeId(employeeId).then(res => this.setState({ reservations: res.reservations, renderPage: true }))
+        this.props.getByEmployeeId(employeeId).then(res => this.setState({ reservations: res.reservations, renderPage: true, openReservationDetails: false }))
     }
 
     getReservationsHandler = (options) => {
-        this.props.getReservations(options).then(res => this.setState({ reservations: res.reservations, renderPage: true }))
+        this.props.getReservations(options).then(res => this.setState({ reservations: res.reservations, count: res.count, renderPage: true, openReservationDetails: false }))
     }
 
     generateReservationMessageHandler = status => {
         switch (status) {
             case CONSTANTS.RESERVATION_ACCEPTED:
-                return NOTIFICATION.success("Reservation was successfully accepted!")
+                return NOTIFICATION.success(this.props.language.toastr.reservationAccepted)
             case CONSTANTS.RESERVATION_DECLINED:
-                return NOTIFICATION.error("Reservation was declined!")
+                return NOTIFICATION.error(this.props.language.toastr.reservationDeclined)
             case CONSTANTS.RESERVATION_IN_PROGRESS:
-                return NOTIFICATION.success("Reservation was added to your list!")
+                return NOTIFICATION.success(this.props.language.toastr.reservationInProgress)
             case CONSTANTS.RESERVATION_DONE:
-                return NOTIFICATION.success("Reservation was completed!")
+                return NOTIFICATION.success(this.props.language.toastr.reservationDone)
         }
     }
 
@@ -241,6 +249,18 @@ class Reservations extends Component {
 
     onFileLoadSuccess = () => {
         this.setState({ pdfPage: 1 })
+    }
+
+    changePageHandler = option => {
+        if (option === 'next') {
+            const newFrom = this.state.from + this.state.itemsPerPage
+            this.setState({ from: newFrom }, this.handlerReservations)
+        }
+
+        if (option === 'prev') {
+            const newFrom = this.state.from - this.state.itemsPerPage
+            this.setState({ from: newFrom }, this.handlerReservations)
+        }
     }
 
     renderModalContentHandler = () => {
@@ -307,6 +327,9 @@ class Reservations extends Component {
     }
 
     render() {
+        const tabsAdmin = [CONSTANTS.DETAILS_TAB, CONSTANTS.PROBLEMS_TAB, CONSTANTS.INVOICES_TAB]
+        const tabsEmployee = [CONSTANTS.DETAILS_TAB, CONSTANTS.PROBLEMS_TAB]
+
         if (this.state.renderPage) {
             return (
                 <div className={this.props.classes.container}>
@@ -318,11 +341,14 @@ class Reservations extends Component {
                             <div className={this.props.classes.optionsIcon}><VisibilityOutlinedIcon /></div>
                             <div onClick={() => this.selectOptionHandler(CONSTANTS.RENDER_RESERVATION_EMPLOYEE)} className={this.props.classes.options}><span className={`${this.state.selectedOption === CONSTANTS.RENDER_RESERVATION_EMPLOYEE ? this.props.classes.selectedOption : ""} ${this.props.classes.optionText}`}>{this.props.language.titles.reservations}</span></div>
                             <div onClick={() => this.selectOptionHandler(CONSTANTS.RENDER_RESERVATION_PERSONAL)} className={this.props.classes.options}><span className={`${this.state.selectedOption === CONSTANTS.RENDER_RESERVATION_PERSONAL ? this.props.classes.selectedOption : ""} ${this.props.classes.optionText}`}>{this.props.language.titles.personalReservations}</span></div>
-                        </div> : null}
+                        </div> : <>
+                                <div className={this.props.classes.searchContainer}>
+                                    <TextField onChange={event => this.setState({ searchInput: event.target.value }, this.handlerReservations)} placeholder={this.props.language.utils.search} />
+                                </div></>}
                     </div>
                     <div className={this.props.classes.containerContent}>
                         <ReservationDetails
-                            tabs={[CONSTANTS.DETAILS_TAB, CONSTANTS.PROBLEMS_TAB, CONSTANTS.INVOICES_TAB]}
+                            tabs={this.props.login.position.toLowerCase() === 'admin' ? tabsAdmin : tabsEmployee}
                             open={this.state.openReservationDetails}
                             item={this.state.selectedReservation}
                             generateInvoice={reservationId => {
@@ -332,15 +358,34 @@ class Reservations extends Component {
                             onCancel={() => this.setState({ openReservationDetails: false })}
                         />
                     </div>
-                    <div style={{ flex: 1, backgroundColor: '#F8F8F8', margin: '20px 55px', border: '1px solid rgba(0,0,0,0.1)', boxShadow: '1px 1px rgba(0,0,0,0.1)' }}>
+                    {this.state.reservations && this.state.reservations.length ? <div style={{ flex: 1, maxHeight: 'calc(100% - 76px)', overflowY: 'auto', backgroundColor: '#F8F8F8', margin: '20px 19px', border: '1px solid rgba(0,0,0,0.1)', boxShadow: '1px 1px rgba(0,0,0,0.1)' }}>
                         <RenderCards
-                            extraWidth={true}
+                            tooltipMessage={this.props.language.tooltip.reservationDetails}
+                            displayOptions={false}
                             displayMainPhoto={true}
                             type={CONSTANTS.RESERVATION_TYPE}
                             onClick={item => { this.setState({ selectedReservation: item, openReservationDetails: true }) }}
-                            content={[{ field: 'reservationStatus', label: this.props.language.labels.status }, { populate: 'carBrandId', field: 'name', label: this.props.language.labels.brand }, { populate: 'carModelId', field: 'name', label: this.props.language.labels.model }, { field: 'price', label: this.props.language.labels.price }]}
+                            content={[
+                                {
+                                    title: 'General details',
+                                    childrens: [
+                                        { populate: 'carBrandId', field: 'name', label: this.props.language.labels.brand },
+                                        { populate: 'carModelId', field: 'name', label: this.props.language.labels.model },
+                                        { field: 'price', label: this.props.language.labels.price },
+                                        { field: 'clientName', label: this.props.language.labels.clientName }]
+                                },
+                                {
+                                    title: this.props.language.labels.status,
+                                    childrens: [
+                                        { field: 'reservationStatus' }
+                                    ]
+                                }]}
                             items={this.state.reservations} />
-                    </div>
+                        <div style={{ display: 'flex', flexDirection: 'row', float: 'right' }}>
+                            <Button disabled={this.state.from === 0 ? true : false} style={{ margin: 8 }} color="secondary" onClick={() => this.changePageHandler('prev')}>{this.props.language.buttons.prev}</Button>
+                            <Button disabled={this.state.count < this.state.itemsPerPage ? true : false} style={{ margin: 8 }} color="secondary" onClick={() => this.changePageHandler('next')}>{this.props.language.buttons.next}</Button>
+                        </div>
+                    </div> : <h4 style={{ marginLeft: 19, color: '#606771' }}>{this.props.language.utils.noResult}</h4>}
                 </div>
             )
         }

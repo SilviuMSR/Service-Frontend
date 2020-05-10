@@ -10,7 +10,7 @@ const blueColor = '#1665d8'
 const greenColor = '#34aa44'
 const redColor = '#e6492d'
 
-const primaryButtonColor = '#34aa44'
+const primaryButtonColor = '#1976D2 '
 const secondarButtonColor = '#f6f7f9'
 
 const MuiTheme = createMuiTheme({
@@ -94,7 +94,7 @@ const MuiTheme = createMuiTheme({
             flatPrimary: {
                 color: whiteColor,
                 backgroundColor: primaryButtonColor,
-                padding: 9,
+                padding: '0px 9px',
                 fontSize: 12,
                 '&:hover': {
                     backgroundColor: primaryColor,
@@ -102,13 +102,30 @@ const MuiTheme = createMuiTheme({
                 },
             },
             label: {
-                fontSize: 12
+                fontSize: 14
+            }
+        },
+        MuiRadio: {
+            colorPrimary: {
+                '&$checked': {
+                    color: '#1976D2',
+                }
+            },
+            colorSecondary: {
+                '&$checked': {
+                    color: '#1976D2'
+                }
             }
         },
         MuiCheckbox: {
             colorPrimary: {
                 '&$checked': {
-                    color: primaryColor,
+                    color: '#1976D2',
+                }
+            },
+            colorSecondary: {
+                '&$checked': {
+                    color: '#1976D2'
                 }
             }
         },

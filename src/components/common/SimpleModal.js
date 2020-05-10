@@ -6,29 +6,35 @@ import { Close } from '@material-ui/icons'
 const style = theme => ({
     dialogTitle: {
         borderBottom: '1px solid #eaedf3',
-        padding: '4px 0px 8px 22px',
+        padding: '4px 0px 8px 21px',
         marginBottom: 10
+    },
+    titleText: {
+        color: '#606771',
+        fontWeight: 500,
+        fontSize: 18
     },
     dialogActions: {
         borderTop: '1px solid #eaedf3',
         marginTop: 10,
-        paddingTop: 25
+        paddingTop: 8
     },
     dialogContent: {
-        padding: '0px 24px 0px',
+        padding: '0px 25px',
         overflow: 'hidden'
     },
     acceptButton: {
+        marginRight: 12
     },
     cancelButton: {
         marginRight: 'auto',
-        marginLeft: 4
+        marginLeft: 14
     },
     topRightCancelButton: {
         float: 'right',
         margin: '5px 15px 0px 0px',
         cursor: 'pointer',
-        fontSize: 18
+        fontSize: 22
     }
 })
 
@@ -42,10 +48,10 @@ class SimpleModal extends Component {
                 onClose={this.props.onClose}
             >
                 <DialogTitle className={this.props.styles ? this.props.styles.title : this.props.classes.dialogTitle}>
-                    {this.props.title}
+                    <span className={this.props.classes.titleText}>{this.props.title.toUpperCase()}</span>
                     <Close onClick={this.props.onCancel} className={this.props.classes.topRightCancelButton} />
                 </DialogTitle>
-                <DialogContent className={this.props.styles ? this.props.styles.contentStyle : this.props.classes.dialogContent}>
+                <DialogContent className={this.props.classes.dialogContent}>
                     {this.props.children}
                 </DialogContent>
                 <DialogActions className={this.props.classes.dialogActions}>

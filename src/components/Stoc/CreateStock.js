@@ -5,10 +5,13 @@ import moment from 'moment'
 import { withStyles } from '@material-ui/core'
 
 import { mapToDropdownSelector, findIndexInArray } from '../../utils/apiFunctions'
+import { validations } from '../../utils/validations'
+
 import * as CONSTANTS from '../../utils/constants'
 import * as BRANDS from '../../redux/actions/brands'
 import * as MODELS from '../../redux/actions/models'
 import * as STOCK from '../../redux/actions/stocks'
+import * as NOTIFICATIONS from '../../utils/notification'
 
 import InputGenerator from '../common/InputGenerator'
 import SimpleModal from '../common/SimpleModal'
@@ -56,9 +59,10 @@ class CreateStock extends Component {
     initialFields = [
         { value: '', type: 'dropdownSelector', label: this.props.language.labels.brand, name: 'carBrandId', options: [] },
         { value: '', type: 'dropdownSelector', label: this.props.language.labels.model, name: 'carModelId', options: [] },
-        { value: '', type: 'text', label: this.props.language.labels.name, name: 'name' },
-        { value: '', type: 'text', label: this.props.language.labels.price, name: 'price' },
-        { value: 0, type: "number", label: this.props.language.labels.quantity, name: 'no' }
+        { value: '', type: 'text', label: this.props.language.labels.name, name: 'name', validation: { checks: [validations.notEmpty] } },
+        { value: '', type: 'number', label: this.props.language.labels.price, name: 'price', validation: { checks: [validations.notEmpty] } },
+        { value: 0, type: "number", label: this.props.language.labels.quantity, name: 'no' },
+        { value: '', type: "text", label: this.props.language.labels.code, name: 'code' }
     ]
 
     state = {
@@ -102,7 +106,8 @@ class CreateStock extends Component {
 
                     return ({
                         ...field,
-                        value: response[field.name]
+                        value: response[field.name],
+                        error: false
                     })
                 })
 
@@ -110,7 +115,7 @@ class CreateStock extends Component {
                     modalFields: modalFieldsCopy
                 })
             }).catch(() => {
-                alert("NOT FOUND")
+                NOTIFICATIONS.error(this.props.language.toastr.notFound)
             })
         })
     }
@@ -136,18 +141,48 @@ class CreateStock extends Component {
 
     }
 
+
+    validate = () => {
+        let newFields = [...this.state.modalFields]
+        let nameIndex = newFields.findIndex(index => index.name === 'name')
+        let priceIndex = newFields.findIndex(index => index.name === 'price')
+        let isValid = true
+
+        // Check if name field is completed
+        let name = newFields[nameIndex].value
+        if (name === '') {
+            newFields[nameIndex].error = true
+            isValid = false
+        }
+
+        let price = newFields[priceIndex].value
+        if (!price) {
+            newFields[priceIndex].error = true
+            isValid = false
+        }
+
+        this.setState({ modalFields: [...Object.values(newFields)] })
+        return isValid
+    }
+
     onAddHandler = () => {
+        if (!this.validate()) return NOTIFICATIONS.error(this.props.language.toastr.failAdd)
         this.props.createStock(this.createStockJson()).then(() => {
+            NOTIFICATIONS.success(this.props.language.toastr.add)
             this.onCancelHandler()
             this.props.getStocks()
         })
+            .catch(() => NOTIFICATIONS.error(this.props.language.toastr.failAdd))
     }
 
     onEditHandler = () => {
+        if (!this.validate()) return NOTIFICATIONS.error(this.props.language.toastr.failAdd)
         this.props.edit(this.props.stockId, this.createStockJson()).then(() => {
+            NOTIFICATIONS.success(this.props.language.toastr.edit)
             this.onCancelHandler()
             this.props.getStocks()
         })
+            .catch(() => NOTIFICATIONS.error(this.props.language.toastr.failEdit))
     }
 
     onChangeHandler = event => {
@@ -171,14 +206,16 @@ class CreateStock extends Component {
     }
 
     renderStocModalFields = () => {
-        return this.state.modalFields.map((field, index) => {
-            return <InputGenerator
-                key={index}
-                margin="dense"
-                fullWidth={true}
-                onChange={event => this.onChangeHandler(event)}
-                {...field} />
-        })
+        return (<div style={{ padding: 16 }}>
+            {this.state.modalFields.map((field, index) => {
+                return <InputGenerator
+                    key={index}
+                    margin="dense"
+                    fullWidth={true}
+                    onChange={event => this.onChangeHandler(event)}
+                    {...field} />
+            })}
+        </div>)
     }
 
     onCancelHandler = () => {
@@ -192,7 +229,7 @@ class CreateStock extends Component {
         return (
             <>
                 <SimpleModal
-                    acceptButtonText={this.props.language.buttons.add}
+                    acceptButtonText={this.props.language.buttons.save}
                     cancelButtonText={this.props.language.buttons.cancel}
                     onAccept={this.props.type === CONSTANTS.CREATE ? this.onAddHandler : this.onEditHandler}
                     maxWidth={"md"}

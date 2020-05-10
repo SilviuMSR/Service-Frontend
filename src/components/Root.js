@@ -1,7 +1,19 @@
 import React, { Component } from 'react'
 import { JssProvider } from 'react-jss'
 import { connect } from 'react-redux'
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom'
+import {
+    AccountBox as ProfileIcon,
+    Dashboard as DashboardIcon,
+    Lock as AdminIcon,
+    DirectionsCar as CarIcon,
+    ErrorOutline as ProblemIcon,
+    SupervisorAccount as UserIcon,
+    Settings as SettingsIcon,
+    EventSeat as ReservationIcon,
+    Extension as StockIcon,
+    Assignment as VacationIcon
+} from '@material-ui/icons'
 
 import * as LOGIN from '../redux/actions/login'
 
@@ -11,44 +23,81 @@ import Reservations from '../components/Reservation/Reservations'
 import RootSidebar from '../components/common/RootSidebar'
 import Admin from '../components/admin/Admin/Admin'
 import Stoc from '../components/Stoc/Stoc'
+import UserProfile from '../components/admin/User/UserProfile'
+import Vacations from '../components/Vacations/Vacations'
 
 class Root extends Component {
 
     state = {
         logged: false,
         renderPage: false,
-        sidebarItems: [{
-            label: 'admin',
-            nested: true,
-            expandedText: 'admin',
-            nestedComponents: [
-                {
-                    to: '/admin/car',
-                    label: 'car'
-                },
-                {
-                    to: '/admin/problem',
-                    label: 'problem'
-                },
-                {
-                    to: '/admin/user',
-                    label: 'user'
-                }
-            ]
-        },
-        {
-            label: 'dashboard',
-            to: '/'
-        },
-        {
-            label: 'reservation',
-            to: '/reservations'
-        },
-        {
-            label: 'stoc',
-            to: '/stoc'
-        }
+        sidebarItems: [
+            {
+                icon: <ProfileIcon />,
+                label: 'profile',
+                requireAdmin: false,
+                to: '/profile'
+            },
+            {
+                icon: <DashboardIcon />,
+                label: 'dashboard',
+                requireAdmin: true,
+                to: '/'
+            },
+            {
+                icon: <AdminIcon />,
+                requireAdmin: true,
+                label: 'admin',
+                nested: true,
+                expandedText: 'admin',
+                nestedComponents: [
+                    {
+                        icon: <CarIcon />,
+                        to: '/admin/car',
+                        label: 'car'
+                    },
+                    {
+                        icon: <ProblemIcon />,
+                        to: '/admin/problem',
+                        label: 'problem'
+                    },
+                    {
+                        icon: <UserIcon />,
+                        to: '/admin/user',
+                        label: 'user'
+                    },
+                    {
+                        icon: <SettingsIcon />,
+                        to: '/admin/settings',
+                        label: 'settings'
+                    }
+                ]
+            },
+            {
+                icon: <ReservationIcon />,
+                label: 'reservation',
+                requireAdmin: false,
+                to: '/reservations'
+            },
+            {
+                icon: <StockIcon />,
+                requireAdmin: true,
+                label: 'stoc',
+                to: '/stoc'
+            },
+            {
+                icon: <VacationIcon />,
+                to: '/vacations',
+                label: 'vacations'
+            }
         ]
+    }
+
+    checkRights = () => this.props.login.position.toLowerCase() === 'admin' ? true : false
+
+    computeSidebarItems = () => {
+        if (!this.checkRights()) return this.state.sidebarItems.filter(item => !item.requireAdmin)
+        return this.state.sidebarItems
     }
 
     componentDidMount() {
@@ -70,15 +119,17 @@ class Root extends Component {
                             <div style={{ display: 'flex', height: '100%' }}>
                                 <RootSidebar
                                     onLogout={this.props.logout}
-                                    items={this.state.sidebarItems}
+                                    items={this.computeSidebarItems()}
                                 />
-                                <div style={{ flex: 1 }}>
+                                <div style={{ flex: 1, width: 'calc(100% - 300px)' }}>
                                     <Switch>
-                                        {<Route path="/" exact component={Dashboard} />}
+                                        {this.checkRights() && <Route path="/" exact component={Dashboard} />}
                                         {<Route path="/reservations" exact component={Reservations} />}
-                                        {<Route path="/stoc" exact component={Stoc} />}
-                                        {<Route path="/admin" component={Admin} />}
-
+                                        {this.checkRights() && <Route path="/stoc" exact component={Stoc} />}
+                                        {<Route path="/profile" exact component={UserProfile} />}
+                                        {this.checkRights() && <Route path="/admin" component={Admin} />}
+                                        {<Route path="/vacations" component={Vacations} />}
+                                        {<Redirect to="/reservations" component={Reservations} />}
                                     </Switch>
                                 </div>
                             </div>

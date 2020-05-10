@@ -8,7 +8,10 @@ import DropdownSelector from './DropdownSelector'
 class InputGenerator extends React.Component {
 
     shouldComponentUpdate(prevProps) {
-        if (this.props.value !== prevProps.value || this.props.name !== prevProps.name || this.props.options !== prevProps.options) {
+        if (this.props.value !== prevProps.value ||
+            this.props.name !== prevProps.name ||
+            this.props.options !== prevProps.options ||
+            this.props.error !== prevProps.error) {
             return true
         }
         return false

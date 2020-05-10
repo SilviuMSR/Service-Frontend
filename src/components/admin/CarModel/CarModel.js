@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
-import { withStyles, Button, TextField } from '@material-ui/core'
+import { withStyles } from '@material-ui/core'
 import { Edit, Delete } from '@material-ui/icons'
 
 import * as MODELS from '../../../redux/actions/models'
 import * as CONSTANTS from '../../../utils/constants'
+import * as NOTIFICATIONS from '../../../utils/notification'
 
 import ConfirmationModal from '../../common/ConfirmationDialog'
 import CreateModelModal from './CreateCarModel'
@@ -44,9 +45,11 @@ class CarModel extends Component {
 
     deleteModelHandler = () => {
         this.props.deleteModel(this.modelToDelete._id).then(() => {
+            NOTIFICATIONS.success(this.props.language.toastr.delete)
             this.props.getModels()
             this.setState({ openConfirmationModal: false })
         })
+            .catch(() => NOTIFICATIONS.error(this.props.language.toastr.failDelete))
     }
 
     closeConfirmationModalHandler = () => {
@@ -69,20 +72,40 @@ class CarModel extends Component {
                     this.props.onCloseModal()
                     this.setState({ openModal: false })
                 }} />
-                <RenderCards
+                {this.props.models && this.props.models.length ? <RenderCards
+                    displayOptions={true}
                     displayMainPhoto={false}
                     type={CONSTANTS.MODEL_TYPE}
-                    onEdit={item => {
-                        this.modelToEdit = item
-                        this.setState({ openModal: true, modalType: CONSTANTS.EDIT })
-                    }}
-                    onDelete={item => {
-                        this.modelToDelete = item
-                        this.setState({ openConfirmationModal: true })
-                    }}
+                    actions={
+                        [
+                            {
+                                icon: <Edit />,
+                                label: 'Edit',
+                                action: item => {
+                                    this.modelToEdit = item
+                                    this.setState({ openModal: true, modalType: CONSTANTS.EDIT })
+                                }
+                            },
+                            {
+                                icon: <Delete />,
+                                label: 'Delete',
+                                action: item => {
+                                    this.modelToDelete = item
+                                    this.setState({ openConfirmationModal: true })
+
+                                }
+                            }
+                        ]
+                    }
                     onClick={item => { }}
-                    content={[{ field: 'name', label: this.props.language.labels.model }]}
+                    content={[
+                        {
+                            title: this.props.language.labels.generalDetails,
+                            childrens: [{ field: 'name', label: this.props.language.labels.model }]
+                        }
+                    ]}
                     items={this.props.models} />
+                    : <p style={{ marginLeft: 19, color: '#606771' }}>{this.props.language.utils.noResult}</p>}
 
 
             </>

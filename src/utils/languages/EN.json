@@ -10,19 +10,69 @@
             "admin": "Admin",
             "car": "Cars",
             "problem": "Problems",
-            "user": "Users"
+            "user": "Users",
+            "settings": "Settings"
         },
+        "vacations": "Vacation Requests",
+        "profile": "My account",
         "reservation": "Reservations",
         "stoc": "Stock",
         "dashboard": "Dashboard"
     },
-    "toastr": {},
+    "toastr": {
+        "changeLanguageSuccess": "Language changed in ",
+        "changeLanguageFail": "Fail to change language",
+        "reservationAccepted": "Reservation was successfully accepted!",
+        "reservationDeclined": "Reservation was declined!",
+        "reservationInProgress": "Reservation was added to your list!",
+        "reservationDone": "Reservation was completed!",
+        "successfullyPhoto": "Photo uploaded successfully",
+        "notificationStopped": "Notifications are stopped",
+        "notificationStarted": "Notifications started successfully",
+        "newStep": "new step",
+        "add": "Successfully created",
+        "failAdd": "Fail to create",
+        "edit": "Successfully modified",
+        "failEdit": "Fail to edit",
+        "delete": "Successfully deleted",
+        "failDelete": "Fail to delete",
+        "notFound": "Not found",
+        "passMatch": "Password don't match",
+        "successAsk": "Successfully modified",
+        "failAsk": "Fail to modifiy",
+        "alreadyAsked": "This request was already handled"
+    },
     "labels": {
+        "language": "Language",
+        "reservationStatus": {
+            "DONE": "DONE",
+            "PENDING": "PENDING",
+            "IN_PROGRESS": "IN PROGRESS",
+            "ACCEPTED": "ACCEPTED",
+            "DECLINED": "DECLINED"
+        },
+        "checkTimeType": {
+            "checkTimeType": "Check time type",
+            "minutes": "Minutes",
+            "hours": "Hours",
+            "days": "Days",
+            "months": "Months",
+            "years": "Years"
+        },
+        "months": "Months",
+        "checkTime": "Check time",
         "brand": "Brand",
         "name": "Name",
+        "fullName": "Fullname",
+        "currentStatus": "Current status",
+        "phone": "Phone number",
         "logo": "Logo",
+        "code": "Bar code",
+        "generalDetails": "General details",
         "model": "Model",
         "price": "Price",
+        "email": "Email",
+        "phoneNumber": "Phone Number",
         "noSteps": "No. steps",
         "difficulty": "Difficulty",
         "newStep": "New step",
@@ -34,6 +84,7 @@
         "date": "Date",
         "clientName": "Client name",
         "clientEmail": "Client email",
+        "requester": "Requester",
         "reservedBy": "Reserved by",
         "problemKnow": "Do you know the problem?",
         "chooseProblem": "Choose problems",
@@ -41,9 +92,20 @@
             "yes": "Yes",
             "no": "No"
         },
-        "quantity": "Quantity"
+        "quantity": "Quantity",
+        "from": "From",
+        "to": "To",
+        "reason": "Reason",
+        "newPass": "New password",
+        "confirmNewPass": "Confirm new password",
+        "problems": "Problems",
+        "top10": "Top 10 employees",
+        "employeeFinished": "Finished reservations by employee",
+        "daily": "Daily reservations",
+        "followSteps": "Follow next steps"
     },
     "titles": {
+        "vacations": "VACATION REQUESTS",
         "stock": "STOCK",
         "chooseProblem": "Choose problems",
         "personalReservations": "MY RESERVATIONS",
@@ -59,14 +121,20 @@
         "editProblem": "Edit problem",
         "editUser": "Edit user",
         "editStock": "Edit piece",
-        "addStock": "Create new piece",
-        "addBrand": "Create new brand",
-        "addModel": "Create new model",
-        "addProblem": "Create new problem",
-        "addUser": "Create new user",
-        "reservationDetails": "Reservation details"
+        "addStock": "Add new piece",
+        "addBrand": "Add new brand",
+        "addModel": "Add new model",
+        "addProblem": "Add new problem",
+        "addUser": "Add new user",
+        "reservationDetails": "Reservation details",
+        "settings": "SETTINGS",
+        "users": "USERS",
+        "userDetails": "GENERAL DETAILS",
+        "actions": "AVAILABLE ACTIONS",
+        "dashboard": "DASHBOARD"
     },
     "buttons": {
+        "changePass": "CHANGE PASSWORD",
         "takeReservation": "Take reservation",
         "cancel": "Cancel",
         "delete": "Delete",
@@ -74,7 +142,19 @@
         "reset": "Reset",
         "accept": "ACCEPT",
         "decline": "DECLINE",
-        "files": "Files"
+        "files": "Files",
+        "start": "Start",
+        "stop": "Stop",
+        "save": "Save",
+        "submit": "Submit",
+        "invoice": "Generate Invoice",
+        "reservationDash": "RESERVATIONS",
+        "userDash": "EMPLOYEES",
+        "carDash": "CARS / PROBLEMS",
+        "next": "NEXT",
+        "prev": "PREV",
+        "askVacation": "VACATION REQUEST",
+        "uploadImage": "UPLOAD IMAGE"
     },
     "utils": {
         "delete": "Are you sure you delete this?",
@@ -87,6 +167,19 @@
         "reservationWaitForEmployee": "Waiting for employee",
         "generateInvoiceFail": "You can generate invoices only when reservation is finished",
         "noProblem": "Problem for this car is unknown",
-        "progress": "Progress details"
+        "progress": "Progress details",
+        "noDocument": "Invoice is not generated",
+        "warning": "WARNING!",
+        "noResult": "No results found",
+        "noBrandSelected": "Please select a brand",
+        "isDone": "Done"
+    },
+    "tooltip": {
+        "reservationDetails": "Press for more details"
+    },
+    "statistics": {
+        "allReservations": "Total reservations",
+        "doneReservations": "Reservations Completed",
+        "acceptedReservations": "Reservations Accepted"
     }
 }

@@ -7,4 +7,6 @@ export const changeLanguage = language =>
             type: TYPES.TOPBAR_CHANGE_LANGUAGE,
             payload: { lang: language, i18n }
         })
+
+        return Promise.resolve({})
     }

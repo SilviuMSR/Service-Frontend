@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import { Link } from 'react-router-dom'
 import { List, ListItem, ListItemText, ListItemIcon, Collapse, withStyles, Button } from '@material-ui/core'
-import { FolderOutlined as FolderOutlinedIcon, ExpandLess as ExpandLessIcon, ExpandMore as ExpandMoreIcon, Menu } from '@material-ui/icons'
+import { FolderOutlined as FolderOutlinedIcon, ExpandLess as ExpandLessIcon, ExpandMore as ExpandMoreIcon, Menu, ExitToApp } from '@material-ui/icons'
 
 const styles = theme => ({
     nested: {
@@ -22,11 +22,11 @@ const styles = theme => ({
         alignItems: 'center',
     },
     sidebarHeaderContent: {
-        width: '90%',
-        height: 80,
+        width: '100%',
+        height: 70,
         display: 'flex',
         alignItems: 'center',
-        borderBottom: '1px solid #eee'
+        borderBottom: '1px solid #f2f2f2'
     },
     listItemText: {
         color: '#fff',
@@ -46,8 +46,7 @@ const styles = theme => ({
     logoutButton: {
         color: 'white',
         backgroundColor: theme.palette.mainColor,
-        position: ' absolute',
-        bottom: '10px'
+        marginTop: '-8px'
     },
     displayNone: {
         display: 'none'
@@ -71,7 +70,11 @@ const styles = theme => ({
         height: '40px',
         width: '100px'
     },
-
+    exitIcon: {
+        fontSize: 24,
+        color: 'white',
+        cursor: 'pointer'
+    }
 })
 
 class Sidebar extends Component {
@@ -120,15 +123,15 @@ class Sidebar extends Component {
     render() {
         const { classes } = this.props
         const ListItemComponent = props => {
-            if (props.isSelected) return (<ListItem  component={props.to ? Link : 'div'} to={props.to} divider={true} button selected={this.state.selected[props.label]} onClick={() => this.handleSelect(props.label)}>
-                <ListItemIcon style={{color: '#c0d3d3'}}>
+            if (props.isSelected) return (<ListItem component={props.to ? Link : 'div'} to={props.to} divider={true} button selected={this.state.selected[props.label]} onClick={() => this.handleSelect(props.label)}>
+                <ListItemIcon style={{ color: '#c0d3d3' }}>
                     {props.icon ? props.icon : <FolderOutlinedIcon />}
                 </ListItemIcon>
                 <ListItemText classes={{ primary: classes.listItemTextSelected }} inset primary={props.text} />
                 {props.nested ? props.open ? <ExpandLessIcon className={classes.sidebarIcon} onClick={() => this.handleExpand(props.label)} /> : <ExpandMoreIcon className={classes.sidebarIcon} onClick={() => this.handleExpand(props.label)} /> : null}
             </ListItem>)
             return (<ListItem component={props.to ? Link : 'div'} to={props.to} divider={true} button selected={this.state.selected[props.label]} onClick={() => this.handleSelect(props.label)}>
-                <ListItemIcon style={{color: '#fff'}}>
+                <ListItemIcon style={{ color: '#fff' }}>
                     {props.icon ? props.icon : <FolderOutlinedIcon />}
                 </ListItemIcon>
                 <ListItemText classes={{ primary: classes.listItemText }} inset primary={props.text} />
@@ -140,7 +143,7 @@ class Sidebar extends Component {
             <>
                 <div className={`${this.state.displayNone ? classes.displayNone : ""} sidebar`}>
                     <div className={classes.sidebarHeaderContent}>
-                        <h3>SERVICE</h3>
+                        <img width={'100%'} src={`/assets/logoservice.png`} />
                     </div>
                     <List component='nav' className={classes.listWrapper}>
                         <>
@@ -174,7 +177,10 @@ class Sidebar extends Component {
                             </div>
                         </>
                     </List>
-                    <Button className={classes.logoutButton} onClick={this.props.onClickButton}>{this.props.buttonText}</Button>
+                    <div onClick={this.props.onClickButton} style={{ display: 'flex', flexDirection: 'row', marginTop: 'auto', paddingLeft: 16, paddingBottom: 16 }}>
+                        <ExitToApp className={classes.exitIcon} />
+                        <Button className={classes.logoutButton}>{this.props.buttonText}</Button>
+                    </div>
                 </div>
             </>
         )
