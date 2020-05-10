@@ -444,7 +444,7 @@ class ReservationDetails extends Component {
                                 if (index !== 0) {
                                     return (
                                         <div className={this.props.classes.stepsContainer}>
-                                            <span style={{ fontWeight: 'bold', paddingLeft: 5 }}>{index}.&nbsp;</span><span>{step}</span>
+                                            <li style={{ fontWeight: 'bold', paddingLeft: 5 }}>{step}</li>
                                         </div>
                                     )
                                 }

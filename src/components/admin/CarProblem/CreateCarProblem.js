@@ -273,7 +273,7 @@ class CreateCarProblem extends Component {
                             if (index !== 0) {
                                 return (
                                     <div style={{ display: 'flex', flexDirection: 'row' }}>
-                                        <span style={{ fontWeight: 'bold', paddingLeft: 5 }}>{index}.&nbsp;</span><span>{step}</span>
+                                        <li style={{ fontWeight: 'bold', paddingLeft: 5 }}>{step}</li>
                                         <Delete style={{ color: 'black', cursor: 'pointer' }} onClick={() => {
                                             this.deleteStepHandler(step)
                                         }} />
