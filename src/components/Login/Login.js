@@ -47,10 +47,14 @@ class Login extends Component {
 
 
     onSubmitHandler = () => {
+        /* Create a copy of the fields required for login with current values */
         let modalFieldsCopy = [...this.state.modalFields].map(field => ({ ...field }))
+        /* Find position of username and password in array in order to take the values */
         let usernameIndex = modalFieldsCopy.findIndex(idx => idx.name === 'username')
         let passwordIndex = modalFieldsCopy.findIndex(idx => idx.name === 'password')
+        /* Check if positions are grater than -1, else attributes were not found */
         if (usernameIndex > -1 && passwordIndex > -1) {
+            /* Call the login function from http layer */
             this.props.login(modalFieldsCopy[usernameIndex].value, sha256(modalFieldsCopy[passwordIndex].value))
                 .catch(err => {
                     if (!err.response)
@@ -76,7 +80,7 @@ class Login extends Component {
                             {...field} />
                     })}
                     <div className="buttonsContainer">
-                        <Button style={{marginTop: 10}} color="primary" onClick={this.onSubmitHandler}>Login</Button>
+                        <Button style={{ marginTop: 10 }} color="primary" onClick={this.onSubmitHandler}>Login</Button>
                     </div>
                 </div>
             </div>

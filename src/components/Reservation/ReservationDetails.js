@@ -10,6 +10,7 @@ import CheckIcon from '@material-ui/icons/Check'
 
 import SimpleModal from '../common/SimpleModal'
 
+import * as NOTIFICATIONS from '../../utils/notification'
 import * as CONSTANTS from '../../utils/constants'
 
 pdfjs.GlobalWorkerOptions.workerSrc = `${localConfig.frontend}/pdf.worker.js`
@@ -377,7 +378,12 @@ class ReservationDetails extends Component {
                             <h2 style={{ letterSpacing: 4, margin: '-4px 0px 4px 0px', marginTop: '-4px' }}>{this.props.language.utils.warning}</h2>
                         </div>
                         <span>{this.props.language.utils.noDocument}</span>
-                        <Button color="secondary" onClick={() => this.props.generateInvoice(this.props.item._id)}>{this.props.language.buttons.invoice}</Button>
+                        <Button color="secondary" onClick={() => {
+                            this.setState({ currentFile: null }, () => {
+                                this.props.generateInvoice(this.props.item._id)
+                            })
+
+                        }}>{this.props.language.buttons.invoice}</Button>
                     </div> :
                         <div className={this.props.classes.fullHeight}>
                             <div className={this.props.classes.filesContainer}>
@@ -439,7 +445,7 @@ class ReservationDetails extends Component {
                             })}
                         </div>
                         <div className={this.props.classes.problemStep}>
-                        <p style={{ padding: 5, fontWeight: 500, fontSize: 18, color: '#545A63', margin: 0 }}>{this.props.language.labels.followSteps}</p>
+                            <p style={{ padding: 5, fontWeight: 500, fontSize: 18, color: '#545A63', margin: 0 }}>{this.props.language.labels.followSteps}</p>
                             {this.state.currentProblem ? this.state.currentProblem.steps.map((step, index) => {
                                 if (index !== 0) {
                                     return (
@@ -511,7 +517,11 @@ class ReservationDetails extends Component {
                     maxWidth={"md"}
                     title={this.props.language.titles.reservationDetails}
                     open={this.props.open}
-                    onCancel={() => this.props.onCancel()}>
+                    onCancel={() => {
+                        this.setState({ currentFile: null }, () => {
+                            this.props.onCancel()
+                        })
+                    }}>
                     {this.mainRender()}
                 </SimpleModal>)
         }

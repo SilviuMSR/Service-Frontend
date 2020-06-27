@@ -352,7 +352,11 @@ class Reservations extends Component {
                             open={this.state.openReservationDetails}
                             item={this.state.selectedReservation}
                             generateInvoice={reservationId => {
-                                this.props.generateInvoice(reservationId).then(() => this.handlerReservations())
+                                this.props.generateInvoice(reservationId).then(() => {
+                                    NOTIFICATION.success("Successfully generated!")
+                                    this.handlerReservations()
+                                })
+                                .catch(() => NOTIFICATION.error("Fail to generate!"))
                             }}
                             modifyStatus={this.modifyStatusHandler}
                             onCancel={() => this.setState({ openReservationDetails: false })}
